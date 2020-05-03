@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>points.json</file>
+        <file>stops.json</file>
+        <file>streets.json</file>
+    </qresource>
+</RCC>

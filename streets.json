@@ -1,0 +1,214 @@
+{
+	"streets": [
+ {
+   "street_id": 0,
+   "point1_id": 34,
+   "point2_id": 2,
+   "street_name": "West Jackson Blvd."
+ },
+ {
+   "street_id": 1,
+   "point1_id": 2,
+   "point2_id": 35,
+   "street_name": "One Dallas Center"
+ },
+ {
+   "street_id": 2,
+   "point1_id": 35,
+   "point2_id": 26,
+   "street_name": "North Clark Street"
+ },
+ {
+   "street_id": 3,
+   "point1_id": 26,
+   "point2_id": 27,
+   "street_name": "Times Square"
+ },
+ {
+   "street_id": 4,
+   "point1_id": 27,
+   "point2_id": 24,
+   "street_name": "Seventh Avenue"
+ },
+ {
+   "street_id": 5,
+   "point1_id": 24,
+   "point2_id": 11,
+   "street_name": "Seventh Avenue"
+ },
+ {
+   "street_id": 6,
+   "point1_id": 11,
+   "point2_id": 8,
+   "street_name": "South Riverside Drive"
+ },
+ {
+   "street_id": 7,
+   "point1_id": 8,
+   "point2_id": 9,
+   "street_name": "Park Avenue"
+ },
+ {
+   "street_id": 8,
+   "point1_id": 9,
+   "point2_id": 29,
+   "street_name": "One Bryant Park"
+ },
+ {
+   "street_id": 9,
+   "point1_id": 29,
+   "point2_id": 20,
+   "street_name": "Lexington Avenue"
+ },
+ {
+   "street_id": 10,
+   "point1_id": 20,
+   "point2_id": 17,
+   "street_name": "South Financial Place"
+ },
+ {
+   "street_id": 11,
+   "point1_id": 17,
+   "point2_id": 30,
+   "street_name": "Pacific Ave"
+ },
+ {
+   "street_id": 12,
+   "point1_id": 30,
+   "point2_id": 18,
+   "street_name": "South Dearborn Street"
+ },
+ {
+   "street_id": 13,
+   "point1_id": 18,
+   "point2_id": 12,
+   "street_name": "Greenwich Street"
+ },
+ {
+   "street_id": 14,
+   "point1_id": 12,
+   "point2_id": 16,
+   "street_name": "Broadway"
+ },
+ {
+   "street_id": 15,
+   "point1_id": 16,
+   "point2_id": 23,
+   "street_name": "Madison Avenue"
+ },
+ {
+   "street_id": 16,
+   "point1_id": 23,
+   "point2_id": 10,
+   "street_name": "Montgomery Street"
+ },
+ {
+   "street_id": 17,
+   "point1_id": 10,
+   "point2_id": 5,
+   "street_name": "West Madison Street"
+ },
+ {
+   "street_id": 18,
+   "point1_id": 5,
+   "point2_id": 32,
+   "street_name": "E 16th Street"
+ },
+ {
+   "street_id": 19,
+   "point1_id": 32,
+   "point2_id": 15,
+   "street_name": "Wall Street"
+ },
+ {
+   "street_id": 20,
+   "point1_id": 15,
+   "point2_id": 6,
+   "street_name": "Wall Street"
+ },
+ {
+   "street_id": 21,
+   "point1_id": 6,
+   "point2_id": 31,
+   "street_name": "Madison Avenue"
+ },
+ {
+   "street_id": 22,
+   "point1_id": 31,
+   "point2_id": 1,
+   "street_name": "City Avenue"
+ },
+ {
+   "street_id": 23,
+   "point1_id": 1,
+   "point2_id": 14,
+   "street_name": "West Street"
+ },
+ {
+   "street_id": 24,
+   "point1_id": 14,
+   "point2_id": 21,
+   "street_name": "S. Financial Place"
+ },
+ {
+   "street_id": 25,
+   "point1_id": 21,
+   "point2_id": 19,
+   "street_name": "Hudson Street"
+ },
+ {
+   "street_id": 26,
+   "point1_id": 19,
+   "point2_id": 25,
+   "street_name": "World Trade Center"
+ },
+ {
+   "street_id": 27,
+   "point1_id": 25,
+   "point2_id": 28,
+   "street_name": "Fifth Avenue"
+ },
+ {
+   "street_id": 28,
+   "point1_id": 28,
+   "point2_id": 22,
+   "street_name": "Broadway"
+ },
+ {
+   "street_id": 29,
+   "point1_id": 22,
+   "point2_id": 7,
+   "street_name": "Secaucus Road"
+ },
+ {
+   "street_id": 30,
+   "point1_id": 7,
+   "point2_id": 36,
+   "street_name": "South Wacker Drive"
+ },
+ {
+   "street_id": 31,
+   "point1_id": 36,
+   "point2_id": 4,
+   "street_name": "Worldwide Plaza"
+ },
+ {
+   "street_id": 32,
+   "point1_id": 4,
+   "point2_id": 33,
+   "street_name": "One Pickwick Plaza"
+ },
+ {
+   "street_id": 33,
+   "point1_id": 33,
+   "point2_id": 13,
+   "street_name": "Madison Avenue"
+ },
+ {
+   "street_id": 34,
+   "point1_id": 13,
+   "point2_id": 3,
+   "street_name": "Wall Street"
+ }
+]
+}
