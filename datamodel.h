@@ -91,12 +91,12 @@ public:
 
     bool LoadFile(QString file_name);
     void Read(const QJsonObject &json);
-signals:
 
-private:
+// private:
 
     std::vector<Point> points;
     std::vector<Street> streets;
+signals:
 
 };
 

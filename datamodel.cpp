@@ -5,9 +5,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-
-
 #include "datamodel.h"
+
+/* TODO
+ * error handling -> exceptions (separate file?)
+ *
+ */
 
 
 DataModel::DataModel(QObject *parent) : QObject(parent)
@@ -23,7 +26,7 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
 bool DataModel::LoadData()
 {
     bool res = LoadFile("points");
-    //res &= LoadFile("streets");
+    res &= LoadFile("streets");
 
     return res;
 }
@@ -49,15 +52,10 @@ bool DataModel::LoadFile(QString file_name)
         {
             QJsonArray points_json = json["points"].toArray(); // "points": [ .. ]
 
-            // setup vector
             this->points.clear();
-            this->points.reserve(points_json.size());
-
-            //qDebug() << "Points: json.size() =" << json.size() << ", [\"points\"].toArray().size =" << points_json.size();
 
             // fill vector with data
             for (int i = 0; i < points_json.size(); ++i) {
-                qDebug() << "reached" << i;
                 QJsonObject point = points_json[i].toObject(); // { "x": .. }
 
                 // qDebug() << "json_points:" << point["point_id"] << point["x"] << point["y"];
@@ -65,7 +63,7 @@ bool DataModel::LoadFile(QString file_name)
                 int x = point["x"].toInt();
                 int y = point["y"].toInt();
 
-                points.at(i) = Point(x, y);
+                points.emplace_back(Point(x, y));
             }
         }
         else
@@ -79,11 +77,9 @@ bool DataModel::LoadFile(QString file_name)
         {
             QJsonArray streets_json = json["streets"].toArray();
 
-            // setup vector
             this->streets.clear();
-            this->streets.reserve(streets_json.size());
 
-            qDebug() << "Streets: json.size() =" << json.size() << ", [\"points\"].toArray().size =" << streets_json.size();
+            // qDebug() << "Streets: json.size() =" << json.size() << ", [\"points\"].toArray().size =" << streets_json.size();
 
             // fill vector with data
             for (int i = 0; i < streets_json.size(); ++i) {
@@ -95,7 +91,7 @@ bool DataModel::LoadFile(QString file_name)
                 int point2 = street["point2_id"].toInt();
                 QString name = street["street_name"].toString();
 
-                streets.at(i) = Street(point1, point2, name);
+                streets.emplace_back(Street(point1, point2, name));
 
             }
         }

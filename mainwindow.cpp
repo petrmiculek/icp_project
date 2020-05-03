@@ -17,8 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     data.LoadData();
 
+
+    // fooling around with gui, testing
     ui->pushButton->setEnabled(false);
-    ui->label_json->setText("asdf");
+    QString content = QString::fromStdString(std::to_string(data.streets.size()));
+    ui->label_json->setText(content);
 
 }
 
