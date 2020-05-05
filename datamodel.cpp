@@ -28,6 +28,13 @@ bool DataModel::LoadData()
     bool res = LoadFile("points");
     res &= LoadFile("streets");
 
+    for(Street& s : streets)
+    {
+        s.point1 = &points.at(s.point_index1);
+        s.point2 = &points.at(s.point_index2);
+        // qDebug() << s.point1->x << s.point2->x;
+    }
+
     return res;
 }
 
@@ -63,7 +70,7 @@ bool DataModel::LoadFile(QString file_name)
                 int x = point["x"].toInt();
                 int y = point["y"].toInt();
 
-                points.emplace_back(Point(x, y));
+                points.emplace_back(x, y);
             }
         }
         else
@@ -91,7 +98,7 @@ bool DataModel::LoadFile(QString file_name)
                 int point2 = street["point2_id"].toInt();
                 QString name = street["street_name"].toString();
 
-                streets.emplace_back(Street(point1, point2, name));
+                streets.emplace_back(point1, point2, name);
 
             }
         }

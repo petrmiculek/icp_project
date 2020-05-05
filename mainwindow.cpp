@@ -2,6 +2,7 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QStandardItem>
+#include <QGraphicsScene>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -13,15 +14,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    auto data = DataModel();
-
-    data.LoadData();
-
+    auto* data = new DataModel();
 
     // fooling around with gui, testing
     ui->pushButton->setEnabled(false);
-    QString content = QString::fromStdString(std::to_string(data.streets.size()));
+    QString content = QString::fromStdString(std::to_string(data->streets.size()) + " streets");
     ui->label_json->setText(content);
+
+    qDebug() << "Hi";
+    InitScene(data);
 
 }
 
@@ -30,6 +31,24 @@ MainWindow::~MainWindow()
     delete ui;
 
 }
+
+
+void MainWindow::InitScene(DataModel* data)
+{
+    auto* scene = new QGraphicsScene(ui->graphicsView);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+
+    std::vector<QLineF> lines;
+    auto i = 0;
+    for (auto line : data->streets) {
+
+        auto scene_line = scene->addLine(line.point1->x(), line.point1->y(), line.point2->x(), line.point2->x());
+
+    }
+
+}
+
 /*
 bool MainWindow::LoadData()
 {

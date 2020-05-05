@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "datamodel.h"
+
 #include <QMainWindow>
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -17,6 +19,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void InitScene(DataModel* data);
 private:
     Ui::MainWindow *ui;
 };

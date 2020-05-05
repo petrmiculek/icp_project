@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QIODevice>
 #include <exception>
+#include <QPoint>
 
 using direction = bool;
 
@@ -12,47 +13,44 @@ struct DataLoadingException : public std::exception {
       return "Custom";
    }
 };
-
+/*
 // crossroads / street endpoint
 class Point
 {
 public:
     Point(int _x, int _y) : x(_x), y(_y) {}
 
-private:
+// private:
     // int id; // can be identified by position
 
     int x;
     int y;
 
 };
-
+*/
 
 class Stop
 {
     int id;
     std::string name;
     int street_percentage; // fraction of distance from point1 to point2
-
 };
 
 
 class Street
 {
 public:
-    Street(int _p1, int _p2, QString _name) : point_index1(_p1), point_index2(_p2), name(_name)
+    Street(int _p1, int _p2, QString _name) : point_index1(_p1), point_index2(_p2), point1(nullptr), point2(nullptr), name(_name)
     {
-        point1 = nullptr;
-        point2 = nullptr;
+
     }
 
     // int id;
-
-    Point * point1; // alternatively, index into points
-    Point * point2;
-
     int point_index1;
     int point_index2;
+
+    QPoint * point1; // alternatively, index into points
+    QPoint * point2;
 
     QString name;
 
@@ -94,7 +92,7 @@ public:
 
 // private:
 
-    std::vector<Point> points;
+    std::vector<QPoint> points;
     std::vector<Street> streets;
 signals:
 
