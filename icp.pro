@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     datamodel.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    maptimer.cpp
 
 HEADERS += \
     datamodel.h \
-    mainwindow.h
+    mainwindow.h \
+    maptimer.h
 
 FORMS += \
     mainwindow.ui
