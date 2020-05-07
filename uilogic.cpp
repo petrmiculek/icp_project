@@ -1,14 +1,36 @@
-#define SMALLINCREMENT 0.1
-#define BIGINCREMENT   1.0
-#define MAXMULTIPLIER  100 // maximum multiplier value (absolute value)
+#define BASEINCREMENT 0.1
+#define MAXMULTIPLIER 10000 // maximum multiplier value (absolute value)
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 #include <QStringRef>
-#include <qdebug.h>
 
 #include <math.h>
+
+void MainWindow::multiplyMultiplicator()
+{
+    currentIncrement += currentIncrement*100;
+    if (fabs(currentIncrement) > MAXMULTIPLIER/100) {
+        currentIncrement = currentIncrement < 0 ? -MAXMULTIPLIER/100 : MAXMULTIPLIER/100;
+    }
+}
+
+void MainWindow::initializeTimers()
+{
+    incrementsModifierTimer = new QTimer(this);
+    incrementsModifierTimer->setInterval(2500);
+    QObject::connect(incrementsModifierTimer, &QTimer::timeout, this, &MainWindow::multiplyMultiplicator);
+
+    incrementTimer = new QTimer(this);
+    incrementTimer->setInterval(100);
+    QObject::connect(incrementTimer, &QTimer::timeout, this, &MainWindow::incrementMultiplier);
+
+    incrementWaiterTimer = new QTimer(this);
+    incrementWaiterTimer->setInterval(750);
+    incrementWaiterTimer->setSingleShot(true);
+    QObject::connect(incrementWaiterTimer, &QTimer::timeout, this, &MainWindow::startAutoIncrement);
+}
 
 void MainWindow::on_toggleTimeBtn_clicked()
 {
@@ -25,7 +47,9 @@ void MainWindow::updateTime()
     // current multiplier
     const double multiplier = mapTimer->getMultiplier();
     // expected multiplier string length
-    const size_t mltplr_length = std::to_string(int(truncl(multiplier))).length() + 2;
+    size_t mltplr_length = std::to_string(int(truncl(multiplier))).length() + 2;
+    if (truncl(multiplier) == 0 && multiplier < 0)
+        mltplr_length += 1;
     // convert multiplier to string
     const QString string_multiplier = QString::fromStdString(std::to_string(multiplier));
     // remove unwanted decimal digits
@@ -39,9 +63,9 @@ void MainWindow::updateTime()
     status_label->setText("(" + (mapTimer->isRunning()?displayed_multiplier.toString()+"x":"Stopped") + ")");
 }
 
-void MainWindow::incrementMultiplier(const double increment)
+void MainWindow::incrementMultiplier()
 {
-    double currentMltplr = mapTimer->getMultiplier() + increment;
+    double currentMltplr = mapTimer->getMultiplier() + currentIncrement;
 
     if (fabs(currentMltplr) > MAXMULTIPLIER) {
         currentMltplr = currentMltplr < 0 ? -MAXMULTIPLIER : MAXMULTIPLIER;
@@ -50,11 +74,38 @@ void MainWindow::incrementMultiplier(const double increment)
     mapTimer->setMultiplier(currentMltplr);
 }
 
-void MainWindow::on_slowerBtn_clicked()
-{ incrementMultiplier(-SMALLINCREMENT); }
-void MainWindow::on_fasterBtn_clicked()
-{ incrementMultiplier(+SMALLINCREMENT); }
-void MainWindow::on_lotfasterBtn_clicked()
-{ incrementMultiplier(+BIGINCREMENT); }
-void MainWindow::on_lotslowerBtn_clicked()
-{ incrementMultiplier(-BIGINCREMENT); }
+void MainWindow::startAutoIncrement()
+{ incrementTimer->start(); incrementsModifierTimer->start(); }
+
+void MainWindow::on_fasterBtn_pressed()
+{
+    currentIncrement = BASEINCREMENT;
+    incrementMultiplier();
+    incrementWaiterTimer->start();
+}
+
+void MainWindow::on_fasterBtn_released()
+{
+    incrementWaiterTimer->stop();
+    incrementTimer->stop();
+    incrementsModifierTimer->stop();
+}
+
+void MainWindow::on_slowerBtn_pressed()
+{
+    currentIncrement = -BASEINCREMENT;
+    incrementMultiplier();
+    incrementWaiterTimer->start();
+}
+
+void MainWindow::on_slowerBtn_released()
+{
+    incrementWaiterTimer->stop();
+    incrementTimer->stop();
+    incrementsModifierTimer->stop();
+}
+
+void MainWindow::on_normalBtn_clicked()
+{
+    mapTimer->setMultiplier(1);
+}

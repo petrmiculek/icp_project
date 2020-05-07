@@ -11,6 +11,7 @@
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QLabel>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,14 +32,12 @@ public:
     void SceneZoomOut();
 private slots:
     void on_toggleTimeBtn_clicked();
+    void on_fasterBtn_pressed();
+    void on_fasterBtn_released();
+    void on_slowerBtn_pressed();
+    void on_slowerBtn_released();
 
-    void on_slowerBtn_clicked();
-
-    void on_fasterBtn_clicked();
-
-    void on_lotfasterBtn_clicked();
-
-    void on_lotslowerBtn_clicked();
+    void on_normalBtn_clicked();
 
     void ZoomInBtn_clicked();
 
@@ -50,8 +49,15 @@ private:
     MapTimer *mapTimer;
     QLabel *time_label;
     QLabel *status_label;
+    double currentIncrement; // multiplier increment
+    QTimer *incrementsModifierTimer; // when timeout is signalled, enlarges the multiplier increment value
+    QTimer *incrementTimer; // automatically modifies time multiplicator with the user holding the button down
+    QTimer *incrementWaiterTimer; // waits before starts automatically incrementing
+    void initializeTimers();
     void updateTime();
-    void incrementMultiplier(double increment);
+    void incrementMultiplier();
+    void startAutoIncrement();
+    void multiplyMultiplicator();
 
     std::vector<QGraphicsLineItem*> scene_streets;
     std::vector<QGraphicsEllipseItem*> scene_stops;
