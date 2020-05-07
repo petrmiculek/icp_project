@@ -127,32 +127,27 @@
               <item>
                <widget class="QPushButton" name="slowerBtn">
                 <property name="text">
-                 <string>slower (-0.1x)</string>
+                 <string>slower</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="normalBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>normal</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="fasterBtn">
                 <property name="text">
-                 <string>faster (0.1x)</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <widget class="QPushButton" name="lotslowerBtn">
-                <property name="text">
-                 <string>slower (-1.0x)</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="lotfasterBtn">
-                <property name="text">
-                 <string>faster (1.0x)</string>
+                 <string>faster</string>
                 </property>
                </widget>
               </item>
