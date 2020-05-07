@@ -4,12 +4,14 @@
 #include <QStandardItem>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include <QWheelEvent>
 
 #include <assert.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "datamodel.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,11 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto* data = new DataModel();
 
-    // fooling around with gui, testing
-    //QString content = QString::fromStdString(std::to_string(data->streets.size()) + " streets");
-    //ui->label_json->setText(content);
-
     InitScene(data);
+    AddZoomButtons();
 
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
     mapTimer->setInterval(50); // setting refresh interval to 50 milliseconds
@@ -32,12 +31,14 @@ MainWindow::MainWindow(QWidget *parent)
     assert(status_label = findChild<QLabel*>("statusLbl"));
 }
 
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-QPen next_color()
+
+QPen NextColor()
 {
     auto pens = std::vector<QPen>({
                  QPen({Qt::red}, 1),
@@ -51,7 +52,8 @@ QPen next_color()
     return pens.at(index++ % pens.size());
 }
 
-QPointF position_on_line(Street street, Stop stop)
+
+QPointF PositionOnLine(Street street, Stop stop)
 {
     auto x_diff = street.point2->x() - street.point1->x();
     auto y_diff = street.point2->y() - street.point1->y();
@@ -74,8 +76,8 @@ void MainWindow::InitScene(DataModel* data)
         auto qline = QLineF(*street.point1, *street.point2);
 
         QGraphicsLineItem* scene_street = scene->addLine(qline);
-        scene_street->setPen(next_color());
-
+        scene_street->setPen(NextColor());
+        scene_street->setFlag(QGraphicsItem::ItemIsSelectable);
         scene_streets.push_back(scene_street);
     }
 
@@ -88,13 +90,13 @@ void MainWindow::InitScene(DataModel* data)
         for (auto stop: street.stops)
         {
             // offset so that ellipse center lies on the street
-            QPointF top_left = position_on_line(street, stop) - point_ellipse_size/2;
+            QPointF top_left = PositionOnLine(street, stop) - point_ellipse_size/2;
 
             // ellipse bounding box
             auto ellipse_rect = QRectF(top_left, top_left + point_ellipse_size);
 
             QGraphicsEllipseItem* scene_stop = scene->addEllipse(ellipse_rect);
-            scene_stop->setPen(next_color());
+            scene_stop->setPen(NextColor());
 
             scene_stops.push_back(scene_stop);
         }
@@ -107,44 +109,69 @@ void MainWindow::InitScene(DataModel* data)
 }
 
 /*
-bool MainWindow::LoadData()
+// podle videa https://www.youtube.com/watch?v=4dq7n8S9AHw
+// udelat custom view, ktere nahradi tridu graphicsView?
+void MainWindow::wheelEvent(QWheelEvent *event)
 {
-    csvModel = new QStandardItemModel(this);
-    csvModel->setColumnCount(3);
-    csvModel->setHorizontalHeaderLabels(QStringList());
-    // ui->tableView->setModel(csvModel);
-
-    auto header_names = QStringList();
-    bool header_exists = false;
-
-    QFile file(":/exampleTable.csv");
-        if ( !file.open(QFile::ReadOnly | QFile::Text) ) {
-            qDebug() << "File not exists";
-        } else {
-            QTextStream in(&file);
-            QString line;
-
-            while (!in.atEnd())
-            {
-                line = in.readLine();
-                // Adding to the model in line with the elements
-                QList<QStandardItem *> standardItemsList;
-                // consider that the line separated by semicolons into columns
-                for (QString item : line.split(";")) {
-                    if (header_exists)
-                    {
-                        standardItemsList.append(new QStandardItem(item));
-                    }
-                    else
-                    {
-
-                    }
-                }
-                csvModel->insertRow(csvModel->rowCount(), standardItemsList);
-            }
-            file.close();
-        }
-
-    return true;
+    if (event->modifiers().testFlag(Qt::ControlModifier))
+    {
+        scaleView(pow((double)2, -event->delta() / 240.0));
+    } else {
+        QGraphicsView::wheelEvent(event);
+    }
 }
 */
+
+void MainWindow::SceneZoomIn()
+{
+    ui->graphicsView->scale(zoom_scale_factor, zoom_scale_factor);
+}
+
+void MainWindow::SceneZoomOut()
+{
+    ui->graphicsView->scale(1/zoom_scale_factor, 1/zoom_scale_factor);
+
+}
+
+void MainWindow::ZoomInBtn_clicked()
+{
+    // add checks?
+    // maximum zoom level
+    SceneZoomIn();
+
+}
+
+void MainWindow::ZoomOutBtn_clicked(){
+    // add checks?
+    // minimum zoom level - when outer box of all objects gets too small or idk
+    SceneZoomOut();
+}
+
+void MainWindow::AddZoomButtons()
+{
+    static bool zoom_buttons_exist = false;
+
+    if (zoom_buttons_exist)
+        return;
+
+    QWidget* parent = new QWidget(this->ui->graphicsView);
+    parent->resize(400, 400);
+    parent->raise();
+
+    const auto button_size = 30;
+
+    auto* zoom_in = new QPushButton(parent);
+    zoom_in->setText("+");
+    zoom_in->setGeometry(15, 15, button_size, button_size);
+    // zoom_in->raise();
+
+    auto* zoom_out = new QPushButton(parent);
+    zoom_out->setText("-");
+    zoom_out->setGeometry(15, 15 + button_size + 3, button_size, button_size);
+    // zoom_out->raise();
+
+    QObject::connect(zoom_in, &QPushButton::clicked, this, &MainWindow::ZoomInBtn_clicked);
+    QObject::connect(zoom_out, &QPushButton::clicked, this, &MainWindow::ZoomOutBtn_clicked);
+
+    zoom_buttons_exist = true;
+}

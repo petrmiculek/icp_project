@@ -26,6 +26,9 @@ public:
 
     void InitScene(DataModel* data);
 
+    void AddZoomButtons();
+    void SceneZoomIn();
+    void SceneZoomOut();
 private slots:
     void on_toggleTimeBtn_clicked();
 
@@ -36,6 +39,10 @@ private slots:
     void on_lotfasterBtn_clicked();
 
     void on_lotslowerBtn_clicked();
+
+    void ZoomInBtn_clicked();
+
+    void ZoomOutBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -48,6 +55,8 @@ private:
 
     std::vector<QGraphicsLineItem*> scene_streets;
     std::vector<QGraphicsEllipseItem*> scene_stops;
+
+    static const constexpr qreal zoom_scale_factor = 5.0/4;
 };
 
 #endif // MAINWINDOW_H
