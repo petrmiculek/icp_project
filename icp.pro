@@ -19,7 +19,8 @@ SOURCES += \
     datamodel.cpp \
     main.cpp \
     mainwindow.cpp \
-    maptimer.cpp
+    maptimer.cpp \
+    uilogic.cpp
 
 HEADERS += \
     datamodel.h \

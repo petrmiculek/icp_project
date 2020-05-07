@@ -29,11 +29,16 @@ public:
 private slots:
     void on_toggleTimeBtn_clicked();
 
+    void on_slowerBtn_clicked();
+
+    void on_fasterBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     MapTimer *mapTimer;
-    QLabel *ui_label;
+    QLabel *time_label;
+    QLabel *status_label;
     void updateTime();
 
     std::vector<QGraphicsLineItem*> scene_streets;
