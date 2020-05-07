@@ -9,7 +9,7 @@ class MapTimer : public QObject
 {
     Q_OBJECT
 public:
-    explicit MapTimer(int h, int m, int s, double multiplier = 1, QObject *parent = nullptr);
+    explicit MapTimer(int h = 0, int m = 0, int s = 0, double multiplier = 1, QObject *parent = nullptr);
     ~MapTimer();
 
     void start();
@@ -18,18 +18,25 @@ public:
     void setInterval(int interval);
     int getInterval() const;
 
-private slots:
-    void privateTimeout();
+    void setMultiplier(double multiplier);
+    double getMultiplier() const;
+
+    QTime currentTime() const;
+    QString currentTime(const QString &format) const;
 
 signals:
     void timeout();
-    void intervalChanged();
+    void intervalChanged(int newInterval);
+    void multiplierChanged(double newMultiplier);
 
 private:
     QTime *setTime;
     QTimer *internalTimer; // periodically invokes signals
     double timeMultiplier;
 
+    void privateTimeout(); // catches QTimer timeout
+
+    static void updateTime(int addMilliseconds, QTime **time);
 };
 
 #endif // MAPTIMER_H

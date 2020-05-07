@@ -1,5 +1,7 @@
 #include "maptimer.h"
 
+#include <stdexcept>
+
 MapTimer::MapTimer(int h, int m, int s, double multiplier, QObject *parent) : QObject(parent)
 {
     setTime = new QTime(h, m, s);
@@ -19,6 +21,16 @@ MapTimer::~MapTimer()
     delete setTime;
 }
 
+QTime MapTimer::currentTime() const
+{
+    return setTime->currentTime();
+}
+
+QString MapTimer::currentTime(const QString &format) const
+{
+    return setTime->toString(format);
+}
+
 void MapTimer::start()
 {
     if (!internalTimer->isActive()) {
@@ -34,7 +46,7 @@ void MapTimer::stop()
 void MapTimer::setInterval(int interval)
 {
     internalTimer->setInterval(interval);
-    emit intervalChanged();
+    emit intervalChanged(interval);
 }
 
 int MapTimer::getInterval() const
@@ -42,9 +54,29 @@ int MapTimer::getInterval() const
     return internalTimer->interval();
 }
 
+void MapTimer::setMultiplier(double multiplier)
+{
+    timeMultiplier = multiplier;
+    emit multiplierChanged(multiplier);
+}
+
+double MapTimer::getMultiplier() const
+{
+    return timeMultiplier;
+}
+
 void MapTimer::privateTimeout()
 {
-    qDebug("Map Timer caught internal timeout!");
+    //qDebug("Map Timer caught internal timeout!");
+
+    updateTime(internalTimer->interval() * timeMultiplier, &setTime);
 
     emit this->timeout();
+}
+
+void MapTimer::updateTime(int addMilliseconds, QTime **time)
+{
+    *time = new QTime( (*time)->addMSecs(addMilliseconds) );
+    if (!(*time)->isValid())
+        throw std::logic_error("invalid time");
 }
