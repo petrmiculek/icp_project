@@ -1,8 +1,11 @@
 #define SMALLINCREMENT 0.1
 #define BIGINCREMENT   1.0
+#define MAXMULTIPLIER  100 // maximum multiplier value (absolute value)
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
+#include <math.h>
 
 void MainWindow::on_toggleTimeBtn_clicked()
 {
@@ -33,8 +36,13 @@ void MainWindow::updateTime()
 
 void MainWindow::incrementMultiplier(const double increment)
 {
-    const double currentMltplr = mapTimer->getMultiplier();
-    mapTimer->setMultiplier(currentMltplr + increment);
+    double currentMltplr = mapTimer->getMultiplier() + increment;
+
+    if (fabs(currentMltplr) > MAXMULTIPLIER) {
+        currentMltplr = currentMltplr < 0 ? -MAXMULTIPLIER : MAXMULTIPLIER;
+    }
+
+    mapTimer->setMultiplier(currentMltplr);
 }
 
 void MainWindow::on_slowerBtn_clicked()
