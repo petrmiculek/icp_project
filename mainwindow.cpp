@@ -18,18 +18,35 @@ MainWindow::MainWindow(QWidget *parent)
     auto* data = new DataModel();
 
     // fooling around with gui, testing
-    ui->pushButton->setEnabled(false);
-    QString content = QString::fromStdString(std::to_string(data->streets.size()) + " streets");
-    ui->label_json->setText(content);
+    //QString content = QString::fromStdString(std::to_string(data->streets.size()) + " streets");
+    //ui->label_json->setText(content);
 
     InitScene(data);
 
+    mapTimer = new MapTimer(0, 0, 0, 1, this);
+    mapTimer->setInterval(50); // setting refresh interval to 50 milliseconds
+    QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
+    ui_label = findChild<QLabel*>("label");
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
 
+void MainWindow::on_toggleTimeBtn_clicked()
+{
+    if (mapTimer->isRunning())
+        mapTimer->stop();
+    else
+        mapTimer->start();
+}
+
+void MainWindow::updateTime()
+{
+    ui_label->setText(mapTimer->currentTime("hh:mm:ss")
+                      // workaround because can't get format "hh:mm:ss.z" to work properly
+                      + mapTimer->currentTime(".z").remove(2,50));
 }
 
 QPen next_color()
@@ -143,3 +160,5 @@ bool MainWindow::LoadData()
     return true;
 }
 */
+
+

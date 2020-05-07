@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "datamodel.h"
+#include "maptimer.h"
 
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>
@@ -9,6 +10,7 @@
 #include <QMainWindow>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,8 +25,16 @@ public:
     ~MainWindow();
 
     void InitScene(DataModel* data);
+
+private slots:
+    void on_toggleTimeBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
+
+    MapTimer *mapTimer;
+    QLabel *ui_label;
+    void updateTime();
 
     std::vector<QGraphicsLineItem*> scene_streets;
     std::vector<QGraphicsEllipseItem*> scene_stops;
