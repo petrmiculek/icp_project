@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QStandardItem>
 #include <QGraphicsScene>
+#include <QGraphicsItem>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -32,6 +33,20 @@ MainWindow::~MainWindow()
 
 }
 
+QPen next_color()
+{
+    auto pens = std::vector<QPen>({
+                 QPen({Qt::red}, 1),
+                 QPen({Qt::blue}, 1),
+                 QPen({Qt::black}, 1),
+                 QPen({Qt::green}, 1)
+    });
+
+    static int index = 0;
+
+    return pens.at(index++ % pens.size());
+}
+
 
 void MainWindow::InitScene(DataModel* data)
 {
@@ -39,12 +54,13 @@ void MainWindow::InitScene(DataModel* data)
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
 
-    std::vector<QLineF> lines;
+
+    std::vector<QGraphicsLineItem*> lines;
     auto i = 0;
     for (auto line : data->streets) {
-
-        auto scene_line = scene->addLine(line.point1->x(), line.point1->y(), line.point2->x(), line.point2->x());
-
+        auto qline = QLineF(*line.point1, *line.point2);
+        QGraphicsLineItem* scene_line = scene->addLine(qline);
+        scene_line->setPen(next_color());
     }
 
 }

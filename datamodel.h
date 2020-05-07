@@ -5,6 +5,7 @@
 #include <QIODevice>
 #include <exception>
 #include <QPoint>
+#include <math.h>
 
 using direction = bool;
 
@@ -29,6 +30,11 @@ public:
 };
 */
 
+static inline double euclid_distance(QPointF * point1, QPointF * point2)
+{
+    return sqrt(pow(point1->x() - point2->x(), 2) + pow(point1->y() - point2->y(), 2));
+}
+
 class Stop
 {
     int id;
@@ -40,23 +46,29 @@ class Stop
 class Street
 {
 public:
-    Street(int _p1, int _p2, QString _name) : point_index1(_p1), point_index2(_p2), point1(nullptr), point2(nullptr), name(_name)
+    Street(int _id, int _x1, int _y1, int _x2, int _y2, QString _name) :
+        id(_id),
+        point1(new QPointF(_x1, _y1)),
+        point2(new QPointF(_x2, _y2)),
+        name(_name),
+        stops({})     // todo do I have to initialize empty vector?
     {
-
+        time_cost = euclid_distance(point1, point2);
     }
 
-    // int id;
-    int point_index1;
-    int point_index2;
+    int id;
+    // static int max_street_id;
 
-    QPoint * point1; // alternatively, index into points
-    QPoint * point2;
+    QPointF * point1;
+    QPointF * point2;
 
     QString name;
 
     std::vector<Stop> stops;
 
     int time_cost;
+
+
 };
 
 
@@ -92,7 +104,6 @@ public:
 
 // private:
 
-    std::vector<QPoint> points;
     std::vector<Street> streets;
 signals:
 

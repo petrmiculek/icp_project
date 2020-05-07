@@ -25,15 +25,8 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
 
 bool DataModel::LoadData()
 {
-    bool res = LoadFile("points");
-    res &= LoadFile("streets");
-
-    for(Street& s : streets)
-    {
-        s.point1 = &points.at(s.point_index1);
-        s.point2 = &points.at(s.point_index2);
-        // qDebug() << s.point1->x << s.point2->x;
-    }
+    bool res = LoadFile("streets");
+    // res &= LoadFile("...");
 
     return res;
 }
@@ -51,7 +44,7 @@ bool DataModel::LoadFile(QString file_name)
     QJsonDocument doc(QJsonDocument::fromJson(file.readAll()));
 
     QJsonObject json(doc.object()); // top level item { .. }
-
+/*
     if(file_name == "points")
     {
 
@@ -77,8 +70,11 @@ bool DataModel::LoadFile(QString file_name)
         {
             qDebug() << "points: main item not an array";
         }
+
     }
-    else if(file_name == "streets")
+    else
+ */
+    if(file_name == "streets")
     {
         if (json.contains("streets") && json["streets"].isArray())
         {
@@ -86,19 +82,18 @@ bool DataModel::LoadFile(QString file_name)
 
             this->streets.clear();
 
-            // qDebug() << "Streets: json.size() =" << json.size() << ", [\"points\"].toArray().size =" << streets_json.size();
-
             // fill vector with data
             for (int i = 0; i < streets_json.size(); ++i) {
                 QJsonObject street = streets_json[i].toObject();
 
-                // qDebug() << "json_points:" << point["point_id"] << point["x"] << point["y"];
+                int start_x = street["start_x"].toInt();
+                int start_y = street["start_y"].toInt();
+                int end_x = street["end_x"].toInt();
+                int end_y = street["end_y"].toInt();
 
-                int point1 = street["point1_id"].toInt();
-                int point2 = street["point2_id"].toInt();
                 QString name = street["street_name"].toString();
 
-                streets.emplace_back(point1, point2, name);
+                streets.emplace_back(i, start_x, start_y, end_x, end_y, name);
 
             }
         }
