@@ -37,9 +37,18 @@ static inline double euclid_distance(QPointF * point1, QPointF * point2)
 
 class Stop
 {
+public:
+    Stop(int _id, int _street_percentage, QString _name) :
+        id(_id),
+        street_percentage(_street_percentage),
+        name(_name)
+    {
+
+    }
+
     int id;
-    std::string name;
-    int street_percentage; // fraction of distance from point1 to point2
+    double street_percentage; // fraction of distance from point1 to point2
+    QString name;
 };
 
 
@@ -75,7 +84,7 @@ public:
 class Trip
 {
     int id;
-    std::string name; // "Bus N95"
+    QString name; // "Bus N95"
     std::vector<std::tuple<Street, direction>> route;
 
 };
@@ -105,6 +114,8 @@ public:
 // private:
 
     std::vector<Street> streets;
+
+
 signals:
 
 };

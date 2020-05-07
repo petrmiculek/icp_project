@@ -26,7 +26,7 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
 bool DataModel::LoadData()
 {
     bool res = LoadFile("streets");
-    // res &= LoadFile("...");
+    res &= LoadFile("stops");
 
     return res;
 }
@@ -95,6 +95,45 @@ bool DataModel::LoadFile(QString file_name)
 
                 streets.emplace_back(i, start_x, start_y, end_x, end_y, name);
 
+            }
+        }
+        else
+        {
+            qDebug() << "streets: main item not an array";
+        }
+    }
+    else if(file_name == "stops")
+    {
+
+        /*
+               "stop_id": 1,
+               "street_id": 1,
+               "street_percentage": 20,
+               "name": "ABBEY LANE"
+         */
+
+        if (json.contains("stops") && json["stops"].isArray())
+        {
+            QJsonArray stops_json = json["stops"].toArray();
+
+            for (int i = 0; i < stops_json.size(); ++i) {
+                QJsonObject stop = stops_json[i].toObject();
+
+                unsigned int street_id = stop["street_id"].toInt();
+                if(street_id < streets.size()){
+                    auto& street = streets.at(street_id);
+
+                    int stop_id = stop["stop_id"].toInt();
+
+                    int street_percentage = stop["street_percentage"].toInt();
+
+                    QString name = stop["name"].toString();
+                    street.stops.emplace_back(stop_id, street_percentage, name);
+                }
+                else
+                {
+                    qDebug() << "stops: invalid street";
+                }
             }
         }
         else

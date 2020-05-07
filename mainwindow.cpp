@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
     QString content = QString::fromStdString(std::to_string(data->streets.size()) + " streets");
     ui->label_json->setText(content);
 
-    qDebug() << "Hi";
     InitScene(data);
 
 }
@@ -47,6 +46,17 @@ QPen next_color()
     return pens.at(index++ % pens.size());
 }
 
+QPointF position_on_line(Street street, Stop stop)
+{
+    auto x_diff = street.point2->x() - street.point1->x();
+    auto y_diff = street.point2->y() - street.point1->y();
+
+    auto x = street.point1->x() + x_diff * stop.street_percentage / 100;
+    auto y = street.point1->y() + y_diff * stop.street_percentage / 100;
+
+    return QPointF(x, y);
+}
+
 
 void MainWindow::InitScene(DataModel* data)
 {
@@ -54,14 +64,40 @@ void MainWindow::InitScene(DataModel* data)
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
 
+    // streets
+    for (auto street : data->streets) {
+        auto qline = QLineF(*street.point1, *street.point2);
 
-    std::vector<QGraphicsLineItem*> lines;
-    auto i = 0;
-    for (auto line : data->streets) {
-        auto qline = QLineF(*line.point1, *line.point2);
-        QGraphicsLineItem* scene_line = scene->addLine(qline);
-        scene_line->setPen(next_color());
+        QGraphicsLineItem* scene_street = scene->addLine(qline);
+        scene_street->setPen(next_color());
+
+        scene_streets.push_back(scene_street);
     }
+
+    // stops
+    for (auto street : data->streets) {
+
+        const static qreal stop_diameter = 10;
+        const static auto point_ellipse_size = QPointF(stop_diameter, stop_diameter);
+
+        for (auto stop: street.stops)
+        {
+            // offset so that ellipse center lies on the street
+            QPointF top_left = position_on_line(street, stop) - point_ellipse_size/2;
+
+            // ellipse bounding box
+            auto ellipse_rect = QRectF(top_left, top_left + point_ellipse_size);
+
+            QGraphicsEllipseItem* scene_stop = scene->addEllipse(ellipse_rect);
+            scene_stop->setPen(next_color());
+
+            scene_stops.push_back(scene_stop);
+        }
+    }
+
+    // vehicles
+
+    // TODO
 
 }
 

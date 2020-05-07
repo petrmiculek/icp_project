@@ -3,6 +3,9 @@
 
 #include "datamodel.h"
 
+#include <QGraphicsItem>
+#include <QGraphicsLineItem>
+#include <QGraphicsEllipseItem>
 #include <QMainWindow>
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -22,6 +25,9 @@ public:
     void InitScene(DataModel* data);
 private:
     Ui::MainWindow *ui;
+
+    std::vector<QGraphicsLineItem*> scene_streets;
+    std::vector<QGraphicsEllipseItem*> scene_stops;
 };
 
 #endif // MAINWINDOW_H
