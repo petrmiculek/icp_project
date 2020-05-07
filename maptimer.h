@@ -14,6 +14,7 @@ public:
 
     void start();
     void stop();
+    bool isRunning() const;
 
     void setInterval(int interval);
     int getInterval() const;

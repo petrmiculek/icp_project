@@ -43,6 +43,11 @@ void MapTimer::stop()
     internalTimer->stop();
 }
 
+bool MapTimer::isRunning() const
+{
+    return internalTimer->isActive();
+}
+
 void MapTimer::setInterval(int interval)
 {
     internalTimer->setInterval(interval);
