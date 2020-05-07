@@ -33,6 +33,10 @@ private slots:
 
     void on_fasterBtn_clicked();
 
+    void on_lotfasterBtn_clicked();
+
+    void on_lotslowerBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -40,6 +44,7 @@ private:
     QLabel *time_label;
     QLabel *status_label;
     void updateTime();
+    void incrementMultiplier(double increment);
 
     std::vector<QGraphicsLineItem*> scene_streets;
     std::vector<QGraphicsEllipseItem*> scene_stops;

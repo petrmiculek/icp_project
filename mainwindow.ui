@@ -86,7 +86,7 @@
           <item>
            <widget class="QLabel" name="statusLbl">
             <property name="text">
-             <string>Stopped</string>
+             <string>(Stopped)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -121,18 +121,44 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QPushButton" name="slowerBtn">
-            <property name="text">
-             <string>slower (-0.1x)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="fasterBtn">
-            <property name="text">
-             <string>faster (0.1x)</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPushButton" name="slowerBtn">
+                <property name="text">
+                 <string>slower (-0.1x)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="fasterBtn">
+                <property name="text">
+                 <string>faster (0.1x)</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QPushButton" name="lotslowerBtn">
+                <property name="text">
+                 <string>slower (-1.0x)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="lotfasterBtn">
+                <property name="text">
+                 <string>faster (1.0x)</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
