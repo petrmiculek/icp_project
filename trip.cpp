@@ -27,3 +27,15 @@ void Trip::addStreetToRoute(Street s, direction d)
     emit routeChanged();
 }
 */
+
+void Trip::addSpawn(QTime time, direction d)
+{
+    spawns.push_back(tuple(time, d));
+}
+
+void Trip::spawnVehiclesAt(QTime atTime)
+{
+    for (auto t : spawns)
+        if (get<0>(t) == atTime);
+            //vehiclePool.push_back(Vehicle(0, 0));
+}

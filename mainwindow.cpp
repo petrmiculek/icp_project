@@ -138,12 +138,18 @@ void MainWindow::InitScene(DataModel* data)
     for (auto street : data->streets) {
         for (auto stop: street.stops)
         {
-            TrafficCircleItem* scene_stop2 = new TrafficCircleItem(PositionOnLine(street, stop.street_percentage), bus_symbol);
+            TrafficCircleItem* scene_stop2 = new TrafficCircleItem(
+                        PositionOnLine(street, stop.street_percentage), bus_symbol);
             scene->addItem(scene_stop2);
         }
     }
 
     // vehicles
+    Trip t("N420", mapTimer);
+    t.addStreetToRoute(data->streets[0]);
+    t.addStreetToRoute(data->streets[1]);
+    t.addSpawn(QTime(0,0,10));
+
 
     // TODO
 
