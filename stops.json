@@ -38,19 +38,19 @@
  },
  {
    "stop_id": 7,
-   "street_id": 30,
+   "street_id": 26,
    "street_percentage": 70,
    "name": "ABBEY WOOD LANE"
  },
  {
    "stop_id": 8,
-   "street_id": 30,
+   "street_id": 27,
    "street_percentage": 20,
    "name": "ABBEY WOOD PUMPING STATION"
  },
  {
    "stop_id": 9,
-   "street_id": 31,
+   "street_id": 28,
    "street_percentage": 40,
    "name": "ABBEY WOOD ROAD"
  }

@@ -69,6 +69,9 @@ private:
     std::vector<QGraphicsLineItem*> scene_streets;
     std::vector<QGraphicsEllipseItem*> scene_stops;
 
+    std::vector<Street> selected_streets;
+    bool selecting;
+
     void initializeTimers();
     void updateTime();
     void incrementMultiplier();
@@ -76,6 +79,7 @@ private:
     void multiplyMultiplicator();
 
     static const constexpr qreal zoom_scale_factor = 5.0/4;
+
 };
 
 #endif // MAINWINDOW_H

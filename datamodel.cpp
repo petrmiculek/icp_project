@@ -7,11 +7,12 @@
 
 #include "datamodel.h"
 
+using direction = bool;
+
 /* TODO
  * error handling -> exceptions (separate file?)
  *
  */
-
 
 
 DataModel::DataModel(QObject *parent) : QObject(parent)
@@ -21,6 +22,36 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
     {
         throw DataLoadingException(); // general exc
     }
+
+    // temporary
+    std::vector<std::tuple<Street, direction>> tmp_route;
+
+    auto street_ids = {15, 16, 17, 18};
+
+    for (auto s_id : street_ids)
+    {
+        bool found = false;
+        for (Street street : streets)
+        {
+            if (street.id == s_id)
+            {
+                std::tuple<Street, direction> tuple = {street, false};
+                tmp_route.push_back(tuple);
+                found = true;
+                break;
+            }
+        }
+
+        if (found == false)
+        {
+            qDebug() << "err creating route";
+            return;
+        }
+    }
+
+    Trip tmp_trip(QString("Test-linka"), tmp_route);
+
+    trips.push_back(tmp_trip);
 }
 
 

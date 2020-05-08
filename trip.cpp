@@ -2,11 +2,11 @@
 
 using namespace std;
 
-Trip::Trip(QString name, QObject *parent) : QObject(parent)
+Trip::Trip(QString name)
 {
     lineName = name;
 }
-Trip::Trip(QString name, vector<tuple<Street, direction>> route, QObject *parent) : Trip(name, parent)
+Trip::Trip(QString name, vector<tuple<Street, direction>> route) : Trip(name)
 {
     this->lineRoute = route;
 }
@@ -20,9 +20,10 @@ vector<tuple<Street, direction>> Trip::route() const
 {
     return lineRoute;
 }
-
+/*
 void Trip::addStreetToRoute(Street s, direction d)
 {
     lineRoute.push_back(tuple(s, d));
     emit routeChanged();
 }
+*/
