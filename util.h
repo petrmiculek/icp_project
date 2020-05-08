@@ -11,7 +11,7 @@ struct DataLoadingException : public std::exception {
 };
 
 
-[[maybe_unused]] double euclid_distance(QPointF * point1, QPointF * point2);
+double euclid_distance(QPointF * point1, QPointF * point2);
 
 
 #endif // UTIL_H
