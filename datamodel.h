@@ -27,6 +27,7 @@ public:
 
 // private:
     std::vector<Street> streets;
+    std::vector<Trip> trips;
 
 signals:
 

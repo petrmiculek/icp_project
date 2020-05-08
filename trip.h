@@ -1,26 +1,22 @@
 #ifndef TRIP_H
 #define TRIP_H
 
-#include <QObject>
-
 #include "street.h"
 
 using direction = bool;
 
-class Trip : public QObject
+class Trip
 {
-    Q_OBJECT
 public:
-    explicit Trip(QString name, QObject *parent = nullptr);
-    explicit Trip(QString name, std::vector<std::tuple<Street, direction>> route, QObject *parent = nullptr);
+    Trip(QString name);
+    Trip(QString name, std::vector<std::tuple<Street, direction>> route);
 
     QString name() const;
     std::vector<std::tuple<Street, direction>> route() const;
 
     void addStreetToRoute(Street s, direction d);
 
-signals:
-    void routeChanged();
+    // void routeChanged();
 
 private:
     QString lineName; // "N95"
