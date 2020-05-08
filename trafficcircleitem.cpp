@@ -1,4 +1,5 @@
 #include "trafficcircleitem.h"
+#include "util.h"
 
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content) : text(content)
 {

@@ -14,15 +14,9 @@ using direction = bool;
  *
  */
 
-
-DataModel::DataModel(QObject *parent) : QObject(parent)
+// sample route
+void CreateTmpRoute(DataModel* data)
 {
-    auto res = LoadData();
-    if(!res)
-    {
-        throw DataLoadingException(); // general exc
-    }
-
     // temporary
     std::vector<std::tuple<Street, direction>> tmp_route;
 
@@ -31,7 +25,7 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
     for (auto s_id : street_ids)
     {
         bool found = false;
-        for (Street street : streets)
+        for (Street street : data->streets)
         {
             if (street.id == s_id)
             {
@@ -51,7 +45,19 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
 
     Trip tmp_trip(QString("Test-linka"), tmp_route);
 
-    trips.push_back(tmp_trip);
+    data->trips.push_back(tmp_trip);
+}
+
+
+DataModel::DataModel(QObject *parent) : QObject(parent)
+{
+    auto res = LoadData();
+    if(!res)
+    {
+        throw DataLoadingException(); // general exc
+    }
+
+    CreateTmpRoute(this);
 }
 
 
@@ -76,7 +82,7 @@ bool DataModel::LoadFile(QString file_name)
     QJsonDocument doc(QJsonDocument::fromJson(file.readAll()));
 
     QJsonObject json(doc.object()); // top level item { .. }
-/*
+    /*
     if(file_name == "points")
     {
 
@@ -105,7 +111,7 @@ bool DataModel::LoadFile(QString file_name)
 
     }
     else
- */
+    */
     if(file_name == "streets")
     {
         if (json.contains("streets") && json["streets"].isArray())

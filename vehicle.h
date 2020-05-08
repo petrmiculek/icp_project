@@ -1,6 +1,8 @@
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
+class Trip;
+
 class Vehicle
 {
 public:

@@ -24,10 +24,10 @@ public:
     void spawnVehiclesAt(QTime atTime);
 
 private:
+    std::vector<Vehicle> vehiclePool;
     QString lineName; // "N95"
     std::vector<std::tuple<Street, direction>> lineRoute;
     std::vector<std::tuple<QTime>> spawns; // when/how to spawn new vehicles
-    std::vector<Vehicle> vehiclePool;
 };
 
 #endif // TRIP_H

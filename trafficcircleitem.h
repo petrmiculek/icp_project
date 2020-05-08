@@ -3,7 +3,7 @@
 
 #include <QGraphicsEllipseItem>
 #include <QPainter>
-#include "mainwindow.h"
+// #include "mainwindow.h"
 
 
 class TrafficCircleItem : public QGraphicsEllipseItem
