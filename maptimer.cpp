@@ -76,7 +76,7 @@ void MapTimer::privateTimeout()
 
     updateTime(internalTimer->interval() * timeMultiplier, &setTime);
 
-    emit this->timeout();
+    emit this->timeout(this->setTime->currentTime());
 }
 
 void MapTimer::updateTime(int addMilliseconds, QTime **time)

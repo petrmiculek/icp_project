@@ -26,7 +26,7 @@ public:
     QString currentTime(const QString &format) const;
 
 signals:
-    void timeout();
+    void timeout(QTime time);
     void intervalChanged(int newInterval);
     void multiplierChanged(double newMultiplier);
 
