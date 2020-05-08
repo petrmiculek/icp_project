@@ -14,6 +14,7 @@ struct DataLoadingException : public std::exception {
       return "Custom";
    }
 };
+
 /*
 // crossroads / street endpoint
 class Point
