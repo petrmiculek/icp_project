@@ -22,13 +22,15 @@ SOURCES += \
     mainwindowzoom.cpp \
     maptimer.cpp \
     trafficcircleitem.cpp \
+    trip.cpp \
     uilogic.cpp
 
 HEADERS += \
     datamodel.h \
     mainwindow.h \
     maptimer.h \
-    trafficcircleitem.h
+    trafficcircleitem.h \
+    trip.h
 
 FORMS += \
     mainwindow.ui

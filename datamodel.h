@@ -7,7 +7,7 @@
 #include <QPoint>
 #include <math.h>
 
-using direction = bool;
+#include "trip.h"
 
 struct DataLoadingException : public std::exception {
    const char * what () const throw () {
@@ -80,16 +80,6 @@ public:
 
 
 };
-
-
-class Trip
-{
-    int id;
-    QString name; // "Bus N95"
-    std::vector<std::tuple<Street, direction>> route;
-
-};
-
 
 class Vehicle
 {
