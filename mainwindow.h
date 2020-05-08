@@ -13,6 +13,12 @@
 #include <QLabel>
 #include <QTimer>
 
+QPen NextColor();
+
+QRectF CenterRectToPoint(QRectF rect, QPointF point);
+
+QPointF PositionOnLine(Street street, int street_percentage);
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
