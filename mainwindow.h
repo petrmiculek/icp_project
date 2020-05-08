@@ -49,6 +49,10 @@ private slots:
 
     void ZoomOutBtn_clicked();
 
+    void selectionChanged();
+
+    void RouteCreateToggled();
+
 private:
     Ui::MainWindow *ui;
 
@@ -59,14 +63,17 @@ private:
     QTimer *incrementsModifierTimer; // when timeout is signalled, enlarges the multiplier increment value
     QTimer *incrementTimer; // automatically modifies time multiplicator with the user holding the button down
     QTimer *incrementWaiterTimer; // waits before starts automatically incrementing
+
+    DataModel * data;
+    QGraphicsScene * scene;
+    std::vector<QGraphicsLineItem*> scene_streets;
+    std::vector<QGraphicsEllipseItem*> scene_stops;
+
     void initializeTimers();
     void updateTime();
     void incrementMultiplier();
     void startAutoIncrement();
     void multiplyMultiplicator();
-
-    std::vector<QGraphicsLineItem*> scene_streets;
-    std::vector<QGraphicsEllipseItem*> scene_stops;
 
     static const constexpr qreal zoom_scale_factor = 5.0/4;
 };

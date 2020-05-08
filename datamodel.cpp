@@ -13,6 +13,7 @@
  */
 
 
+
 DataModel::DataModel(QObject *parent) : QObject(parent)
 {
     auto res = LoadData();

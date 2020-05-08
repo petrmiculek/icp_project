@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "datamodel.h"
+#include "street.h"
 
 using direction = bool;
 

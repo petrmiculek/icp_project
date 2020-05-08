@@ -13,17 +13,18 @@
 #include "ui_mainwindow.h"
 #include "datamodel.h"
 #include "trafficcircleitem.h"
+#include "mainwindow.h"
 
 static constexpr uint a[] = {0x1F68D}; // bus Unicode symbol
 static const QString bus_symbol = QString::fromUcs4(a,1);
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    auto* data = new DataModel();
+    data = new DataModel();
 
     InitScene(data);
     AddZoomButtons();
@@ -35,29 +36,77 @@ MainWindow::MainWindow(QWidget *parent)
     assert(status_label = findChild<QLabel*>("statusLbl"));
 
     initializeTimers();
+
+    // QPushButton::connect(createRouteBtn, &QTimer::timeout, this, &MainWindow::);
+
 }
 
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete data;
+    delete mapTimer;
+    delete scene;
 }
 
 
-QPen NextColor()
+void MainWindow::selectionChanged()
 {
-    auto pens = std::vector<QPen>({
-                                      {{Qt::red}, 1},
-                                      {{Qt::blue}, 1},
-                                      {{Qt::black}, 1},
-                                      {{Qt::darkGreen}, 1},
-                                      {{Qt::gray}, 1},
-                                      {{Qt::darkBlue}, 1},
-                                  });
+    // maybe only add line items to a vector
+}
 
-    static int index = 0;
+void MainWindow::RouteCreateToggled()
+{
+    auto items = scene->selectedItems();
 
-    return pens.at(index++ % pens.size());
+    // std::vector<QGraphicsLineItem*> streets{};
+
+    for (auto line: items)
+    {
+        for(auto street: data->streets)
+        {
+            // if (street.point1 == )
+        }
+    }
+}
+
+
+void MainWindow::InitScene(DataModel* data)
+{
+    scene = new QGraphicsScene(ui->graphicsView);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    ui->graphicsView->scale(2, 2);
+
+    // streets
+    for (auto street : data->streets) {
+        auto qline = QLineF(*street.point1, *street.point2);
+
+
+        QGraphicsLineItem* scene_street = scene->addLine(qline);
+        scene_street->setPen(NextColor());
+        scene_street->setFlag(QGraphicsItem::ItemIsSelectable);
+
+        scene_streets.push_back(scene_street);
+    }
+
+    // stops
+    for (auto street : data->streets) {
+        for (auto stop: street.stops)
+        {
+            TrafficCircleItem* scene_stop2 = new TrafficCircleItem(PositionOnLine(street, stop.street_percentage), bus_symbol);
+            scene->addItem(scene_stop2);
+        }
+    }
+
+    // vehicles
+
+    // TODO
+
+    connect(scene, &QGraphicsScene::selectionChanged,
+            this, &MainWindow::selectionChanged);
+
 }
 
 
@@ -82,40 +131,20 @@ QPointF PositionOnLine(Street street, int street_percentage)
 }
 
 
-
-
-void MainWindow::InitScene(DataModel* data)
+QPen NextColor()
 {
-    auto* scene = new QGraphicsScene(ui->graphicsView);
-    ui->graphicsView->setScene(scene);
-    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    ui->graphicsView->scale(2, 2);
+    auto pens = std::vector<QPen>({
+                                      {{Qt::red}, 1},
+                                      {{Qt::blue}, 1},
+                                      {{Qt::black}, 1},
+                                      {{Qt::darkGreen}, 1},
+                                      {{Qt::gray}, 1},
+                                      {{Qt::darkBlue}, 1},
+                                  });
+    static int index = 0;
 
-    // streets
-    for (auto street : data->streets) {
-        auto qline = QLineF(*street.point1, *street.point2);
-
-        QGraphicsLineItem* scene_street = scene->addLine(qline);
-        scene_street->setPen(NextColor());
-        scene_street->setFlag(QGraphicsItem::ItemIsSelectable);
-        scene_streets.push_back(scene_street);
-    }
-
-    // stops
-    for (auto street : data->streets) {
-        for (auto stop: street.stops)
-        {
-            TrafficCircleItem* scene_stop2 = new TrafficCircleItem(PositionOnLine(street, stop.street_percentage), bus_symbol);
-            scene->addItem(scene_stop2);
-        }
-    }
-
-    // vehicles
-
-    // TODO
-
+    return pens.at(index++ % pens.size());
 }
-
 
 /*
 // podle videa https://www.youtube.com/watch?v=4dq7n8S9AHw
@@ -130,4 +159,3 @@ void MainWindow::wheelEvent(QWheelEvent *event)
     }
 }
 */
-
