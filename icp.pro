@@ -19,13 +19,16 @@ SOURCES += \
     datamodel.cpp \
     main.cpp \
     mainwindow.cpp \
+    mainwindowzoom.cpp \
     maptimer.cpp \
+    trafficcircleitem.cpp \
     uilogic.cpp
 
 HEADERS += \
     datamodel.h \
     mainwindow.h \
-    maptimer.h
+    maptimer.h \
+    trafficcircleitem.h
 
 FORMS += \
     mainwindow.ui

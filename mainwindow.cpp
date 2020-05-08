@@ -5,13 +5,17 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QWheelEvent>
+#include <QPen>
 
 #include <assert.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "datamodel.h"
+#include "trafficcircleitem.h"
 
+static constexpr uint a[] = {0x1F68D}; // bus Unicode symbol
+static const QString bus_symbol = QString::fromUcs4(a,1);
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -78,52 +82,7 @@ QPointF PositionOnLine(Street street, int street_percentage)
 }
 
 
-class StopCircle :public QGraphicsEllipseItem
-{
-public:
-    StopCircle(QPointF center)  // BUS: u8"\1F68D" -- doesn't work
-    {
-        QRectF rect = CenterRectToPoint(QRectF(center, center + point_ellipse_size), center);
 
-        // circle bounding box
-        setRect(rect);
-
-        setPen(NextColor());
-        setBrush({Qt::white});
-
-        // inner text bounding box
-        text_space = QRectF(rect);
-        text_space.setWidth(text_space.width() * inscribed_square_size);
-        text_space.setHeight(text_space.height() * inscribed_square_size);
-        text_space = CenterRectToPoint(text_space, center);
-        text_space.translate(0, -1);
-
-        uint a[] = {0x1F68D};
-        text = QString::fromUcs4(a,1);
-    }
-
-    void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 ) override
-    {
-        QGraphicsEllipseItem::paint(painter, option, widget);
-
-        QFont font = painter->font();
-         font.setPixelSize(7);
-         painter->setFont(font);
-        painter->drawText(text_space, Qt::AlignCenter, text);    // Draw you text
-
-    }
-
-    // QGraphicsTextItem text;
-    QRectF text_space;
-    QString text;
-
-private:
-    // should be static
-    static constexpr qreal stop_diameter = 10;
-    static constexpr QPointF point_ellipse_size = {stop_diameter, stop_diameter};
-    static constexpr qreal inscribed_square_size = 0.707;
-
-};
 
 void MainWindow::InitScene(DataModel* data)
 {
@@ -146,13 +105,7 @@ void MainWindow::InitScene(DataModel* data)
     for (auto street : data->streets) {
         for (auto stop: street.stops)
         {
-            StopCircle* scene_stop2 = new StopCircle(PositionOnLine(street, stop.street_percentage));
-
-            // QGraphicsEllipseItem* scene_stop = scene->addEllipse(ellipse_rect);
-            // scene_stop->setPen(NextColor());
-            // scene_stop->setBrush(QBrush(Qt::white));
-            // scene_stops.push_back(scene_stop);
-
+            TrafficCircleItem* scene_stop2 = new TrafficCircleItem(PositionOnLine(street, stop.street_percentage), bus_symbol);
             scene->addItem(scene_stop2);
         }
     }
@@ -162,7 +115,6 @@ void MainWindow::InitScene(DataModel* data)
     // TODO
 
 }
-
 
 
 /*
@@ -179,56 +131,3 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 }
 */
 
-void MainWindow::SceneZoomIn()
-{
-    ui->graphicsView->scale(zoom_scale_factor, zoom_scale_factor);
-}
-
-void MainWindow::SceneZoomOut()
-{
-    ui->graphicsView->scale(1/zoom_scale_factor, 1/zoom_scale_factor);
-
-}
-
-void MainWindow::ZoomInBtn_clicked()
-{
-    // add checks?
-    // maximum zoom level
-    SceneZoomIn();
-
-}
-
-void MainWindow::ZoomOutBtn_clicked(){
-    // add checks?
-    // minimum zoom level - when outer box of all objects gets too small or idk
-    SceneZoomOut();
-}
-
-void MainWindow::AddZoomButtons()
-{
-    static bool zoom_buttons_exist = false;
-
-    if (zoom_buttons_exist)
-        return;
-
-    QWidget* parent = new QWidget(this->ui->graphicsView);
-    parent->resize(45, 80);
-    parent->raise();
-
-    const auto button_size = 30;
-
-    auto* zoom_in = new QPushButton(parent);
-    zoom_in->setText("+");
-    zoom_in->setGeometry(15, 15, button_size, button_size);
-    // zoom_in->raise();
-
-    auto* zoom_out = new QPushButton(parent);
-    zoom_out->setText("-");
-    zoom_out->setGeometry(15, 15 + button_size + 3, button_size, button_size);
-    // zoom_out->raise();
-
-    QObject::connect(zoom_in, &QPushButton::clicked, this, &MainWindow::ZoomInBtn_clicked);
-    QObject::connect(zoom_out, &QPushButton::clicked, this, &MainWindow::ZoomOutBtn_clicked);
-
-    zoom_buttons_exist = true;
-}
