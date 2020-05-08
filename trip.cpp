@@ -20,22 +20,20 @@ vector<tuple<Street, direction>> Trip::route() const
 {
     return lineRoute;
 }
-/*
+
 void Trip::addStreetToRoute(Street s, direction d)
 {
     lineRoute.push_back(tuple(s, d));
-    emit routeChanged();
 }
-*/
 
-void Trip::addSpawn(QTime time, direction d)
+void Trip::addSpawn(QTime time)
 {
-    spawns.push_back(tuple(time, d));
+    spawns.push_back(time);
 }
 
 void Trip::spawnVehiclesAt(QTime atTime)
 {
     for (auto t : spawns)
-        if (get<0>(t) == atTime);
-            //vehiclePool.push_back(Vehicle(0, 0));
+        if (get<0>(t) == atTime)
+            vehiclePool.push_back(Vehicle(0, 0));
 }

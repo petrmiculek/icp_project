@@ -145,7 +145,7 @@ void MainWindow::InitScene(DataModel* data)
     }
 
     // vehicles
-    Trip t("N420", mapTimer);
+    Trip t("N420");
     t.addStreetToRoute(data->streets[0]);
     t.addStreetToRoute(data->streets[1]);
     t.addSpawn(QTime(0,0,10));

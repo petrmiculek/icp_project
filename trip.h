@@ -19,14 +19,15 @@ public:
     std::vector<std::tuple<Street, direction>> route() const;
 
     void addStreetToRoute(Street s, direction d = true);
-    void addSpawn(QTime time, direction d = true);
+    void addSpawn(QTime time);
 
     void spawnVehiclesAt(QTime atTime);
 
 private:
     QString lineName; // "N95"
     std::vector<std::tuple<Street, direction>> lineRoute;
-    std::vector<std::tuple<QTime, direction>> spawns; // when/how to spawn new vehicles
+    std::vector<std::tuple<QTime>> spawns; // when/how to spawn new vehicles
+    std::vector<Vehicle> vehiclePool;
 };
 
 #endif // TRIP_H
