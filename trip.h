@@ -24,7 +24,7 @@ public:
     std::vector<Street_dir> route() const;
     std::vector<Vehicle*> vehicles() const;
 
-    void addStreetToRoute(Street s, direction d = true);
+    void addStreetToRoute(Street s, direction d = dir_default);
     void addSpawn(QTime time);
     void setLastTime(QTime time);
 
