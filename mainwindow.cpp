@@ -150,6 +150,12 @@ void MainWindow::redrawVehicles(QTime time)
 {
     for (auto trip : trips) {
         trip.spawnVehiclesAt(time);
+        for (auto vehicle : trip.vehicles()) {
+            auto* v = new TrafficCircleItem(
+                        PositionOnLine(data->streets[vehicle.street_id], vehicle.street_percentage),
+                        "A");
+            scene->addItem(v);
+        }
     }
 }
 

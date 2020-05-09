@@ -24,6 +24,11 @@ vector<tuple<Street, direction>> Trip::route() const
     return lineRoute;
 }
 
+vector<Vehicle> Trip::vehicles() const
+{
+    return vehiclePool;
+}
+
 void Trip::addStreetToRoute(Street s, direction d)
 {
     lineRoute.push_back(tuple(s, d));

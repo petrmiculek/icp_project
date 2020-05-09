@@ -17,6 +17,7 @@ public:
 
     QString name() const;
     std::vector<std::tuple<Street, direction>> route() const;
+    std::vector<Vehicle> vehicles() const;
 
     void addStreetToRoute(Street s, direction d = true);
     void addSpawn(QTime time);
