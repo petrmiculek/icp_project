@@ -30,7 +30,7 @@ public:
 
     void spawnVehiclesAt(QTime time);
 
-private:
+//private:
     std::vector<Vehicle> vehiclePool;
     std::vector<Street_dir> lineRoute;
     std::vector<QTime> spawns; // when to spawn new vehicles
@@ -39,7 +39,7 @@ private:
 
     void createNewVehiclesAt(QTime time);
     void advanceVehicleRoute(Vehicle* v);
-    static void updateVehiclePosition(Vehicle* v, double elapsedMSecs);
+    void updateVehiclePosition(Vehicle &v, double elapsedMSecs);
 };
 
 #endif // TRIP_H

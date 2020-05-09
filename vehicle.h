@@ -10,7 +10,6 @@ class Vehicle
 {
 public:
     Vehicle(int street_id, double speed, direction dir = dir_forward, double progress = 0);
-    ~Vehicle();
 
     int street_id; // which street it's on
     int internal_street_index;

@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     AddZoomButtons();
 
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
-    mapTimer->setInterval(100); // setting refresh interval to 100 milliseconds
+    mapTimer->setInterval(10); // setting refresh interval to 100 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     assert(time_label = findChild<QLabel*>("timeLbl"));
     assert(status_label = findChild<QLabel*>("statusLbl"));
@@ -149,23 +149,26 @@ void MainWindow::InitScene(DataModel* data)
 void MainWindow::redrawVehicles(QTime time)
 {
     // delete old vehicles
-    /*for (size_t i = 0; i < drawnVehicles.size(); i++) {
+    for (size_t i = 0; i < drawnVehicles.size(); i++) {
         scene->removeItem(drawnVehicles[i]);
         delete drawnVehicles[i];
     }
-    drawnVehicles.clear();*/
+    drawnVehicles.clear();
 
-    for (auto trip : data->trips) {
-        qDebug() << trip.vehicles().size();
-        /*trip.spawnVehiclesAt(time);
-        for (auto vehicle : trip.vehicles()) {
+    for (auto& trip : data->trips) {
+        trip.spawnVehiclesAt(time);
+        for (auto& vehicle : trip.vehicles()) {
+            if (vehicle.speed == -1)
+                // invalid vehicle
+                continue;
+
             auto* v = new TrafficCircleItem(
-                        PositionOnLine(data->streets[vehicle->street_id],
-                        vehicle->streetPercentage(data->streets[vehicle->street_id].time_cost)),
+                        PositionOnLine(data->streets[vehicle.street_id],
+                        vehicle.streetPercentage(data->streets[vehicle.street_id].time_cost)),
                         "A");
             scene->addItem(v);
             drawnVehicles.push_back(v);
-        }*/
+        }
     }
 }
 

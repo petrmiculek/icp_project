@@ -8,14 +8,9 @@ Vehicle::Vehicle(int street_id, double speed, direction dir, double progress)  :
     internal_street_index = 0;
 }
 
-Vehicle::~Vehicle()
-{
-    qDebug() << "Vehicle destroyed";
-}
-
 double Vehicle::streetPercentage(double street_cost)
 {
-    return progress / street_cost * 100;
+    return (dir == dir_forward ? 1 : (-1)) * progress / street_cost * 100;
 }
 
 double Vehicle::fromMSecsToProgress(double msecs)
