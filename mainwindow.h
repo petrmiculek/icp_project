@@ -14,11 +14,8 @@
 #include <QLabel>
 #include <QTimer>
 
-QPen NextColor();
+class StreetItem;
 
-QRectF CenterRectToPoint(QRectF rect, QPointF point);
-
-QPointF PositionOnLine(Street street, double street_percentage);
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -64,7 +61,7 @@ private:
 
     DataModel * data;
     QGraphicsScene * scene;
-    std::vector<QGraphicsLineItem*> scene_streets;
+    std::vector<StreetItem*> scene_streets;
     std::vector<QGraphicsEllipseItem*> scene_stops;
 
     std::vector<Street> selected_streets;

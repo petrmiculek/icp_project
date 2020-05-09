@@ -9,9 +9,9 @@
 class TrafficCircleItem : public QGraphicsEllipseItem
 {
 public:
-    TrafficCircleItem(QPointF center, QString content);
+    TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent = nullptr);
 
-    void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 ) override;
+    void paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
     // QGraphicsTextItem text;
     QRectF text_space;

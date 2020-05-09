@@ -23,6 +23,7 @@ SOURCES += \
     maptimer.cpp \
     stop.cpp \
     street.cpp \
+    streetitem.cpp \
     trafficcircleitem.cpp \
     trip.cpp \
     uilogic.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     maptimer.h \
     stop.h \
     street.h \
+    streetitem.h \
     trafficcircleitem.h \
     trip.h \
     util.h \

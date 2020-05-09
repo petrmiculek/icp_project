@@ -1,7 +1,7 @@
 #include "trafficcircleitem.h"
 #include "util.h"
 
-TrafficCircleItem::TrafficCircleItem(QPointF center, QString content) : text(content)
+TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) : QGraphicsEllipseItem(parent), text(content)
 {
     QRectF rect = CenterRectToPoint(QRectF(center, center + point_ellipse_size), center);
 

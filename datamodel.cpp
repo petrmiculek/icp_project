@@ -15,7 +15,7 @@ using direction = bool;
  */
 
 // sample route
-void CreateTmpRoute(DataModel* data)
+void CreateSampleTrip(DataModel* data)
 {
     // temporary
     std::vector<Street_dir> tmp_route;
@@ -25,7 +25,7 @@ void CreateTmpRoute(DataModel* data)
     for (auto s_id : street_ids)
     {
         bool found = false;
-        for (Street street : data->streets)
+        for (Street& street : data->streets)
         {
             if (street.id == s_id)
             {
@@ -42,9 +42,7 @@ void CreateTmpRoute(DataModel* data)
         }
     }
 
-    Trip tmp_trip(QString("Test-linka"), tmp_route);
-
-    data->trips.push_back(tmp_trip);
+    data->trips.emplace_back(QString("Test-linka"), tmp_route);
 }
 
 
@@ -56,21 +54,26 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
         throw DataLoadingException(); // general exc
     }
 
-    CreateTmpRoute(this);
+    // Creating mock trip, not used anymore
+    // CreateSampleTrip(this);
 }
 
 
 bool DataModel::LoadData()
 {
-    bool res = LoadFile("streets");
-    res &= LoadFile("stops");
-    res &= LoadFile("trips");
+    bool res = LoadJSONFile("streets");
+    res &= LoadJSONFile("stops");
+    res &= LoadJSONFile("trips");
 
     return res;
 }
 
-
-bool DataModel::LoadFile(QString file_name)
+/**
+ * @brief DataModel::LoadJSONFile Load JSON File of given structure, based on file name
+ * @param file_name
+ * @return
+ */
+bool DataModel::LoadJSONFile(QString file_name)
 {
     QFile file(":/" + file_name + ".json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -83,6 +86,10 @@ bool DataModel::LoadFile(QString file_name)
 
     QJsonObject json(doc.object()); // top level item { .. }
     /*
+
+    // We don't currently load points separately, so this is not needed.
+    // Keeping this, in case we change the structure of JSON data
+
     if(file_name == "points")
     {
 
@@ -220,16 +227,13 @@ bool DataModel::LoadFile(QString file_name)
                     }
 
                     // save trip to collection
-
                     trips.emplace_back(QString::number(trip_id), route);
                 }
                 else
                 {
                     qDebug() << "trips: invalid streets array";
                 }
-
             }
-            qDebug() << "loaded" << trips.size() << "trips";
         }
         else
         {

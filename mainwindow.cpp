@@ -11,6 +11,8 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "streetitem.h"
+#include "util.h"
 
 static constexpr uint a[] = {0x1F68D}; // bus Unicode symbol
 static const QString bus_symbol = QString::fromUcs4(a,1);
@@ -123,11 +125,12 @@ void MainWindow::InitScene(DataModel* data)
 
     // streets
     for (auto street : data->streets) {
-        auto qline = QLineF(*street.point1, *street.point2);
+        // auto qline = QLineF(*street.point1, *street.point2);
 
-        QGraphicsLineItem* scene_street = scene->addLine(qline);
-        scene_street->setPen(NextColor());
-        scene_street->setFlag(QGraphicsItem::ItemIsSelectable);
+        //QGraphicsLineItem* scene_street = scene->addLine(qline);
+
+        StreetItem* scene_street = new StreetItem(street);
+        scene->addItem(scene_street);
 
         scene_streets.push_back(scene_street);
     }
