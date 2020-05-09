@@ -43,45 +43,44 @@ StreetItem::StreetItem(Street street, QGraphicsItem * parent) :
     // nothing
 }
 
+StreetItem::~StreetItem()
+{
+    qDebug() << "Street destroyed";
+}
+
 QPointF StreetItem::ComputeLabelPos()
 {
-
-    QLineF normal = line().normalVector();
+    // get center point of line
     auto center = line().center();
+
+    // shift point to top/right (so that it's not directly on the line)
+    QLineF normal = line().normalVector();
     auto tmp = line().p2() - center;
+
     normal.translate(tmp);
-    normal.setLength(5);
+    normal.setLength(3);
 
     auto text_center = normal.p2();
 
 
-
+    // compute top left corner of text
     auto aligned_rect = CenterRectToPoint(label.boundingRect(), text_center);
 
     label.setPos(aligned_rect.topLeft());
 
-    // label.setTransformOriginPoint(text_center);
+    // rotate around its center
+    label.setTransformOriginPoint(label.boundingRect().center());
+
+    // rotate to the line's orientation
     label.setRotation(-line().angle());
 
+    // currently unused
     return aligned_rect.topLeft();
-
-
-    // get center point of line
-
-    // shift point to top/right (so that it's not directly on the line)
-
-    // compute top left corner of text
-
-
-    // + (ensure text is above line, by text orientation?)
 }
 
 void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )
 {
     // Label
-    qDebug() << "" << label.text() << "Rotation:" <<label.rotation();
-
-
     label.paint(painter, option, widget);
 
     // Line
