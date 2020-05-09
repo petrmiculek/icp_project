@@ -15,6 +15,11 @@ Trip::Trip(QString name, vector<Street_dir> route) : Trip(name)
     this->lineRoute = route;
 }
 
+Trip::~Trip()
+{
+    delete lastTime;
+}
+
 QString Trip::name() const
 {
     return lineName;
@@ -45,16 +50,48 @@ void Trip::setLastTime(QTime time)
     lastTime = new QTime(time);
 }
 
+void Trip::advanceVehicleRoute(Vehicle *v)
+{
+    ++v->internal_street_index;
+    if (v->internal_street_index < lineRoute.size()) {
+        v->street_id = lineRoute[v->internal_street_index].first.id;
+    }
+}
+
 void Trip::spawnVehiclesAt(QTime time)
 {
-    if (lastTime)
-        updateVehiclesPosition(abs(time.secsTo(*lastTime)));
+    // updating existing vehicles
+    if (lastTime && vehiclePool.size() != 0) {
+        const int msecsElapsed = abs(time.msecsTo(*lastTime));
+        for (auto* vehicle : vehiclePool) {
+            updateVehiclePosition(vehicle, msecsElapsed);
+
+            // we've reached the end of the street
+            double w; // wasted progress
+            while ((w=vehicle->progress - lineRoute[vehicle->internal_street_index].first.time_cost) > 0) {
+                advanceVehicleRoute(vehicle);
+
+                w = vehicle->fromProgressToMSecs(w); // convert to wasted milliseconds
+
+                updateVehiclePosition(vehicle, w); // advance again on new street
+            }
+        }
+    }
+
     createNewVehiclesAt(time);
 
     setLastTime(time);
 
     // qDebug() << (*lastTime).toString();
     // qDebug() << vehiclePool.size();
+}
+
+void Trip::updateVehiclePosition(Vehicle* v, double elapsedMSecs)
+{
+    if (elapsedMSecs == 0)
+        return;
+
+    v->progress += v->fromMSecsToProgress(elapsedMSecs);
 }
 
 void Trip::createNewVehiclesAt(QTime time)
@@ -84,15 +121,7 @@ void Trip::createNewVehiclesAt(QTime time)
     }
 }
 
-void Trip::updateVehiclesPosition(int elapsedSecs)
-{
-    if (vehiclePool.size() == 0)
-        return;
 
-    for (auto vehicle : vehiclePool) {
-
-    }
-}
 
 
 

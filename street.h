@@ -29,7 +29,7 @@ public:
 
     std::vector<Stop> stops;
 
-    int time_cost;
+    double time_cost;
 };
 
 #endif // STREET_H
