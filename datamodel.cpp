@@ -64,6 +64,7 @@ bool DataModel::LoadData()
 {
     bool res = LoadFile("streets");
     res &= LoadFile("stops");
+    res &= LoadFile("trips");
 
     return res;
 }
@@ -228,13 +229,13 @@ bool DataModel::LoadFile(QString file_name)
                 }
 
             }
+            qDebug() << "loaded" << trips.size() << "trips";
         }
         else
         {
             qDebug() << "streets: main item not an array";
         }
     }
-
 
     return true;
 }

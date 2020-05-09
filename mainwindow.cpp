@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     AddZoomButtons();
 
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
-    mapTimer->setInterval(1000); // setting refresh interval to 100 milliseconds
+    mapTimer->setInterval(100); // setting refresh interval to 100 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     assert(time_label = findChild<QLabel*>("timeLbl"));
     assert(status_label = findChild<QLabel*>("statusLbl"));
@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
 
+    // tempora
     selected_streets = {};
     selecting = false;
 
@@ -154,9 +155,11 @@ void MainWindow::redrawVehicles(QTime time)
     }
     drawnVehicles.clear();
 
-    for (auto trip : trips) {
+    qDebug() << "data->trips.size():" << data->trips.size();
+
+    for (auto trip : data->trips) {
         trip.spawnVehiclesAt(time);
-        for (auto vehicle : trip.vehiclePool) {
+        for (auto vehicle : trip.vehicles()) {
             auto* v = new TrafficCircleItem(
                         PositionOnLine(data->streets[vehicle.street_id], vehicle.street_percentage),
                         "A");
@@ -168,6 +171,7 @@ void MainWindow::redrawVehicles(QTime time)
 
 void MainWindow::initTrips()
 {
+    /*
     // vehicles
     Trip t("N420");
     t.addStreetToRoute(data->streets[0]);
@@ -177,6 +181,15 @@ void MainWindow::initTrips()
     trips.push_back(t);
 
     t.setLastTime(QTime(0, 0, 1));
+    */
+
+    qDebug() << "trips_size" << data->trips.size();
+
+    for (auto& t : data->trips)
+    {
+        t.addSpawn(QTime(0,0,2));
+        t.setLastTime(QTime(0, 0, 1));
+    }
 
     // can connect to Trip's functions only through an intemediary as Trip is not a QObject
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
