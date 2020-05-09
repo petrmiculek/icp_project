@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     AddZoomButtons();
 
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
-    mapTimer->setInterval(10); // setting refresh interval to 100 milliseconds
+    mapTimer->setInterval(50); // setting refresh interval to 100 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     assert(time_label = findChild<QLabel*>("timeLbl"));
     assert(status_label = findChild<QLabel*>("statusLbl"));
