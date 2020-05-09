@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     AddZoomButtons();
 
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
-    mapTimer->setInterval(100); // setting refresh interval to 100 milliseconds
+    mapTimer->setInterval(1000); // setting refresh interval to 100 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     assert(time_label = findChild<QLabel*>("timeLbl"));
     assert(status_label = findChild<QLabel*>("statusLbl"));
@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     selected_streets = {};
     selecting = false;
+
+    initTrips();
 }
 
 
@@ -112,7 +114,6 @@ void MainWindow::RouteCreateToggled()
     }
 }
 
-
 void MainWindow::InitScene(DataModel* data)
 {
     scene = new QGraphicsScene(ui->graphicsView);
@@ -140,21 +141,33 @@ void MainWindow::InitScene(DataModel* data)
             scene->addItem(scene_stop2);
         }
     }
-/*
+
+    connect(scene, &QGraphicsScene::selectionChanged,
+            this, &MainWindow::selectionChanged);
+}
+
+void MainWindow::redrawVehicles(QTime time)
+{
+    for (auto trip : trips) {
+        trip.spawnVehiclesAt(time);
+    }
+}
+
+void MainWindow::initTrips()
+{
     // vehicles
     Trip t("N420");
     t.addStreetToRoute(data->streets[0]);
     t.addStreetToRoute(data->streets[1]);
-    t.addSpawn(QTime(0,0,10));
+    t.addSpawn(QTime(0,0,2));
 
-*/
-    // TODO
+    trips.push_back(t);
 
-    connect(scene, &QGraphicsScene::selectionChanged,
-            this, &MainWindow::selectionChanged);
+    t.setLastTime(QTime(0, 0, 1));
 
+    // can connect to Trip's functions only through an intemediary as Trip is not a QObject
+    QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
 }
-
 
 /*
 // podle videa https://www.youtube.com/watch?v=4dq7n8S9AHw

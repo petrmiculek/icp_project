@@ -1,14 +1,16 @@
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
-class Trip;
+using direction = bool;
 
 class Vehicle
 {
 public:
-    Vehicle(int street_id, int street_percentage);
+    Vehicle(int street_id, double speed, direction dir = true);
     int street_id;  // which street it's on
     int street_percentage;
+    direction dir;
+    double speed;
 };
 
 #endif // VEHICLE_H

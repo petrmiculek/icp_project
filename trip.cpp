@@ -1,10 +1,13 @@
 #include "trip.h"
 
+#include <math.h>
+#include <qdebug.h>
+
 using namespace std;
 
-Trip::Trip(QString name)
+Trip::Trip(QString name) : lineName(name), lastTime(nullptr)
 {
-    lineName = name;
+
 }
 Trip::Trip(QString name, vector<tuple<Street, direction>> route) : Trip(name)
 {
@@ -31,9 +34,43 @@ void Trip::addSpawn(QTime time)
     spawns.push_back(time);
 }
 
-void Trip::spawnVehiclesAt(QTime atTime)
+void Trip::setLastTime(QTime time)
 {
-    for (auto t : spawns)
-        if (get<0>(t) == atTime)
-            vehiclePool.push_back(Vehicle(0, 0));
+    lastTime = new QTime(time);
+}
+
+void Trip::spawnVehiclesAt(QTime time)
+{
+    if (lastTime)
+        updateVehiclesPosition(abs(time.secsTo(*lastTime)));
+    createNewVehiclesAt(time);
+
+    setLastTime(time);
+    qDebug() << (*lastTime).toString();
+}
+
+void Trip::createNewVehiclesAt(QTime time)
+{
+    if (spawns.size() == 0)
+        return;
+
+    int street_id = get<0>(lineRoute.front()).id;
+    bool direction = get<1>(lineRoute.front());
+
+    if (!lastTime) {
+        for (auto t : spawns)
+            if (t == time)
+                vehiclePool.push_back(Vehicle(street_id, 0.1, direction));
+    }
+    else {
+        for (auto t : spawns)
+            if (*lastTime > t && t <= time)
+                vehiclePool.push_back(Vehicle(street_id, 0.1, direction));
+    }
+}
+
+void Trip::updateVehiclesPosition(int elapsedSecs)
+{
+    if (vehiclePool.size() == 0)
+        return;
 }

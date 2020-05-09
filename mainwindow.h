@@ -42,20 +42,16 @@ private slots:
     void on_fasterBtn_released();
     void on_slowerBtn_pressed();
     void on_slowerBtn_released();
-
     void on_normalBtn_clicked();
-
     void ZoomInBtn_clicked();
-
     void ZoomOutBtn_clicked();
-
     void selectionChanged();
-
     void RouteCreateToggled();
 
 private:
     Ui::MainWindow *ui;
 
+    std::vector<Trip> trips;
     MapTimer *mapTimer;
     QLabel *time_label;
     QLabel *status_label;
@@ -74,9 +70,11 @@ private:
 
     void initializeTimers();
     void updateTime();
+    void redrawVehicles(QTime time);
     void incrementMultiplier();
     void startAutoIncrement();
     void multiplyMultiplicator();
+    void initTrips();
 
     static const constexpr qreal zoom_scale_factor = 5.0/4;
 
