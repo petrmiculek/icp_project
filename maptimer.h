@@ -14,6 +14,7 @@ public:
 
     void start();
     void stop();
+    void reset();
     bool isRunning() const;
 
     void setInterval(int interval);
@@ -29,6 +30,7 @@ signals:
     void timeout(QTime time);
     void intervalChanged(int newInterval);
     void multiplierChanged(double newMultiplier);
+    void reset_signal();
 
 private:
     QTime *setTime;

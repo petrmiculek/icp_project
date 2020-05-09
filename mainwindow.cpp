@@ -29,8 +29,9 @@ MainWindow::MainWindow(QWidget *parent)
     AddZoomButtons();
 
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
-    mapTimer->setInterval(100); // setting refresh interval to 100 milliseconds
+    mapTimer->setInterval(50); // setting refresh interval to 100 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
+    QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
     assert(time_label = findChild<QLabel*>("timeLbl"));
     assert(status_label = findChild<QLabel*>("statusLbl"));
 
@@ -151,19 +152,19 @@ void MainWindow::InitScene(DataModel* data)
 
 void MainWindow::redrawVehicles(QTime time)
 {
-    // delete old vehicles
-    for (size_t i = 0; i < drawnVehicles.size(); i++) {
-        scene->removeItem(drawnVehicles[i]);
-        delete drawnVehicles[i];
-    }
-    drawnVehicles.clear();
+    deleteDrawnVehicles();
 
-    for (auto trip : data->trips) {
+    for (auto& trip : data->trips) {
         trip.spawnVehiclesAt(time);
-        for (auto vehicle : trip.vehicles()) {
+        for (auto& vehicle : trip.vehicles()) {
+            if (vehicle.isinvalid())
+                // invalid vehicle
+                continue;
+
             auto* v = new TrafficCircleItem(
-                        PositionOnLine(data->streets[vehicle->street_id], vehicle->street_percentage),
-                        "A");
+                        PositionOnLine(data->streets[vehicle.street_id],
+                        vehicle.streetPercentage(data->streets[vehicle.street_id].time_cost)),
+                        vehicle.symbol());
             scene->addItem(v);
             drawnVehicles.push_back(v);
         }
@@ -172,28 +173,33 @@ void MainWindow::redrawVehicles(QTime time)
 
 void MainWindow::initTrips()
 {
-    /*
-    // vehicles
-    Trip t("N420");
-    t.addStreetToRoute(data->streets[0]);
-    t.addStreetToRoute(data->streets[1]);
-    t.addSpawn(QTime(0,0,2));
-
-    trips.push_back(t);
-
-    t.setLastTime(QTime(0, 0, 1));
-    */
-
-    // qDebug() << "trips_size" << data->trips.size();
-
     for (auto& t : data->trips)
     {
         t.addSpawn(QTime(0,0,2));
-        t.setLastTime(QTime(0, 0, 1));
     }
 
-    // can connect to Trip's functions only through an intemediary as Trip is not a QObject
+    // can connect to Trip's functions only through an intermediary as Trip is not a QObject
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
+}
+
+void MainWindow::invalidateVehicles()
+{
+    deleteDrawnVehicles();
+    for (auto& trip : data->trips) {
+        trip.setLastTime(mapTimer->currentTime());
+        for (auto& vehicle : trip.vehicles())
+            vehicle.invalidate();
+    }
+}
+
+void MainWindow::deleteDrawnVehicles()
+{
+    // delete old vehicles
+    for (size_t i = 0; i < drawnVehicles.size(); i++) {
+        scene->removeItem(drawnVehicles[i]);
+        delete drawnVehicles[i];
+    }
+    drawnVehicles.clear();
 }
 
 /*

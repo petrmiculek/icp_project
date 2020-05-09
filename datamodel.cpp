@@ -29,7 +29,7 @@ void CreateSampleTrip(DataModel* data)
         {
             if (street.id == s_id)
             {
-                tmp_route.emplace_back(street, dir_default);
+                tmp_route.emplace_back(street, dir_forward);
                 found = true;
                 break;
             }
@@ -222,7 +222,7 @@ bool DataModel::LoadJSONFile(QString file_name)
                         }
 
                         // iterator to target street is dereferenced
-                        route.emplace_back(*target_street, dir_default);
+                        route.emplace_back(*target_street, dir_forward);
 
                     }
 

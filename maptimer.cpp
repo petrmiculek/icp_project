@@ -43,6 +43,17 @@ void MapTimer::stop()
     internalTimer->stop();
 }
 
+void MapTimer::reset()
+{
+    const bool startTimer = internalTimer->isActive();
+    internalTimer->stop();
+    setTime = new QTime(0, 0);
+    emit timeout(*setTime);
+    emit reset_signal();
+    if (startTimer)
+        internalTimer->start();
+}
+
 bool MapTimer::isRunning() const
 {
     return internalTimer->isActive();

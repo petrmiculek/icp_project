@@ -45,12 +45,12 @@ private slots:
     void ZoomOutBtn_clicked();
     void selectionChanged();
     void RouteCreateToggled();
+    void on_resetBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
 
     std::vector<TrafficCircleItem*> drawnVehicles;
-    std::vector<Trip> trips;
     MapTimer *mapTimer;
     QLabel *time_label;
     QLabel *status_label;
@@ -74,6 +74,8 @@ private:
     void startAutoIncrement();
     void multiplyMultiplicator();
     void initTrips();
+    void invalidateVehicles();
+    void deleteDrawnVehicles();
 
     static const constexpr qreal zoom_scale_factor = 5.0/4;
 

@@ -109,3 +109,8 @@ void MainWindow::on_normalBtn_clicked()
 {
     mapTimer->setMultiplier(1);
 }
+
+void MainWindow::on_resetBtn_clicked()
+{
+    mapTimer->reset();
+}
