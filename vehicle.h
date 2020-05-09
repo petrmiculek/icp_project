@@ -1,6 +1,8 @@
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
+#include <QString>
+
 using direction = bool;
 
 #define dir_forward false
@@ -9,7 +11,7 @@ using direction = bool;
 class Vehicle
 {
 public:
-    Vehicle(int street_id, double speed, direction dir = dir_forward, double progress = 0);
+    Vehicle(int street_id, double speed, QString symbol = "", direction dir = dir_forward, double progress = 0);
 
     int street_id; // which street it's on
     int internal_street_index;
@@ -20,6 +22,10 @@ public:
     double streetPercentage(double street_cost);
     double fromMSecsToProgress(double msecs);
     double fromProgressToMSecs(double progress);
+
+    QString symbol() const;
+private:
+    QString _symbol;
 };
 
 #endif // VEHICLE_H

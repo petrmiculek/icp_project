@@ -99,6 +99,7 @@ void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)
 
 void Trip::createNewVehiclesAt(QTime time)
 {
+    static char symb = 'A';
     if (spawns.size() == 0)
         return;
 
@@ -108,14 +109,14 @@ void Trip::createNewVehiclesAt(QTime time)
         // first call, lastTime was not set yet
         for (auto t : spawns)
             if (t == time) {
-                vehiclePool.push_back(Vehicle(street.id, 0.01, direction));
+                vehiclePool.push_back(Vehicle(street.id, 0.01, QString(symb++), direction));
             }
     }
     else {
         // lastTime set => check if time is past this point
         for (auto t : spawns)
             if (*lastTime < t && t <= time) {
-                vehiclePool.push_back(Vehicle(street.id, 0.01, direction));
+                vehiclePool.push_back(Vehicle(street.id, 0.01, QString(symb++), direction));
             }
     }
 }

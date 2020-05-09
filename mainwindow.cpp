@@ -165,7 +165,7 @@ void MainWindow::redrawVehicles(QTime time)
             auto* v = new TrafficCircleItem(
                         PositionOnLine(data->streets[vehicle.street_id],
                         vehicle.streetPercentage(data->streets[vehicle.street_id].time_cost)),
-                        "A");
+                        vehicle.symbol());
             scene->addItem(v);
             drawnVehicles.push_back(v);
         }
@@ -177,7 +177,6 @@ void MainWindow::initTrips()
     for (auto& t : data->trips)
     {
         t.addSpawn(QTime(0,0,2));
-        t.setLastTime(QTime(0, 0, 1));
     }
 
     // can connect to Trip's functions only through an intermediary as Trip is not a QObject
