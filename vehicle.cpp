@@ -10,5 +10,5 @@ Vehicle::Vehicle(int street_id, double speed, direction dir)  :
 
 Vehicle::~Vehicle()
 {
-    //qDebug() << "Vehicle destroyed";
+    qDebug() << "Vehicle destroyed";
 }

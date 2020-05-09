@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
 
-    // tempora
+    // temporary
     selected_streets = {};
     selecting = false;
 
@@ -155,8 +155,6 @@ void MainWindow::redrawVehicles(QTime time)
     }
     drawnVehicles.clear();
 
-    qDebug() << "data->trips.size():" << data->trips.size();
-
     for (auto trip : data->trips) {
         trip.spawnVehiclesAt(time);
         for (auto vehicle : trip.vehicles()) {
@@ -183,7 +181,7 @@ void MainWindow::initTrips()
     t.setLastTime(QTime(0, 0, 1));
     */
 
-    qDebug() << "trips_size" << data->trips.size();
+    // qDebug() << "trips_size" << data->trips.size();
 
     for (auto& t : data->trips)
     {

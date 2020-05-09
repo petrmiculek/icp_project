@@ -163,7 +163,7 @@ bool DataModel::LoadFile(QString file_name)
 
                     int stop_id = stop["stop_id"].toInt();
 
-                    int street_percentage = stop["street_percentage"].toInt();
+                    double street_percentage = stop["street_percentage"].toDouble();
 
                     QString name = stop["name"].toString();
                     street.stops.emplace_back(stop_id, street_percentage, name);
