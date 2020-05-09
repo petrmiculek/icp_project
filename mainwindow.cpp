@@ -154,7 +154,6 @@ void MainWindow::redrawVehicles(QTime time)
     }
     drawnVehicles.clear();
 
-    qDebug() << "Trips: " << trips.size();
     for (auto trip : trips) {
         trip.spawnVehiclesAt(time);
         for (auto* vehicle : trip.vehicles()) {
