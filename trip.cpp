@@ -24,7 +24,7 @@ vector<tuple<Street, direction>> Trip::route() const
     return lineRoute;
 }
 
-vector<Vehicle> Trip::vehicles() const
+vector<Vehicle*> Trip::vehicles() const
 {
     return vehiclePool;
 }
@@ -52,6 +52,7 @@ void Trip::spawnVehiclesAt(QTime time)
 
     setLastTime(time);
     qDebug() << (*lastTime).toString();
+    qDebug() << vehiclePool.size();
 }
 
 void Trip::createNewVehiclesAt(QTime time)
@@ -65,12 +66,12 @@ void Trip::createNewVehiclesAt(QTime time)
     if (!lastTime) {
         for (auto t : spawns)
             if (t == time)
-                vehiclePool.push_back(Vehicle(street_id, 0.1, direction));
+                vehiclePool.push_back(new Vehicle(street_id, 0.1, direction));
     }
     else {
         for (auto t : spawns)
             if (*lastTime > t && t <= time)
-                vehiclePool.push_back(Vehicle(street_id, 0.1, direction));
+                vehiclePool.push_back(new Vehicle(street_id, 0.1, direction));
     }
 }
 

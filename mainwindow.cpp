@@ -11,7 +11,6 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "trafficcircleitem.h"
 
 static constexpr uint a[] = {0x1F68D}; // bus Unicode symbol
 static const QString bus_symbol = QString::fromUcs4(a,1);
@@ -148,13 +147,22 @@ void MainWindow::InitScene(DataModel* data)
 
 void MainWindow::redrawVehicles(QTime time)
 {
+    // delete old vehicles
+    for (size_t i = 0; i < drawnVehicles.size(); i++) {
+        scene->removeItem(drawnVehicles[i]);
+        delete drawnVehicles[i];
+    }
+    drawnVehicles.clear();
+
+    qDebug() << "Trips: " << trips.size();
     for (auto trip : trips) {
         trip.spawnVehiclesAt(time);
-        for (auto vehicle : trip.vehicles()) {
+        for (auto* vehicle : trip.vehicles()) {
             auto* v = new TrafficCircleItem(
-                        PositionOnLine(data->streets[vehicle.street_id], vehicle.street_percentage),
+                        PositionOnLine(data->streets[vehicle->street_id], vehicle->street_percentage),
                         "A");
             scene->addItem(v);
+            drawnVehicles.push_back(v);
         }
     }
 }

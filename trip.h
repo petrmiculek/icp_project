@@ -17,7 +17,7 @@ public:
 
     QString name() const;
     std::vector<std::tuple<Street, direction>> route() const;
-    std::vector<Vehicle> vehicles() const;
+    std::vector<Vehicle*> vehicles() const;
 
     void addStreetToRoute(Street s, direction d = true);
     void addSpawn(QTime time);
@@ -26,7 +26,7 @@ public:
     void spawnVehiclesAt(QTime time);
 
 private:
-    std::vector<Vehicle> vehiclePool;
+    std::vector<Vehicle*> vehiclePool;
     std::vector<std::tuple<Street, direction>> lineRoute;
     std::vector<QTime> spawns; // when to spawn new vehicles
     const QString lineName; // "N95"

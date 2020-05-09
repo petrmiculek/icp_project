@@ -3,6 +3,7 @@
 
 #include "datamodel.h"
 #include "maptimer.h"
+#include "trafficcircleitem.h"
 
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>
@@ -51,6 +52,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    std::vector<TrafficCircleItem*> drawnVehicles;
     std::vector<Trip> trips;
     MapTimer *mapTimer;
     QLabel *time_label;
