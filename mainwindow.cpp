@@ -159,7 +159,7 @@ void MainWindow::redrawVehicles(QTime time)
         trip.spawnVehiclesAt(time);
         for (auto vehicle : trip.vehicles()) {
             auto* v = new TrafficCircleItem(
-                        PositionOnLine(data->streets[vehicle.street_id], vehicle.street_percentage),
+                        PositionOnLine(data->streets[vehicle->street_id], vehicle->street_percentage),
                         "A");
             scene->addItem(v);
             drawnVehicles.push_back(v);

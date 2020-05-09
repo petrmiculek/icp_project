@@ -25,7 +25,7 @@ vector<Street_dir> Trip::route() const
     return lineRoute;
 }
 
-vector<Vehicle> Trip::vehicles() const
+vector<Vehicle*> Trip::vehicles() const
 {
     return vehiclePool;
 }
@@ -72,14 +72,14 @@ void Trip::createNewVehiclesAt(QTime time)
         // first call, lastTime was not set yet
         for (auto t : spawns)
             if (t == time) {
-                vehiclePool.push_back(Vehicle(street.id, 0.1, direction));
+                vehiclePool.push_back(new Vehicle(street.id, 0.1, direction));
             }
     }
     else {
         // lastTime set => check if time is past this point
         for (auto t : spawns)
             if (*lastTime < t && t <= time) {
-                vehiclePool.push_back(Vehicle(street.id, 0.1, direction));
+                vehiclePool.push_back(new Vehicle(street.id, 0.1, direction));
             }
     }
 }
@@ -88,4 +88,38 @@ void Trip::updateVehiclesPosition(int elapsedSecs)
 {
     if (vehiclePool.size() == 0)
         return;
+
+    for (auto vehicle : vehiclePool) {
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
