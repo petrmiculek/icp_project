@@ -2,10 +2,24 @@
 #include "qdebug.h"
 #include <math.h>
 
-Vehicle::Vehicle(int street_id, double speed, QString symbol, direction dir, double progress)  :
-    street_id(street_id), progress(progress), dir(dir), speed(speed), _symbol(symbol)
+#define INVALID_VALUE -1
+
+Vehicle::Vehicle(int street_id, double speed, direction dir, double progress)  :
+    street_id(street_id), progress(progress), dir(dir), speed(speed)
 {
     internal_street_index = 0;
+    _symbol = getSymbol();
+}
+
+QString Vehicle::getSymbol() const
+{
+#define FIRST_SYMB 'A'
+    static /*constinit*/ char currentSymbol = FIRST_SYMB;
+
+    if (currentSymbol == 'Z' + 1)
+        currentSymbol = FIRST_SYMB;
+
+    return QString(currentSymbol++);
 }
 
 QString Vehicle::symbol() const
@@ -13,9 +27,18 @@ QString Vehicle::symbol() const
     return _symbol;
 }
 
+void Vehicle::invalidate()
+{
+    speed = INVALID_VALUE;
+}
+
+bool Vehicle::isinvalid()
+{
+    return speed == INVALID_VALUE;
+}
+
 double Vehicle::streetPercentage(double street_cost)
 {
-    qDebug() << "Linka " << symbol() << ": " << dir;
     if (dir == dir_forward)
         return progress / street_cost * 100;
     else

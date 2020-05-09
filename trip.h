@@ -30,7 +30,7 @@ public:
 
     void spawnVehiclesAt(QTime time);
 
-//private:
+private:
     std::vector<Vehicle> vehiclePool;
     std::vector<Street_dir> lineRoute;
     std::vector<QTime> spawns; // when to spawn new vehicles

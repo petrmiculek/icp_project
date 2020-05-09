@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
     mapTimer->setInterval(50); // setting refresh interval to 100 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
+    QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
     assert(time_label = findChild<QLabel*>("timeLbl"));
     assert(status_label = findChild<QLabel*>("statusLbl"));
 
@@ -148,17 +149,12 @@ void MainWindow::InitScene(DataModel* data)
 
 void MainWindow::redrawVehicles(QTime time)
 {
-    // delete old vehicles
-    for (size_t i = 0; i < drawnVehicles.size(); i++) {
-        scene->removeItem(drawnVehicles[i]);
-        delete drawnVehicles[i];
-    }
-    drawnVehicles.clear();
+    deleteDrawnVehicles();
 
     for (auto& trip : data->trips) {
         trip.spawnVehiclesAt(time);
         for (auto& vehicle : trip.vehicles()) {
-            if (vehicle.speed == -1)
+            if (vehicle.isinvalid())
                 // invalid vehicle
                 continue;
 
@@ -181,6 +177,26 @@ void MainWindow::initTrips()
 
     // can connect to Trip's functions only through an intermediary as Trip is not a QObject
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
+}
+
+void MainWindow::invalidateVehicles()
+{
+    deleteDrawnVehicles();
+    for (auto& trip : data->trips) {
+        trip.setLastTime(mapTimer->currentTime());
+        for (auto& vehicle : trip.vehicles())
+            vehicle.invalidate();
+    }
+}
+
+void MainWindow::deleteDrawnVehicles()
+{
+    // delete old vehicles
+    for (size_t i = 0; i < drawnVehicles.size(); i++) {
+        scene->removeItem(drawnVehicles[i]);
+        delete drawnVehicles[i];
+    }
+    drawnVehicles.clear();
 }
 
 /*
