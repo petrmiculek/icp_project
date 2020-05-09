@@ -10,7 +10,7 @@ Vehicle::Vehicle(int street_id, double speed, direction dir, double progress)  :
 
 Vehicle::~Vehicle()
 {
-    //qDebug() << "Vehicle destroyed";
+    qDebug() << "Vehicle destroyed";
 }
 
 double Vehicle::streetPercentage(double street_cost)

@@ -17,6 +17,7 @@ Trip::Trip(QString name, vector<Street_dir> route) : Trip(name)
 
 Trip::~Trip()
 {
+    //qDebug() << "Trip " << this->lineName << " destroyed";
     delete lastTime;
 }
 
@@ -30,7 +31,7 @@ vector<Street_dir> Trip::route() const
     return lineRoute;
 }
 
-vector<Vehicle*> Trip::vehicles() const
+vector<Vehicle> Trip::vehicles() const
 {
     return vehiclePool;
 }
@@ -61,19 +62,20 @@ void Trip::advanceVehicleRoute(Vehicle *v)
 void Trip::spawnVehiclesAt(QTime time)
 {
     // updating existing vehicles
+    //qDebug() << "size " << vehiclePool.size();
     if (lastTime && vehiclePool.size() != 0) {
         const int msecsElapsed = abs(time.msecsTo(*lastTime));
-        for (auto* vehicle : vehiclePool) {
-            updateVehiclePosition(vehicle, msecsElapsed);
+        for (auto vehicle : vehiclePool) {
+            updateVehiclePosition(&vehicle, msecsElapsed);
 
             // we've reached the end of the street
             double w; // wasted progress
-            while ((w=vehicle->progress - lineRoute[vehicle->internal_street_index].first.time_cost) > 0) {
-                advanceVehicleRoute(vehicle);
+            while ((w=vehicle.progress - lineRoute[vehicle.internal_street_index].first.time_cost) > 0) {
+                advanceVehicleRoute(&vehicle);
 
-                w = vehicle->fromProgressToMSecs(w); // convert to wasted milliseconds
+                w = vehicle.fromProgressToMSecs(w); // convert to wasted milliseconds
 
-                updateVehiclePosition(vehicle, w); // advance again on new street
+                updateVehiclePosition(&vehicle, w); // advance again on new street
             }
         }
     }
@@ -103,20 +105,22 @@ void Trip::createNewVehiclesAt(QTime time)
     bool direction = get<1>(lineRoute.front());
     */
 
+    qDebug() << "creating vehicles";
+
     auto& [street, direction] = lineRoute.front();
 
     if (!lastTime) {
         // first call, lastTime was not set yet
         for (auto t : spawns)
             if (t == time) {
-                vehiclePool.push_back(new Vehicle(street.id, 0.1, direction));
+                vehiclePool.push_back(Vehicle(street.id, 0.1, direction));
             }
     }
     else {
         // lastTime set => check if time is past this point
         for (auto t : spawns)
             if (*lastTime < t && t <= time) {
-                vehiclePool.push_back(new Vehicle(street.id, 0.1, direction));
+                vehiclePool.push_back(Vehicle(street.id, 0.1, direction));
             }
     }
 }

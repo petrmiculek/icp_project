@@ -18,7 +18,7 @@ QPen NextColor();
 
 QRectF CenterRectToPoint(QRectF rect, QPointF point);
 
-QPointF PositionOnLine(Street street, int street_percentage);
+QPointF PositionOnLine(Street street, double street_percentage);
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -53,7 +53,6 @@ private:
     Ui::MainWindow *ui;
 
     std::vector<TrafficCircleItem*> drawnVehicles;
-    std::vector<Trip> trips;
     MapTimer *mapTimer;
     QLabel *time_label;
     QLabel *status_label;

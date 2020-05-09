@@ -20,7 +20,7 @@ QRectF CenterRectToPoint(QRectF rect, QPointF point)
 }
 
 
-QPointF PositionOnLine(Street street, int street_percentage)
+QPointF PositionOnLine(Street street, double street_percentage)
 {
     auto x_diff = street.point2->x() - street.point1->x();
     auto y_diff = street.point2->y() - street.point1->y();

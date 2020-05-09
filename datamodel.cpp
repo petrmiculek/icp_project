@@ -29,7 +29,7 @@ void CreateTmpRoute(DataModel* data)
         {
             if (street.id == s_id)
             {
-                tmp_route.emplace_back(street, dir_default);
+                tmp_route.emplace_back(street, dir_forward);
                 found = true;
                 break;
             }
@@ -163,7 +163,7 @@ bool DataModel::LoadFile(QString file_name)
 
                     int stop_id = stop["stop_id"].toInt();
 
-                    int street_percentage = stop["street_percentage"].toInt();
+                    double street_percentage = stop["street_percentage"].toDouble();
 
                     QString name = stop["name"].toString();
                     street.stops.emplace_back(stop_id, street_percentage, name);
@@ -215,7 +215,7 @@ bool DataModel::LoadFile(QString file_name)
                         }
 
                         // iterator to target street is dereferenced
-                        route.emplace_back(*target_street, dir_default);
+                        route.emplace_back(*target_street, dir_forward);
 
                     }
 
