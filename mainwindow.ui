@@ -185,16 +185,6 @@
          </spacer>
         </item>
         <item>
-         <widget class="QListWidget" name="listWidget">
-          <property name="maximumSize">
-           <size>
-            <width>1000</width>
-            <height>600</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer_3">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
