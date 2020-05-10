@@ -44,10 +44,21 @@ private slots:
     void ZoomInBtn_clicked();
     void ZoomOutBtn_clicked();
     void selectionChanged();
-    void RouteCreateToggled();
     void on_resetBtn_clicked();
+    // void RouteCreateToggled();
 
 private:
+    void initializeTimers();
+    void updateTime();
+    void redrawVehicles(QTime time);
+    void incrementMultiplier();
+    void startAutoIncrement();
+    void multiplyMultiplicator();
+    void initTrips();
+    void invalidateVehicles();
+    void deleteDrawnVehicles();
+
+
     Ui::MainWindow *ui;
 
     std::vector<TrafficCircleItem*> drawnVehicles;
@@ -66,16 +77,6 @@ private:
 
     std::vector<Street> selected_streets;
     bool selecting;
-
-    void initializeTimers();
-    void updateTime();
-    void redrawVehicles(QTime time);
-    void incrementMultiplier();
-    void startAutoIncrement();
-    void multiplyMultiplicator();
-    void initTrips();
-    void invalidateVehicles();
-    void deleteDrawnVehicles();
 
     static const constexpr qreal zoom_scale_factor = 5.0/4;
 

@@ -2,8 +2,8 @@
 
 #define INVALID_VALUE -1
 
-Vehicle::Vehicle(int street_id, double speed, direction dir, double progress)  :
-    street_id(street_id), progress(progress), dir(dir), speed(speed)
+Vehicle::Vehicle(Street_dir& _street_dir, double _speed, double _progress)  :
+    street(_street_dir.first), direction(_street_dir.second), progress(_progress), speed(_speed)
 {
     internal_street_index = 0;
     _symbol = getSymbol();
@@ -37,7 +37,7 @@ bool Vehicle::isinvalid()
 
 double Vehicle::streetPercentage(double street_cost)
 {
-    if (dir == dir_forward)
+    if (direction == dir_forward)
         return progress / street_cost * 100;
     else
         return 100 - (progress / street_cost * 100);

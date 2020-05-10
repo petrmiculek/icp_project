@@ -35,7 +35,7 @@ vector<Vehicle> Trip::vehicles() const
     return vehiclePool;
 }
 
-void Trip::addStreetToRoute(Street s, direction d) // , direction d = dir_default (== true)
+void Trip::addStreetToRoute(Street s, Direction d) // default param: Direction d = dir_forward
 {
     lineRoute.emplace_back(s, d);
 }
@@ -52,10 +52,9 @@ void Trip::setLastTime(QTime time)
 
 void Trip::advanceVehicleRoute(Vehicle *v)
 {
-    ++v->internal_street_index;
+    v->internal_street_index++;
     if (v->internal_street_index < lineRoute.size()) {
-        v->street_id = lineRoute[v->internal_street_index].first.id;
-        v->dir = lineRoute[v->internal_street_index].second;
+        std::tie(v->street, v->direction) = lineRoute[v->internal_street_index];
         v->progress = 0;
     }
     else {
@@ -102,20 +101,21 @@ void Trip::createNewVehiclesAt(QTime time)
     if (spawns.size() == 0)
         return;
 
-    auto& [street, direction] = lineRoute.front();
+    // unpacking not needed currently, keeping for reference
+    // auto& [street, Direction] = lineRoute.front();
 
     if (!lastTime) {
         // first call, lastTime was not set yet
         for (auto t : spawns)
             if (t == time) {
-                vehiclePool.push_back(Vehicle(street.id, 0.01, direction));
+                vehiclePool.push_back(Vehicle(lineRoute.front()));
             }
     }
     else {
         // lastTime set => check if time is past this point
         for (auto t : spawns)
             if (*lastTime < t && t <= time) {
-                vehiclePool.push_back(Vehicle(street.id, 0.01, direction));
+                vehiclePool.push_back(Vehicle(lineRoute.front()));
             }
     }
 }

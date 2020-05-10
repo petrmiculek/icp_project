@@ -7,9 +7,6 @@
 #include "vehicle.h"
 #include "maptimer.h"
 
-using direction = bool;
-using Street_dir = std::pair<Street, direction>;
-
 #define dir_forward false
 #define dir_backward true
 
@@ -24,7 +21,7 @@ public:
     std::vector<Street_dir> route() const;
     std::vector<Vehicle> vehicles() const;
 
-    void addStreetToRoute(Street s, direction d = dir_forward);
+    void addStreetToRoute(Street s, Direction d = dir_forward);
     void addSpawn(QTime time);
     void setLastTime(QTime time);
 

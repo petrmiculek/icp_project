@@ -7,6 +7,9 @@
 #include "util.h"
 #include "stop.h"
 
+using Direction = bool;
+using Street_dir = std::pair<Street, Direction>;
+
 class Street
 {
 public:
