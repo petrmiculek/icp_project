@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // initialize map timer
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
-    mapTimer->setInterval(50); // setting refresh interval to 100 milliseconds
+    mapTimer->setInterval(50); // setting refresh interval to 50 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
 

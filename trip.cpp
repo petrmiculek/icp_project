@@ -14,7 +14,7 @@ Trip::Trip(QString name, vector<Street_dir> route) : lineName(name), lastTime (n
 {
     this->lineRoute = route;
     pen = NextColor();
-    initStartingProgress();
+    initStopsPositions();
 }
 
 Trip::Trip(QString name, std::vector<Street_dir> route, std::vector<QTime> _departures) :
@@ -24,7 +24,7 @@ Trip::Trip(QString name, std::vector<Street_dir> route, std::vector<QTime> _depa
 {
     lineRoute = route;
     pen = NextColor();
-    initStartingProgress();
+    initStopsPositions();
 }
 
 Trip::~Trip()
@@ -64,6 +64,7 @@ void Trip::setLastTime(QTime time)
 
 void Trip::advanceVehicleRoute(Vehicle *v)
 {
+    v->restMSecs = rand() % 2500 + 750; // wait at least 750 msecs, max 3250 msecs
     v->internal_street_index++;
     if (v->internal_street_index < lineRoute.size()) {
         std::tie(v->street, v->direction) = lineRoute.at(v->internal_street_index);
@@ -74,7 +75,7 @@ void Trip::advanceVehicleRoute(Vehicle *v)
         v->speed = SPEED_INVALID;
     }
 
-    initStartingProgress();
+    initStopsPositions();
 }
 
 void Trip::updateVehiclesAt(QTime time)
@@ -105,6 +106,18 @@ void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)
         return;
 
     v.progress += v.fromMSecsToProgress(elapsedMSecs);
+
+    // begin waiting if the vehicle comes across a stop
+    if (stopsPositions.at(v.internal_street_index) != -1 && v.progress > stopsPositions.at(v.internal_street_index)) {
+        // waiting on a bus stop
+        double waitedProgress = v.progress - stopsPositions.at(v.internal_street_index);
+        v.progress = stopsPositions.at(v.internal_street_index);
+        v.restMSecs -= v.fromProgressToMSecs(waitedProgress);
+        if (v.restMSecs < 0) {
+            v.progress += v.fromMSecsToProgress(fabs(v.restMSecs));
+            v.restMSecs = 0;
+        }
+    }
 }
 
 void Trip::createNewVehiclesAt(QTime time)
@@ -119,25 +132,46 @@ void Trip::createNewVehiclesAt(QTime time)
         // first call, lastTime was not set yet
         for (auto t : departures)
             if (t == time) {
-                vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, startingProgress));
+                vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, stopsPositions.front()));
+                vehiclePool.back().restMSecs = rand() % 2500 + 750; // wait at least 750 msecs, max 3250 msecs
             }
     }
     else {
         // lastTime set => check if time is past this point
         for (auto t : departures)
             if (*lastTime < t && t <= time) {
-                vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, startingProgress));
+                vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, stopsPositions.front()));
+                vehiclePool.back().restMSecs = rand() % 2500 + 750; // wait at least 750 msecs, max 3250 msecs
             }
     }
 }
 
-void Trip::initStartingProgress()
+void Trip::initStopsPositions()
 {
-    startingProgress =
-        lineRoute.front().first.stops.front().street_percentage / 100 * lineRoute.front().first.time_cost;
-    if (lineRoute.front().second == dir_backward)
-        startingProgress = lineRoute.front().first.time_cost - startingProgress;
+    stopsPositions.clear();
+    for (size_t i = 0; i < lineRoute.size(); i++) {
+        if (lineRoute.at(i).first.stops.size() == 0) {
+            // fill with placeholders since this street has no bus stops
+            stopsPositions.push_back(-1);
+            continue;
+        }
+
+        double value =
+            lineRoute.at(i).first.stops.front().street_percentage / 100 * lineRoute.at(i).first.time_cost;
+        if (lineRoute.front().second == dir_backward)
+            value = lineRoute.at(i).first.time_cost - value;
+        stopsPositions.push_back(value);
+    }
+    stopsPositions.push_back(-1);
 }
+
+
+
+
+
+
+
+
 
 
 

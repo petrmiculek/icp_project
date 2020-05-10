@@ -25,6 +25,7 @@ public:
     unsigned int internal_street_index;
     double progress;
     double speed;
+    double restMSecs; // milliseconds to rest (i.e. on a bus stop)
 
     void invalidate();
     bool isinvalid();

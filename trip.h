@@ -39,12 +39,11 @@ private:
     std::vector<Street_dir> lineRoute;
     QTime *lastTime;
     std::vector<Vehicle> vehiclePool;
-
-    double startingProgress;
+    std::vector<double> stopsPositions;
 
     void advanceVehicleRoute(Vehicle* v);
     void updateVehiclePosition(Vehicle &v, double elapsedMSecs);
-    void initStartingProgress();
+    void initStopsPositions();
 };
 
 #endif // TRIP_H
