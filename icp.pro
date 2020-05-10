@@ -22,7 +22,6 @@ SOURCES += \
     mainwindowzoom.cpp \
     maptimer.cpp \
     stop.cpp \
-    street.cpp \
     streetitem.cpp \
     trafficcircleitem.cpp \
     trip.cpp \

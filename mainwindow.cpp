@@ -32,8 +32,10 @@ MainWindow::MainWindow(QWidget *parent)
     mapTimer->setInterval(50); // setting refresh interval to 100 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
-    assert(time_label = findChild<QLabel*>("timeLbl"));
-    assert(status_label = findChild<QLabel*>("statusLbl"));
+    time_label = findChild<QLabel*>("timeLbl");
+    status_label = findChild<QLabel*>("statusLbl");
+    assert(time_label);
+    assert(status_label);
 
     initializeTimers();
 
@@ -154,7 +156,6 @@ void MainWindow::redrawVehicles(QTime time)
         trip.spawnVehiclesAt(time);
         for (auto& vehicle : trip.vehicles()) {
             if (vehicle.isinvalid())
-                // invalid vehicle
                 continue;
 
             auto* v = new TrafficCircleItem(
@@ -190,7 +191,6 @@ void MainWindow::invalidateVehicles()
 
 void MainWindow::deleteDrawnVehicles()
 {
-    // delete old vehicles
     for (size_t i = 0; i < drawnVehicles.size(); i++) {
         scene->removeItem(drawnVehicles[i]);
         delete drawnVehicles[i];

@@ -72,6 +72,8 @@ int MapTimer::getInterval() const
 
 void MapTimer::setMultiplier(double multiplier)
 {
+    if (multiplier < 0.0)
+        return;
     timeMultiplier = multiplier;
     emit multiplierChanged(multiplier);
 }
@@ -83,10 +85,7 @@ double MapTimer::getMultiplier() const
 
 void MapTimer::privateTimeout()
 {
-    //qDebug("Map Timer caught internal timeout!");
-
     updateTime(internalTimer->interval() * timeMultiplier, &setTime);
-
     emit this->timeout(*setTime);
 }
 

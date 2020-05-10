@@ -24,12 +24,7 @@ StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent
 StreetItem::StreetItem(Street street, QGraphicsItem * parent) :
     StreetItem({*street.point1, *street.point2}, street.name + "-" + QString::number(street.id), parent)
 {
-    // nothing
-}
 
-StreetItem::~StreetItem()
-{
-    qDebug() << "Street destroyed";
 }
 
 void StreetItem::SetLabelPosition()
