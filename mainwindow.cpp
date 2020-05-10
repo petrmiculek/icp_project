@@ -39,13 +39,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     // setup ui pointers
     time_label = findChild<QLabel*>("timeLbl");
-    status_label = findChild<QLabel*>("statusLbl");
-    transport_tree_view = findChild<QTreeView*>("pttreeView");
     assert(time_label);
+
+    status_label = findChild<QLabel*>("statusLbl");
     assert(status_label);
+
+    transport_tree_view = findChild<QTreeView*>("pttreeView");
     assert(transport_tree_view);
 
-    // initialize lines tree view
+    strttraffic_label = findChild<QLabel*>("strttrafficLbl");
+    assert(strttraffic_label);
+
+    traffic_slider = findChild<QSlider*>("strttrafficSlider");
+    assert(traffic_slider);
+
+    // initialize lines in tree view
     auto* model = new QStandardItemModel();
     for (auto trip : data->trips) {
         auto* lineItem = new QStandardItem("Line " + trip.name());
