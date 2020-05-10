@@ -114,6 +114,10 @@ void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)
         v.progress = stopsPositions.at(v.internal_street_index);
         v.restMSecs -= v.fromProgressToMSecs(waitedProgress);
         if (v.restMSecs < 0) {
+            if (v.internal_street_index + 2 == stopsPositions.size()) {
+                // if the vehicle is on the last stop (stopsPositions is one item bigger)
+                v.invalidate();
+            }
             v.progress += v.fromMSecsToProgress(fabs(v.restMSecs));
             v.restMSecs = 0;
         }
