@@ -2,23 +2,22 @@
 #include <QDebug>
 
 
-Vehicle::Vehicle(Street_dir _street_dir, double _speed, double _progress)  :
-    street(_street_dir.first), direction(_street_dir.second), progress(_progress), speed(_speed)
+Vehicle::Vehicle(Street_dir _street_dir, QString lineName, double _speed, double _progress)  :
+    street(_street_dir.first), direction(_street_dir.second), progress(_progress), speed(_speed), _symbol(lineName)
 {
     internal_street_index = 0;
-    _symbol = getSymbol();
 }
 
-QString Vehicle::getSymbol() const
+/*QString Vehicle::getSymbol() const
 {
 #define FIRST_SYMB 'A'
-    static /*constinit*/ char currentSymbol = FIRST_SYMB;
+    static char currentSymbol = FIRST_SYMB;
 
     if (currentSymbol == 'Z' + 1)
         currentSymbol = FIRST_SYMB;
 
     return QString(currentSymbol++);
-}
+}*/
 
 QString Vehicle::symbol() const
 {

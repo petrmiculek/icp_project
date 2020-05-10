@@ -115,14 +115,14 @@ void Trip::createNewVehiclesAt(QTime time)
         // first call, lastTime was not set yet
         for (auto t : departures)
             if (t == time) {
-                vehiclePool.push_back(Vehicle(lineRoute.front()));
+                vehiclePool.push_back(Vehicle(lineRoute.front(), name()));
             }
     }
     else {
         // lastTime set => check if time is past this point
         for (auto t : departures)
             if (*lastTime < t && t <= time) {
-                vehiclePool.push_back(Vehicle(lineRoute.front()));
+                vehiclePool.push_back(Vehicle(lineRoute.front(), name()));
             }
     }
 }

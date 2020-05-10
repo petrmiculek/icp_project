@@ -14,7 +14,7 @@
 class Vehicle
 {
 public:
-    Vehicle(Street_dir _street_dir, double _speed = speed_default, double _progress = 0.0);
+    Vehicle(Street_dir _street_dir, QString lineName, double _speed = speed_default, double _progress = 0.0);
 
     Street& street;
     Direction direction;

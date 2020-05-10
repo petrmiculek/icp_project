@@ -49,6 +49,7 @@ QPen NextColor()
 
 QString toCamelCase(QString& s)
 {
+    // https://wiki.qt.io/Converting_Strings_from_and_to_Camel_Case
     QStringList parts = s.toLower().split(' ', QString::SkipEmptyParts);
     for (int i = 0; i < parts.size(); ++i)
         parts[i].replace(0, 1, parts[i][0].toUpper());
