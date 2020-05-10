@@ -18,7 +18,7 @@ public:
         point1(new QPointF(_x1, _y1)),
         point2(new QPointF(_x2, _y2)),
         name(_name),
-        stops({})     // todo do I have to initialize empty vector?
+        traffic_density(0)
     {
         time_cost = euclid_distance(point1, point2);
     }
@@ -33,6 +33,7 @@ public:
     std::vector<Stop> stops;
 
     double time_cost;
+    double traffic_density;
 };
 
 #endif // STREET_H

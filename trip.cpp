@@ -19,13 +19,10 @@ Trip::Trip(QString name, vector<Street_dir> route) : lineName(name), lastTime (n
 Trip::Trip(QString name, std::vector<Street_dir> route, std::vector<QTime> _departures) :
     departures(std::move(_departures)),
     lineName(name),
-    lineRoute({route}),
     lastTime(nullptr)
 {
+    lineRoute = route;
     pen = NextColor();
-
-    /*this->lineRoute = route;
-    this->departures = _departures;*/
 }
 
 Trip::~Trip()

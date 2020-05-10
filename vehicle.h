@@ -20,7 +20,7 @@ public:
 
     const QPen pen;
 
-    Street& street;
+    Street street;
     Direction direction;
     unsigned int internal_street_index;
     double progress;
