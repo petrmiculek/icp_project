@@ -1,8 +1,9 @@
 #include "vehicle.h"
+#include <QDebug>
 
 #define INVALID_VALUE -1
 
-Vehicle::Vehicle(Street_dir& _street_dir, double _speed, double _progress)  :
+Vehicle::Vehicle(Street_dir _street_dir, double _speed, double _progress)  :
     street(_street_dir.first), direction(_street_dir.second), progress(_progress), speed(_speed)
 {
     internal_street_index = 0;
@@ -37,6 +38,8 @@ bool Vehicle::isinvalid()
 
 double Vehicle::streetPercentage(double street_cost)
 {
+    if (street_cost == 0) {qDebug() << "div by zero attempted in streetPercentage"; return 0;}
+
     if (direction == dir_forward)
         return progress / street_cost * 100;
     else

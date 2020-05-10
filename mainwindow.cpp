@@ -111,6 +111,7 @@ void MainWindow::InitScene(DataModel* data)
             this, &MainWindow::selectionChanged);
 }
 
+
 void MainWindow::redrawVehicles(QTime time)
 {
     deleteDrawnVehicles();
@@ -123,10 +124,12 @@ void MainWindow::redrawVehicles(QTime time)
             if (vehicle.isinvalid())
                 continue;
 
+            auto veh_pos = PositionOnLine(vehicle.street,
+                                      vehicle.streetPercentage(vehicle.street.time_cost));
+            auto symbol = vehicle.symbol();
             auto* v = new TrafficCircleItem(
-                        PositionOnLine(vehicle.street,
-                        vehicle.streetPercentage(vehicle.street.time_cost)),
-                        vehicle.symbol());
+                        veh_pos,
+                        symbol);
             scene->addItem(v);
             drawnVehicles.push_back(v);
         }
@@ -135,9 +138,10 @@ void MainWindow::redrawVehicles(QTime time)
 
 void MainWindow::initTrips()
 {
+    // TODO remove
     for (auto& t : data->trips)
     {
-        t.addSpawn(QTime(0,0,2));
+        // t.addSpawn(QTime(0,0,2));
     }
 
     // can connect to Trip's functions only through an intermediary as Trip is not a QObject

@@ -8,7 +8,7 @@
 #include "stop.h"
 
 using Direction = bool;
-using Street_dir = std::pair<Street, Direction>;
+using Street_dir = std::pair<Street&, Direction>; // TODO TEST CHANGE TO REFERENCE
 
 class Street
 {
