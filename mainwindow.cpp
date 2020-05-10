@@ -37,7 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     initializeTimers();
 
-    QObject::connect(ui->createRouteBtn, &QPushButton::clicked, this, &MainWindow::RouteCreateToggled);
+    // creating routes, deleted, keeping code for later - objížďky
+    // QObject::connect(ui->createRouteBtn, &QPushButton::clicked, this, &MainWindow::RouteCreateToggled);
 
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
 
@@ -57,65 +58,6 @@ MainWindow::~MainWindow()
     delete scene;
 }
 
-
-void MainWindow::selectionChanged()
-{    
-    QList<QGraphicsItem*> items = scene->selectedItems();
-
-    if (items.size() != 1)
-        return;
-
-    // std::vector<Street> selectedStreets {};
-
-    auto line = dynamic_cast<QGraphicsLineItem*>(items.first());
-    for(auto street: data->streets)
-    {
-        auto pt1 = line->line().p1();
-        auto pt2 = line->line().p2();
-
-        if (pt1.x() == street.point1->x()
-                && pt1.y() == street.point1->y()
-                && pt2.x() == street.point2->x()
-                && pt2.y() == street.point2->y())
-        {
-            selected_streets.push_back(street);
-            // qDebug() << "found, dir1" << street.name;
-            break;
-        }
-        else if (pt2.x() == street.point1->x()
-                 && pt2.y() == street.point1->y()
-                 && pt1.x() == street.point2->x()
-                 && pt1.y() == street.point2->y())
-        {
-            selected_streets.push_back(street);
-            // qDebug() << "found, dir2" << street.name;
-            break;
-        }
-    }
-}
-
-void MainWindow::RouteCreateToggled()
-{
-    // toggle state
-    selecting = ! selecting;
-
-    if(selecting)
-    {
-        ui->createRouteBtn->setText(QString("Save route"));
-        selected_streets.clear();
-    }
-    else
-    {
-        ui->createRouteBtn->setText(QString("Start creating route"));
-        // create path from streets
-
-        qDebug() << "Total streets selected:" << selected_streets.size();
-
-        for (auto street : selected_streets) {
-            qDebug() << street.id;
-        }
-    }
-}
 
 void MainWindow::InitScene(DataModel* data)
 {
@@ -158,8 +100,8 @@ void MainWindow::redrawVehicles(QTime time)
                 continue;
 
             auto* v = new TrafficCircleItem(
-                        PositionOnLine(data->streets[vehicle.street_id],
-                        vehicle.streetPercentage(data->streets[vehicle.street_id].time_cost)),
+                        PositionOnLine(vehicle.street,
+                        vehicle.streetPercentage(vehicle.street.time_cost)),
                         vehicle.symbol());
             scene->addItem(v);
             drawnVehicles.push_back(v);
@@ -208,6 +150,70 @@ void MainWindow::wheelEvent(QWheelEvent *event)
         scaleView(pow((double)2, -event->delta() / 240.0));
     } else {
         QGraphicsView::wheelEvent(event);
+    }
+}
+*/
+
+// CURRENTLY UNUSED - objížďky
+void MainWindow::selectionChanged()
+{
+    QList<QGraphicsItem*> items = scene->selectedItems();
+
+    if (items.size() != 1)
+        return;
+
+    // std::vector<Street> selectedStreets {};
+
+    auto line = dynamic_cast<QGraphicsLineItem*>(items.first());
+    for(auto street: data->streets)
+    {
+        auto pt1 = line->line().p1();
+        auto pt2 = line->line().p2();
+
+        if (pt1.x() == street.point1->x()
+                && pt1.y() == street.point1->y()
+                && pt2.x() == street.point2->x()
+                && pt2.y() == street.point2->y())
+        {
+            selected_streets.push_back(street);
+            // qDebug() << "found, dir1" << street.name;
+            break;
+        }
+        else if (pt2.x() == street.point1->x()
+                 && pt2.y() == street.point1->y()
+                 && pt1.x() == street.point2->x()
+                 && pt1.y() == street.point2->y())
+        {
+            selected_streets.push_back(street);
+            // qDebug() << "found, dir2" << street.name;
+            break;
+        }
+    }
+}
+
+
+
+/*
+void MainWindow::RouteCreateToggled()
+{
+    // toggle state
+    selecting = ! selecting;
+
+    if(selecting)
+    {
+        ui->createRouteBtn->setText(QString("Save route"));
+        selected_streets.clear();
+    }
+    else
+    {
+        ui->createRouteBtn->setText(QString("Start creating route"));
+        // create path from streets
+
+        qDebug() << "Total streets selected:" << selected_streets.size();
+
+        for (auto street : selected_streets) {
+            qDebug() << street.id;
+        }
     }
 }
 */

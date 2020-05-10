@@ -2,8 +2,9 @@
 #define VEHICLE_H
 
 #include <QString>
+#include "street.h"
 
-using direction = bool;
+// using clauses are in street.h
 
 #define dir_forward false
 #define dir_backward true
@@ -11,12 +12,12 @@ using direction = bool;
 class Vehicle
 {
 public:
-    Vehicle(int street_id, double speed, direction dir = dir_forward, double progress = 0);
+    Vehicle(Street_dir& _street_dir, double _speed = speed_default, double _progress = 0.0);
 
-    int street_id; // which street it's on
-    int internal_street_index;
+    Street& street;
+    Direction direction;
+    unsigned int internal_street_index;
     double progress;
-    direction dir;
     double speed;
 
     void invalidate();
@@ -29,6 +30,8 @@ public:
 private:
     QString getSymbol() const;
     QString _symbol;
+
+    static constexpr double speed_default = 0.01;
 };
 
 #endif // VEHICLE_H

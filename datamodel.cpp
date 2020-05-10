@@ -7,7 +7,7 @@
 
 #include "datamodel.h"
 
-using direction = bool;
+using Direction = bool;
 
 /* TODO
  * error handling -> exceptions (separate file?)

@@ -21,6 +21,10 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsI
     text_space = CenterRectToPoint(text_space, center);
     text_space.translate(0, -1);
 
+    // looking for something to keep buses/stops at a constant size on screen
+    // (this does not do the trick)
+    // setFlag(QGraphicsItem::ItemIgnoresTransformations);
+
 }
 
 

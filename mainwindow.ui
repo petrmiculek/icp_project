@@ -185,9 +185,12 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="createRouteBtn">
-          <property name="text">
-           <string>Start creating route</string>
+         <widget class="QListWidget" name="listWidget">
+          <property name="maximumSize">
+           <size>
+            <width>1000</width>
+            <height>600</height>
+           </size>
           </property>
          </widget>
         </item>
