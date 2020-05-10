@@ -46,3 +46,12 @@ QPen NextColor()
 
     return pens.at(index++ % pens.size());
 }
+
+QString toCamelCase(QString& s)
+{
+    QStringList parts = s.split(' ', QString::SkipEmptyParts);
+    for (int i = 0; i < parts.size(); ++i)
+        parts[i].replace(0, 1, parts[i][0].toUpper());
+
+    return parts.join(" ");
+}

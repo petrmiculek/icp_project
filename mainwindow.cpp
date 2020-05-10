@@ -45,9 +45,19 @@ MainWindow::MainWindow(QWidget *parent)
     assert(status_label);
     assert(transport_tree_view);
 
-    // initialize app ui
-    //transport_tree_view->header()->setVisible(true);
-    //QStandardItemModel model(this);
+    // initialize lines tree view
+    transport_tree_view->header()->setVisible(false);
+    auto* model = new QStandardItemModel();
+    for (auto trip : data->trips) {
+        auto* lineItem = new QStandardItem("Line " + trip.name() + ":");
+        for (auto street_dir : trip.route())
+            for (auto stop : street_dir.first.stops) {
+                auto* stopItem = new QStandardItem(stop.name);
+                lineItem->appendRow(stopItem);
+            }
+        model->appendRow(lineItem);
+    }
+    transport_tree_view->setModel(model);
 
     // creating routes, deleted, keeping code for later - objížďky
     // QObject::connect(ui->createRouteBtn, &QPushButton::clicked, this, &MainWindow::RouteCreateToggled);

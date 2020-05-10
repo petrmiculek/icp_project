@@ -21,5 +21,6 @@ double euclid_distance(QPointF * point1, QPointF * point2);
 QRectF CenterRectToPoint(QRectF rect, QPointF point);
 QPointF PositionOnLine(Street street, double street_percentage);
 QPen NextColor();
+QString toCamelCase(QString& s);
 
 #endif // UTIL_H
