@@ -1,7 +1,6 @@
 #include "vehicle.h"
 #include <QDebug>
 
-#define INVALID_VALUE -1
 
 Vehicle::Vehicle(Street_dir _street_dir, double _speed, double _progress)  :
     street(_street_dir.first), direction(_street_dir.second), progress(_progress), speed(_speed)
@@ -28,12 +27,12 @@ QString Vehicle::symbol() const
 
 void Vehicle::invalidate()
 {
-    speed = INVALID_VALUE;
+    speed = SPEED_INVALID;
 }
 
 bool Vehicle::isinvalid()
 {
-    return speed == INVALID_VALUE;
+    return speed == SPEED_INVALID;
 }
 
 double Vehicle::streetPercentage(double street_cost)

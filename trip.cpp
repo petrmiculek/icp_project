@@ -69,7 +69,7 @@ void Trip::advanceVehicleRoute(Vehicle *v)
     }
     else {
         // invalidating vehicle
-        v->speed = -1;
+        v->speed = SPEED_INVALID;
     }
 }
 
@@ -83,7 +83,8 @@ void Trip::updateVehiclesAt(QTime time)
 
             // we've reached the end of the street
             double w; // wasted progress
-            while ((w=vehicle.progress - lineRoute.at(vehicle.internal_street_index).first.time_cost) > 0) {
+            while (vehicle.internal_street_index < lineRoute.size() &&
+                   (w=vehicle.progress - lineRoute.at(vehicle.internal_street_index).first.time_cost) > 0) {
                 advanceVehicleRoute(&vehicle);
 
                 w = vehicle.fromProgressToMSecs(w); // convert to wasted milliseconds
