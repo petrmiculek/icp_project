@@ -1,4 +1,4 @@
-QT       += core gui xml
+QT += core gui xml widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,7 +22,6 @@ SOURCES += \
     mainwindowzoom.cpp \
     maptimer.cpp \
     stop.cpp \
-    street.cpp \
     streetitem.cpp \
     trafficcircleitem.cpp \
     trip.cpp \

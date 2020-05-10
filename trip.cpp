@@ -73,7 +73,7 @@ void Trip::advanceVehicleRoute(Vehicle *v)
     }
 }
 
-void Trip::spawnVehiclesAt(QTime time)
+void Trip::updateVehiclesAt(QTime time)
 {
     // updating existing vehicles
     if (lastTime && vehiclePool.size() != 0) {
@@ -92,10 +92,6 @@ void Trip::spawnVehiclesAt(QTime time)
             }
         }
     }
-
-    createNewVehiclesAt(time);
-
-    setLastTime(time);
 }
 
 void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)

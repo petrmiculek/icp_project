@@ -1,6 +1,4 @@
 #include "vehicle.h"
-#include "qdebug.h"
-#include <math.h>
 
 #define INVALID_VALUE -1
 

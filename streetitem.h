@@ -15,7 +15,6 @@ class StreetItem : public QGraphicsLineItem
 public:
     StreetItem(QLineF _line, QString _street_name, QGraphicsItem * parent = nullptr);    
     StreetItem(Street street, QGraphicsItem * parent = nullptr);
-    ~StreetItem();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 

@@ -28,7 +28,8 @@ public:
     void addSpawn(QTime time);
     void setLastTime(QTime time);
 
-    void spawnVehiclesAt(QTime time);
+    void updateVehiclesAt(QTime time);
+    void createNewVehiclesAt(QTime time);
 
     // TODO Revert to private
     std::vector<QTime> departures; // when to spawn new vehicles
@@ -38,7 +39,6 @@ private:
     QTime *lastTime;
     std::vector<Vehicle> vehiclePool;
 
-    void createNewVehiclesAt(QTime time);
     void advanceVehicleRoute(Vehicle* v);
     void updateVehiclePosition(Vehicle &v, double elapsedMSecs);
 };
