@@ -14,6 +14,7 @@ Trip::Trip(QString name, vector<Street_dir> route) : lineName(name), lastTime (n
 {
     this->lineRoute = route;
     pen = NextColor();
+    initStartingProgress();
 }
 
 Trip::Trip(QString name, std::vector<Street_dir> route, std::vector<QTime> _departures) :
@@ -23,6 +24,7 @@ Trip::Trip(QString name, std::vector<Street_dir> route, std::vector<QTime> _depa
 {
     lineRoute = route;
     pen = NextColor();
+    initStartingProgress();
 }
 
 Trip::~Trip()
@@ -71,6 +73,8 @@ void Trip::advanceVehicleRoute(Vehicle *v)
         // invalidating vehicle
         v->speed = SPEED_INVALID;
     }
+
+    initStartingProgress();
 }
 
 void Trip::updateVehiclesAt(QTime time)
@@ -105,9 +109,6 @@ void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)
 
 void Trip::createNewVehiclesAt(QTime time)
 {
-    static const auto startingProgress = 0;
-            //lineRoute.front().first.stops.front().street_percentage / 100 * lineRoute.front().first.time_cost;
-
     if (departures.size() == 0)
         return;
 
@@ -130,7 +131,13 @@ void Trip::createNewVehiclesAt(QTime time)
     }
 }
 
-
+void Trip::initStartingProgress()
+{
+    startingProgress =
+        lineRoute.front().first.stops.front().street_percentage / 100 * lineRoute.front().first.time_cost;
+    if (lineRoute.front().second == dir_backward)
+        startingProgress = lineRoute.front().first.time_cost - startingProgress;
+}
 
 
 

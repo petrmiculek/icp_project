@@ -40,8 +40,11 @@ private:
     QTime *lastTime;
     std::vector<Vehicle> vehiclePool;
 
+    double startingProgress;
+
     void advanceVehicleRoute(Vehicle* v);
     void updateVehiclePosition(Vehicle &v, double elapsedMSecs);
+    void initStartingProgress();
 };
 
 #endif // TRIP_H
