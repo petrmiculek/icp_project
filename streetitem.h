@@ -13,15 +13,13 @@ class Street;
 class StreetItem : public QGraphicsLineItem
 {
 public:
-    StreetItem(QGraphicsItem * parent = nullptr);
-    StreetItem(QLineF _line, QGraphicsItem * parent = nullptr);
     StreetItem(QLineF _line, QString _street_name, QGraphicsItem * parent = nullptr);    
     StreetItem(Street street, QGraphicsItem * parent = nullptr);
     ~StreetItem();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    QPointF ComputeLabelPos();
+    void SetLabelPosition();
 
     QString name;
 
@@ -29,7 +27,6 @@ public:
     bool is_closed;
 
     QGraphicsSimpleTextItem label;
-
 
     // cannot get this to work as static
     const QPen color_default = QPen(Qt::lightGray);

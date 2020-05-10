@@ -209,8 +209,12 @@ bool DataModel::LoadJSONFile(QString file_name)
                     QJsonArray streets_json = trip_json["streets_id"].toArray();
                     std::vector<Street_dir> route;
 
-                    for(auto street : streets_json){
-                        auto street_id = street.toInt();
+                    for(auto street_dir : streets_json){
+                        auto street_dir_arr = street_dir.toArray();
+
+                        auto street_id = street_dir_arr[0].toInt();
+                        auto dir = street_dir_arr[1].toInt();
+
                         auto target_street = std::find_if(streets.begin(), streets.end(),
                                                           [street_id] (Street curr_street) {return curr_street.id == street_id;});
 
@@ -222,7 +226,7 @@ bool DataModel::LoadJSONFile(QString file_name)
                         }
 
                         // iterator to target street is dereferenced
-                        route.emplace_back(*target_street, dir_forward);
+                        route.emplace_back(*target_street, dir);
 
                     }
 

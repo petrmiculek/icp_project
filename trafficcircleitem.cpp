@@ -8,8 +8,11 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsI
     // circle bounding box
     setRect(rect);
 
-    setPen(NextColor());
-    setBrush({Qt::white});
+    QPen pen_stop = NextColor();
+    setPen(pen_stop);
+    QColor color_stop = pen_stop.color();
+    color_stop.setAlpha(66);
+    setBrush(color_stop);
 
     // inner text bounding box
     text_space = QRectF(rect);

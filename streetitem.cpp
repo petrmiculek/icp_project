@@ -1,21 +1,8 @@
-
 #include "streetitem.h"
 #include "util.h"
 #include "street.h"
 #include <QDebug>
 #include <QFont>
-
-StreetItem::StreetItem(QGraphicsItem *parent)
-{
-    StreetItem(QLineF(), "Sample", parent);
-}
-
-StreetItem::StreetItem(QLineF _line, QGraphicsItem *parent)
-{
-
-    StreetItem(_line, "Sample", parent);
-
-}
 
 StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent) :
     QGraphicsLineItem(parent),
@@ -29,16 +16,13 @@ StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent
     setPen(color_default);
     setFlag(QGraphicsItem::ItemIsSelectable);
 
-    label.setPos(line().p1()); // temporary
-
     label.setFont(font_label);
 
-    ComputeLabelPos();
-
+    SetLabelPosition();
 }
 
 StreetItem::StreetItem(Street street, QGraphicsItem * parent) :
-    StreetItem({*street.point1, *street.point2}, street.name, parent)
+    StreetItem({*street.point1, *street.point2}, street.name + "-" + QString::number(street.id), parent)
 {
     // nothing
 }
@@ -48,7 +32,7 @@ StreetItem::~StreetItem()
     qDebug() << "Street destroyed";
 }
 
-QPointF StreetItem::ComputeLabelPos()
+void StreetItem::SetLabelPosition()
 {
     // get center point of line
     auto center = line().center();
@@ -62,7 +46,6 @@ QPointF StreetItem::ComputeLabelPos()
 
     auto text_center = normal.p2();
 
-
     // compute top left corner of text
     auto aligned_rect = CenterRectToPoint(label.boundingRect(), text_center);
 
@@ -73,9 +56,6 @@ QPointF StreetItem::ComputeLabelPos()
 
     // rotate to the line's orientation
     label.setRotation(-line().angle());
-
-    // currently unused
-    return aligned_rect.topLeft();
 }
 
 void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )

@@ -126,10 +126,6 @@ void MainWindow::InitScene(DataModel* data)
 
     // streets
     for (auto street : data->streets) {
-        // auto qline = QLineF(*street.point1, *street.point2);
-
-        //QGraphicsLineItem* scene_street = scene->addLine(qline);
-
         StreetItem* scene_street = new StreetItem(street);
         scene->addItem(scene_street);
 
