@@ -2,13 +2,14 @@
 #define STREET_H
 
 #include <QPointF>
+#include <QDebug>
 #include <QString>
 
 #include "util.h"
 #include "stop.h"
 
 using Direction = bool;
-using Street_dir = std::pair<Street&, Direction>; // TODO TEST CHANGE TO REFERENCE
+using Street_dir = std::pair<Street&, Direction>;
 
 class Street
 {
@@ -18,9 +19,30 @@ public:
         point1(new QPointF(_x1, _y1)),
         point2(new QPointF(_x2, _y2)),
         name(_name),
-        traffic_density(0)
+        traffic_density(0.0)
     {
         time_cost = euclid_distance(point1, point2);
+    }
+
+    ~Street()
+    {
+        // delete point1;
+        // delete point2;
+    }
+
+    double cost()
+    {
+        return time_cost + (traffic_density > 1 ? log2(traffic_density) : 0);
+    }
+
+    double trafficDensity()
+    {
+        return traffic_density;
+    }
+
+    void SetTrafficDensity(double slider_value)
+    {
+        traffic_density = slider_value;
     }
 
     int id;

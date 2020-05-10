@@ -14,6 +14,9 @@
 #include <QLabel>
 #include <QTimer>
 #include <QTreeView>
+#include <QMutex>
+
+#define NONE_SELECTED (-1)
 
 class StreetItem;
 
@@ -35,7 +38,9 @@ public:
     void AddZoomButtons();
     void SceneZoomIn();
     void SceneZoomOut();
+
 private slots:
+
     void on_toggleTimeBtn_clicked();
     void on_fasterBtn_pressed();
     void on_fasterBtn_released();
@@ -46,6 +51,7 @@ private slots:
     void ZoomOutBtn_clicked();
     void selectionChanged();
     void on_resetBtn_clicked();
+    void TrafficSliderChanged(int value);
     // void RouteCreateToggled();
 
 private:
@@ -79,6 +85,7 @@ private:
     std::vector<QGraphicsEllipseItem*> scene_stops;
 
     std::vector<Street> selected_streets;
+    int selected_street;
     bool selecting;
 
     static constexpr qreal zoom_scale_factor = 5.0/4;

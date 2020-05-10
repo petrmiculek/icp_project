@@ -38,20 +38,11 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
 
     // setup ui pointers
-    time_label = findChild<QLabel*>("timeLbl");
-    assert(time_label);
-
-    status_label = findChild<QLabel*>("statusLbl");
-    assert(status_label);
-
-    transport_tree_view = findChild<QTreeView*>("pttreeView");
-    assert(transport_tree_view);
-
-    strttraffic_label = findChild<QLabel*>("strttrafficLbl");
-    assert(strttraffic_label);
-
-    traffic_slider = findChild<QSlider*>("strttrafficSlider");
-    assert(traffic_slider);
+    time_label = ui->timeLbl;
+    status_label = ui->statusLbl;
+    transport_tree_view = ui->pttreeView;
+    strttraffic_label = ui->strttrafficLbl;
+    traffic_slider = ui->strttrafficSlider;
 
     // initialize lines in tree view
     auto* model = new QStandardItemModel();
@@ -69,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     // creating routes, deleted, keeping code for later - objížďky
     // QObject::connect(ui->createRouteBtn, &QPushButton::clicked, this, &MainWindow::RouteCreateToggled);
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
+    QObject::connect(ui->strttrafficSlider, &QSlider::valueChanged, this, &MainWindow::TrafficSliderChanged);
 
     initializeTimers();
 
@@ -87,7 +79,6 @@ MainWindow::~MainWindow()
     delete mapTimer;
     delete scene;
 }
-
 
 void MainWindow::InitScene(DataModel* data)
 {
@@ -186,19 +177,48 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 }
 */
 
-// CURRENTLY UNUSED - objížďky
+void MainWindow::TrafficSliderChanged(int value)
+{
+    if(selected_streets.size() != 1 || selected_street == NONE_SELECTED)
+    {
+        return;
+    }
+    // static constexpr auto max_density_penalty = 10;
+
+    auto& street = selected_streets.front();
+
+    data->streets.at(selected_street).SetTrafficDensity(value);
+
+    /*
+    for (auto str:scene_streets)
+    {
+        // find scene street to highlight accordingly
+    }
+    */
+}
+
+
 void MainWindow::selectionChanged()
 {
     QList<QGraphicsItem*> items = scene->selectedItems();
 
+    selected_streets.clear();
+    selected_street = NONE_SELECTED;
+
     if (items.size() != 1)
-        return;
-
-    // std::vector<Street> selectedStreets {};
-
-    auto line = dynamic_cast<QGraphicsLineItem*>(items.first());
-    for(auto street: data->streets)
     {
+        ui->strttrafficSlider->setEnabled(false);
+        ui->strttrafficSlider->setValue(QSlider::NoTicks);
+        return;
+    }
+
+    ui->strttrafficSlider->setEnabled(true);
+
+    auto line = dynamic_cast<StreetItem*>(items.first());
+    for(unsigned int i = 0; i < data->streets.size(); i++)
+    {
+        auto street = data->streets.at(i);
+
         auto pt1 = line->line().p1();
         auto pt2 = line->line().p2();
 
@@ -208,21 +228,15 @@ void MainWindow::selectionChanged()
                 && pt2.y() == street.point2->y())
         {
             selected_streets.push_back(street);
-            // qDebug() << "found, dir1" << street.name;
-            break;
-        }
-        else if (pt2.x() == street.point1->x()
-                 && pt2.y() == street.point1->y()
-                 && pt1.x() == street.point2->x()
-                 && pt1.y() == street.point2->y())
-        {
-            selected_streets.push_back(street);
-            // qDebug() << "found, dir2" << street.name;
+            selected_street = i;
+
+            ui->strttrafficSlider->setValue(street.trafficDensity());
             break;
         }
     }
-}
 
+
+}
 
 
 /*

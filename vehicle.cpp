@@ -7,7 +7,7 @@ Vehicle::Vehicle(Street_dir _street_dir, QString lineName, double _progress, dou
 }
 
 Vehicle::Vehicle(Street_dir _street_dir, QString lineName, QPen pen, double _progress, double _speed) :
-    street(_street_dir.first), direction(_street_dir.second), pen(pen), progress(_progress), speed(_speed), _symbol(lineName)
+     pen(pen), street(_street_dir.first) , direction(_street_dir.second), progress(_progress), speed(_speed), _symbol(lineName)
 {
     internal_street_index = 0;
 }
