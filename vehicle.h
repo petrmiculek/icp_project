@@ -4,6 +4,8 @@
 #include <QString>
 #include "street.h"
 
+#define SPEED_INVALID -1
+
 // using clauses are in street.h
 
 #define dir_forward false

@@ -114,12 +114,11 @@ void MainWindow::redrawVehicles(QTime time)
             if (vehicle.isinvalid())
                 continue;
 
-            auto veh_pos = PositionOnLine(vehicle.street,
-                                      vehicle.streetPercentage(vehicle.street.time_cost));
-            auto symbol = vehicle.symbol();
+
             auto* v = new TrafficCircleItem(
-                        veh_pos,
-                        symbol);
+                        PositionOnLine(vehicle.street,
+                                       vehicle.streetPercentage(vehicle.street.time_cost)),
+                        vehicle.symbol());
             scene->addItem(v);
             drawnVehicles.push_back(v);
         }
