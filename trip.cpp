@@ -114,6 +114,10 @@ void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)
         v.progress = stopsPositions.at(v.internal_street_index);
         v.restMSecs -= v.fromProgressToMSecs(waitedProgress);
         if (v.restMSecs < 0) {
+            if (v.internal_street_index + 2 == stopsPositions.size()) {
+                // if the vehicle is on the last stop (stopsPositions is one item bigger)
+                v.invalidate();
+            }
             v.progress += v.fromMSecsToProgress(fabs(v.restMSecs));
             v.restMSecs = 0;
         }
@@ -158,7 +162,7 @@ void Trip::initStopsPositions()
 
         double value =
             lineRoute.at(i).first.stops.front().street_percentage / 100 * lineRoute.at(i).first.time_cost;
-        if (lineRoute.front().second == dir_backward)
+        if (lineRoute.at(i).second == dir_backward)
             value = lineRoute.at(i).first.time_cost - value;
         stopsPositions.push_back(value);
     }
