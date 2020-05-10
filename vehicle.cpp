@@ -40,8 +40,6 @@ bool Vehicle::isinvalid()
 
 double Vehicle::streetPercentage(double street_cost)
 {
-    if (street_cost == 0) {qDebug() << "div by zero attempted in streetPercentage"; return 0;}
-
     if (direction == dir_forward)
         return progress / street_cost * 100;
     else
