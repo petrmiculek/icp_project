@@ -7,22 +7,25 @@ using namespace std;
 
 Trip::Trip(QString name) : lineName(name), lastTime (nullptr)
 {
-
+    pen = NextColor();
 }
 
 Trip::Trip(QString name, vector<Street_dir> route) : lineName(name), lastTime (nullptr)
 {
     this->lineRoute = route;
+    pen = NextColor();
 }
 
 Trip::Trip(QString name, std::vector<Street_dir> route, std::vector<QTime> _departures) :
+    departures(std::move(_departures)),
     lineName(name),
-    // lineRoute({route}), // TODO TEST IF THIS WOULD WORK
-    // departures(std::move(_departures)),
+    lineRoute({route}),
     lastTime(nullptr)
 {
-    this->lineRoute = route;
-    this->departures = _departures;
+    pen = NextColor();
+
+    /*this->lineRoute = route;
+    this->departures = _departures;*/
 }
 
 Trip::~Trip()
@@ -105,6 +108,9 @@ void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)
 
 void Trip::createNewVehiclesAt(QTime time)
 {
+    static const auto startingProgress = 0;
+            //lineRoute.front().first.stops.front().street_percentage / 100 * lineRoute.front().first.time_cost;
+
     if (departures.size() == 0)
         return;
 
@@ -115,14 +121,42 @@ void Trip::createNewVehiclesAt(QTime time)
         // first call, lastTime was not set yet
         for (auto t : departures)
             if (t == time) {
-                vehiclePool.push_back(Vehicle(lineRoute.front(), name()));
+                vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, startingProgress));
             }
     }
     else {
         // lastTime set => check if time is past this point
         for (auto t : departures)
             if (*lastTime < t && t <= time) {
-                vehiclePool.push_back(Vehicle(lineRoute.front(), name()));
+                vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, startingProgress));
             }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

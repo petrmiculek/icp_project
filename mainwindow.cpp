@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     // initialize lines tree view
     auto* model = new QStandardItemModel();
     for (auto trip : data->trips) {
-        auto* lineItem = new QStandardItem("Line " + trip.name() + ":");
+        auto* lineItem = new QStandardItem("Line " + trip.name());
         for (auto street_dir : trip.route())
             for (auto stop : street_dir.first.stops) {
                 auto* stopItem = new QStandardItem(stop.name);
@@ -123,11 +123,10 @@ void MainWindow::redrawVehicles(QTime time)
             if (vehicle.isinvalid())
                 continue;
 
-
             auto* v = new TrafficCircleItem(
                         PositionOnLine(vehicle.street,
                                        vehicle.streetPercentage(vehicle.street.time_cost)),
-                        vehicle.symbol());
+                        vehicle.symbol(), vehicle.pen);
             scene->addItem(v);
             drawnVehicles.push_back(v);
         }
@@ -139,7 +138,7 @@ void MainWindow::initTrips()
     // TODO remove
     for (auto& t : data->trips)
     {
-        // t.addSpawn(QTime(0,0,2));
+        t.addSpawn(QTime(0,0,2));
     }
 
     // can connect to Trip's functions only through an intermediary as Trip is not a QObject

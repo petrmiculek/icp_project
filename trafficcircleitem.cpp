@@ -1,14 +1,21 @@
 #include "trafficcircleitem.h"
 #include "util.h"
 
-TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) : QGraphicsEllipseItem(parent), text(content)
+TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) :
+    TrafficCircleItem(center, content, NextColor(), parent)
+{
+
+}
+
+TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen pen, QGraphicsItem * parent) :
+    QGraphicsEllipseItem(parent), text(content), pen(pen)
 {
     QRectF rect = CenterRectToPoint(QRectF(center, center + point_ellipse_size), center);
 
     // circle bounding box
     setRect(rect);
 
-    QPen pen_stop = NextColor();
+    QPen pen_stop = pen;
     setPen(pen_stop);
     QColor color_stop = pen_stop.color();
     color_stop.setAlpha(66);
@@ -24,9 +31,7 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsI
     // looking for something to keep buses/stops at a constant size on screen
     // (this does not do the trick)
     // setFlag(QGraphicsItem::ItemIgnoresTransformations);
-
 }
-
 
 void TrafficCircleItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {

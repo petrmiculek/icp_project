@@ -3,6 +3,7 @@
 
 #include <QString>
 #include "street.h"
+#include "util.h"
 
 #define SPEED_INVALID -1
 
@@ -14,7 +15,10 @@
 class Vehicle
 {
 public:
-    Vehicle(Street_dir _street_dir, QString lineName, double _speed = speed_default, double _progress = 0.0);
+    Vehicle(Street_dir _street_dir, QString lineName, double _progress = 0.0, double _speed = speed_default);
+    Vehicle(Street_dir _street_dir, QString lineName, QPen pen, double _progress = 0.0, double _speed = speed_default);
+
+    const QPen pen;
 
     Street& street;
     Direction direction;
@@ -30,7 +34,7 @@ public:
 
     QString symbol() const;
 private:
-    QString getSymbol() const;
+    //QString getSymbol() const;
     QString _symbol;
 
     static constexpr double speed_default = 0.01;

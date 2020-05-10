@@ -6,6 +6,7 @@
 #include "street.h"
 #include "vehicle.h"
 #include "maptimer.h"
+#include "util.h"
 
 // using clauses are in street.h
 
@@ -31,9 +32,9 @@ public:
     void updateVehiclesAt(QTime time);
     void createNewVehiclesAt(QTime time);
 
-    // TODO Revert to private
-    std::vector<QTime> departures; // when to spawn new vehicles
 private:
+    QPen pen;
+    std::vector<QTime> departures; // when to spawn new vehicles
     const QString lineName; // "N95"
     std::vector<Street_dir> lineRoute;
     QTime *lastTime;
