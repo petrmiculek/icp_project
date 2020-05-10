@@ -7,12 +7,11 @@
 
 #include "datamodel.h"
 
-using Direction = bool;
-
 /* TODO
  * error handling -> exceptions (separate file?)
  *
  */
+
 
 // sample route
 void CreateSampleTrip(DataModel* data)
@@ -84,7 +83,7 @@ bool DataModel::LoadJSONFile(QString file_name)
 
     QJsonDocument doc(QJsonDocument::fromJson(file.readAll()));
 
-    QJsonObject json(doc.object()); // top level item { .. }
+    QJsonObject json(doc.object()); // top level item { ... }
     /*
 
     // We don't currently load points separately, so this is not needed.
@@ -95,13 +94,13 @@ bool DataModel::LoadJSONFile(QString file_name)
 
         if (json.contains("points") && json["points"].isArray())
         {
-            QJsonArray points_json = json["points"].toArray(); // "points": [ .. ]
+            QJsonArray points_json = json["points"].toArray(); // "points": [ ... ]
 
             this->points.clear();
 
             // fill vector with data
             for (int i = 0; i < points_json.size(); ++i) {
-                QJsonObject point = points_json[i].toObject(); // { "x": .. }
+                QJsonObject point = points_json[i].toObject(); // { "x": ... }
 
                 // qDebug() << "json_points:" << point["point_id"] << point["x"] << point["y"];
 
@@ -142,10 +141,6 @@ bool DataModel::LoadJSONFile(QString file_name)
 
             }
         }
-        else
-        {
-            qDebug() << "streets: main item not an array";
-        }
     }
     else if(file_name == "stops")
     {
@@ -181,10 +176,7 @@ bool DataModel::LoadJSONFile(QString file_name)
                 }
             }
         }
-        else
-        {
-            qDebug() << "streets: main item not an array";
-        }
+
     }
     else if(file_name == "trips")
     {
@@ -204,47 +196,52 @@ bool DataModel::LoadJSONFile(QString file_name)
 
                 unsigned int trip_id = trip_json["trip_id"].toInt();
 
-                if(trip_json["streets_id"].isArray())
-                {
-                    QJsonArray streets_json = trip_json["streets_id"].toArray();
-                    std::vector<Street_dir> route;
+                QJsonArray streets_json = trip_json["streets_id"].toArray();
+                std::vector<Street_dir> route;
 
-                    for(auto street_dir : streets_json){
-                        auto street_dir_arr = street_dir.toArray();
+                // streets
+                for(auto street_dir : streets_json){
+                    auto street_dir_arr = street_dir.toArray();
 
-                        auto street_id = street_dir_arr[0].toInt();
-                        auto dir = street_dir_arr[1].toInt();
+                    // street and direction
+                    auto street_id = street_dir_arr[0].toInt();
+                    auto dir = street_dir_arr[1].toInt();
 
-                        auto target_street = std::find_if(streets.begin(), streets.end(),
-                                                          [street_id] (Street curr_street) {return curr_street.id == street_id;});
+                    // find if street exists
+                    auto target_street = std::find_if(streets.begin(), streets.end(),
+                                                      [street_id] (auto curr_street) {return curr_street.id == street_id;});
 
-
-                        if (target_street == streets.end())
-                        {
-                            qDebug() << "trips: invalid street id" << street_id;
-                            return false;
-                        }
-
-                        // iterator to target street is dereferenced
-                        route.emplace_back(*target_street, dir);
-
+                    if (target_street == streets.end())
+                    {
+                        qDebug() << "trips: invalid street id" << street_id;
+                        return false;
                     }
 
-                    // save trip to collection
-                    trips.emplace_back(QString::number(trip_id), route);
+                    // street added to route
+                    // (iterator to target street is dereferenced)
+                    route.emplace_back(*target_street, dir);
                 }
-                else
+
+                // departure times
+                std::vector<QTime> departures;
+
+                QJsonArray departures_json = trip_json["departures"].toArray();
+                for (auto departure_json : departures_json)
                 {
-                    qDebug() << "trips: invalid streets array";
+                    QJsonArray departure_arr = departure_json.toArray();
+
+                    auto departure_hours = departure_arr[0].toInt();
+                    auto departure_minutes = departure_arr[1].toInt();
+                    auto departure_seconds = departure_arr[2].toInt();
+
+                    departures.emplace_back(departure_hours, departure_minutes, departure_seconds);
                 }
+
+                // save trip to collection
+                trips.emplace_back(QString::number(trip_id), route, departures);
             }
-        }
-        else
-        {
-            qDebug() << "streets: main item not an array";
         }
     }
 
     return true;
 }
-

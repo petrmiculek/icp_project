@@ -5,14 +5,24 @@
 
 using namespace std;
 
-Trip::Trip(QString name) : lineName(name), lastTime(nullptr)
+Trip::Trip(QString name) : lineName(name), lastTime (nullptr)
 {
 
 }
 
-Trip::Trip(QString name, vector<Street_dir> route) : Trip(name)
+Trip::Trip(QString name, vector<Street_dir> route) : lineName(name), lastTime (nullptr)
 {
     this->lineRoute = route;
+}
+
+Trip::Trip(QString name, std::vector<Street_dir> route, std::vector<QTime> _departures) :
+    lineName(name),
+    // lineRoute({route}), // TODO TEST IF THIS WOULD WORK
+    // departures(std::move(_departures)),
+    lastTime(nullptr)
+{
+    this->lineRoute = route;
+    this->departures = _departures;
 }
 
 Trip::~Trip()
@@ -42,7 +52,7 @@ void Trip::addStreetToRoute(Street s, Direction d) // default param: Direction d
 
 void Trip::addSpawn(QTime time)
 {
-    spawns.push_back(time);
+    departures.push_back(time);
 }
 
 void Trip::setLastTime(QTime time)
@@ -54,7 +64,7 @@ void Trip::advanceVehicleRoute(Vehicle *v)
 {
     v->internal_street_index++;
     if (v->internal_street_index < lineRoute.size()) {
-        std::tie(v->street, v->direction) = lineRoute[v->internal_street_index];
+        std::tie(v->street, v->direction) = lineRoute.at(v->internal_street_index);
         v->progress = 0;
     }
     else {
@@ -73,7 +83,7 @@ void Trip::spawnVehiclesAt(QTime time)
 
             // we've reached the end of the street
             double w; // wasted progress
-            while ((w=vehicle.progress - lineRoute[vehicle.internal_street_index].first.time_cost) > 0) {
+            while ((w=vehicle.progress - lineRoute.at(vehicle.internal_street_index).first.time_cost) > 0) {
                 advanceVehicleRoute(&vehicle);
 
                 w = vehicle.fromProgressToMSecs(w); // convert to wasted milliseconds
@@ -98,7 +108,7 @@ void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)
 
 void Trip::createNewVehiclesAt(QTime time)
 {
-    if (spawns.size() == 0)
+    if (departures.size() == 0)
         return;
 
     // unpacking not needed currently, keeping for reference
@@ -106,14 +116,14 @@ void Trip::createNewVehiclesAt(QTime time)
 
     if (!lastTime) {
         // first call, lastTime was not set yet
-        for (auto t : spawns)
+        for (auto t : departures)
             if (t == time) {
                 vehiclePool.push_back(Vehicle(lineRoute.front()));
             }
     }
     else {
         // lastTime set => check if time is past this point
-        for (auto t : spawns)
+        for (auto t : departures)
             if (*lastTime < t && t <= time) {
                 vehiclePool.push_back(Vehicle(lineRoute.front()));
             }

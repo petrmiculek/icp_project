@@ -7,6 +7,8 @@
 #include "vehicle.h"
 #include "maptimer.h"
 
+// using clauses are in street.h
+
 #define dir_forward false
 #define dir_backward true
 
@@ -15,6 +17,7 @@ class Trip
 public:
     Trip(QString name);
     Trip(QString name, std::vector<Street_dir> route);
+    Trip(QString name, std::vector<Street_dir> route, std::vector<QTime> departures);
     ~Trip();
 
     QString name() const;
@@ -27,12 +30,13 @@ public:
 
     void spawnVehiclesAt(QTime time);
 
+    // TODO Revert to private
+    std::vector<QTime> departures; // when to spawn new vehicles
 private:
-    std::vector<Vehicle> vehiclePool;
-    std::vector<Street_dir> lineRoute;
-    std::vector<QTime> spawns; // when to spawn new vehicles
     const QString lineName; // "N95"
+    std::vector<Street_dir> lineRoute;
     QTime *lastTime;
+    std::vector<Vehicle> vehiclePool;
 
     void createNewVehiclesAt(QTime time);
     void advanceVehicleRoute(Vehicle* v);
