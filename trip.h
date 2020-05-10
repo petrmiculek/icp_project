@@ -25,7 +25,8 @@ public:
     void addSpawn(QTime time);
     void setLastTime(QTime time);
 
-    void spawnVehiclesAt(QTime time);
+    void updateVehiclesAt(QTime time);
+    void createNewVehiclesAt(QTime time);
 
 private:
     std::vector<Vehicle> vehiclePool;
@@ -34,7 +35,6 @@ private:
     const QString lineName; // "N95"
     QTime *lastTime;
 
-    void createNewVehiclesAt(QTime time);
     void advanceVehicleRoute(Vehicle* v);
     void updateVehiclePosition(Vehicle &v, double elapsedMSecs);
 };

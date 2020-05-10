@@ -7,6 +7,9 @@
 #include <QWheelEvent>
 #include <QPen>
 
+#include <QAbstractItemModel>
+#include <QHeaderView>
+
 #include <assert.h>
 
 #include "mainwindow.h"
@@ -28,27 +31,35 @@ MainWindow::MainWindow(QWidget *parent)
     InitScene(data);
     AddZoomButtons();
 
+    // initialize map timer
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
     mapTimer->setInterval(50); // setting refresh interval to 100 milliseconds
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
+
+    // setup ui pointers
     time_label = findChild<QLabel*>("timeLbl");
     status_label = findChild<QLabel*>("statusLbl");
+    transport_tree_view = findChild<QTreeView*>("pttreeView");
     assert(time_label);
     assert(status_label);
+    assert(transport_tree_view);
 
-    initializeTimers();
+    // initialize app ui
+    //transport_tree_view->header()->setVisible(true);
+    //QStandardItemModel model(this);
 
     // creating routes, deleted, keeping code for later - objížďky
     // QObject::connect(ui->createRouteBtn, &QPushButton::clicked, this, &MainWindow::RouteCreateToggled);
-
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
+
+    initializeTimers();
 
     // temporary
     selected_streets = {};
     selecting = false;
 
-    initTrips();
+    initTrips(); // goes last
 }
 
 
@@ -95,7 +106,9 @@ void MainWindow::redrawVehicles(QTime time)
     deleteDrawnVehicles();
 
     for (auto& trip : data->trips) {
-        trip.spawnVehiclesAt(time);
+        trip.updateVehiclesAt(time);
+        trip.createNewVehiclesAt(time);
+        trip.setLastTime(time);
         for (auto& vehicle : trip.vehicles()) {
             if (vehicle.isinvalid())
                 continue;

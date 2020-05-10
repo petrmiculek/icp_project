@@ -13,6 +13,7 @@
 #include <QStandardItemModel>
 #include <QLabel>
 #include <QTimer>
+#include <QTreeView>
 
 class StreetItem;
 
@@ -65,6 +66,7 @@ private:
     MapTimer *mapTimer;
     QLabel *time_label;
     QLabel *status_label;
+    QTreeView *transport_tree_view;
     double currentIncrement; // multiplier increment
     QTimer *incrementsModifierTimer; // when timeout is signalled, enlarges the multiplier increment value
     QTimer *incrementTimer; // automatically modifies time multiplicator with the user holding the button down
@@ -78,8 +80,7 @@ private:
     std::vector<Street> selected_streets;
     bool selecting;
 
-    static const constexpr qreal zoom_scale_factor = 5.0/4;
-
+    static constexpr qreal zoom_scale_factor = 5.0/4;
 };
 
 #endif // MAINWINDOW_H
