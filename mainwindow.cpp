@@ -46,7 +46,6 @@ MainWindow::MainWindow(QWidget *parent)
     assert(transport_tree_view);
 
     // initialize lines tree view
-    transport_tree_view->header()->setVisible(false);
     auto* model = new QStandardItemModel();
     for (auto trip : data->trips) {
         auto* lineItem = new QStandardItem("Line " + trip.name() + ":");
