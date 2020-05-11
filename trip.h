@@ -23,26 +23,26 @@ public:
 
     QString name() const;
     std::vector<Street_dir> route() const;
-    std::vector<Vehicle> vehicles() const;
+    std::vector<std::shared_ptr<Vehicle>> vehicles() const;
 
     void addStreetToRoute(Street s, Direction d = dir_forward);
     void addSpawn(QTime time);
     void setLastTime(QTime time);
 
     void updateVehiclesAt(QTime time);
-    std::vector<Vehicle*> createNewVehiclesAt(QTime time);
+    std::vector<int> createNewVehiclesAt(QTime time);
 
+    std::vector<std::shared_ptr<Vehicle>> vehiclePool;
 private:
     QPen pen;
     std::vector<QTime> departures; // when to spawn new vehicles
     const QString lineName; // "N95"
     std::vector<Street_dir> lineRoute;
     QTime *lastTime;
-    std::vector<Vehicle> vehiclePool;
     std::vector<double> stopsPositions;
 
-    void advanceVehicleRoute(Vehicle* v);
-    void updateVehiclePosition(Vehicle &v, double elapsedMSecs);
+    void advanceVehicleRoute(std::shared_ptr<Vehicle> v);
+    void updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs);
     void initStopsPositions();
 };
 

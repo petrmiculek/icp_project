@@ -11,21 +11,18 @@ class TrafficCircleItem : public QGraphicsEllipseItem
 {
 public:
     TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent = nullptr);
-    // TrafficCircleItem(QPointF center, QString content, QPen color, QGraphicsItem * parent = nullptr);
-    TrafficCircleItem(QPointF center, QString content, QPen color, Vehicle * _vehicle, QGraphicsItem * parent = nullptr);
-    TrafficCircleItem(Vehicle * _vehicle, QGraphicsItem * parent = nullptr);
+    TrafficCircleItem(QPointF center, QString content, QPen color, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent = nullptr);
+    TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent = nullptr);
 
     void paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
     void MoveTo(QPointF center);
     void SetRectCoords(QPointF point);
 
-
-    // QGraphicsTextItem text;
     QRectF text_space;
     QString text;
 
     const QPen pen;
-    Vehicle * vehicle;
+    std::shared_ptr<Vehicle> vehicle;
 
 private:
     static constexpr qreal stop_diameter = 10;

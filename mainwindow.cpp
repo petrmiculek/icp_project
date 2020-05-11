@@ -115,17 +115,18 @@ void MainWindow::redrawVehicles(QTime time)
     // move existing + spawn new
     for (auto& trip : data->trips) {
         trip.updateVehiclesAt(time);
-        std::vector<Vehicle*> new_vehicles = trip.createNewVehiclesAt(time);
+        std::vector<int> new_vehicles = trip.createNewVehiclesAt(time);
         trip.setLastTime(time);
 
         // create new vehicles
-        for (auto* vehicle : new_vehicles) {
+        for (auto i : new_vehicles) {
+            auto& vehicle = trip.vehiclePool.at(i);
             if (vehicle->isinvalid())
             {
                 qDebug() << "redrawVehicles: invalid vehicle";
                 continue;
             }
-            auto* v = new TrafficCircleItem(vehicle);
+            auto* v = new TrafficCircleItem(trip.vehiclePool.at(i));
             scene->addItem(v);
             drawnVehicles.push_back(v);
         }
@@ -139,6 +140,7 @@ void MainWindow::redrawVehicles(QTime time)
             continue;
         }
 
+        // ERROR SHOWS HERE: ACCESSING VEHICLES STREET LEADS TO SIGSEGV
         item->MoveTo(item->vehicle->position());
     }
 }
@@ -161,7 +163,7 @@ void MainWindow::invalidateVehicles()
     for (auto& trip : data->trips) {
         trip.setLastTime(mapTimer->currentTime());
         for (auto& vehicle : trip.vehicles())
-            vehicle.invalidate();
+            vehicle->invalidate();
     }
 }
 
@@ -173,10 +175,10 @@ void MainWindow::deleteDrawnVehicles()
         if(drawnVehicles.at(i)->vehicle != nullptr
                 && drawnVehicles.at(i)->vehicle->isinvalid())
         {
-            scene->removeItem(drawnVehicles.at(i));
-            delete drawnVehicles.at(i);
-            drawnVehicles.at(i) = nullptr;
-            drawnVehicles.erase(drawnVehicles.begin() + i);
+            // scene->removeItem(drawnVehicles.at(i));
+            // delete drawnVehicles.at(i);
+            // drawnVehicles.at(i) = nullptr;
+            // drawnVehicles.erase(drawnVehicles.begin() + i);
         }
     }
     // drawnVehicles.clear();

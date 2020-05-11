@@ -60,7 +60,7 @@ double Vehicle::streetPercentage(double street_cost)
     return tmp;
 }
 
-double Vehicle::streetPercentage(Street street)
+double Vehicle::streetPercentage(const Street& street)
 {
     return streetPercentage(street.time_cost);
 }

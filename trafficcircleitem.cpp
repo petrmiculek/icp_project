@@ -8,7 +8,7 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsI
 
 }
 
-TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen, Vehicle * _vehicle, QGraphicsItem * parent) :
+TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent) :
     QGraphicsEllipseItem(parent),
     text(content),
     pen(_pen),
@@ -32,7 +32,7 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
     text_space.translate(0, -1);
 }
 
-TrafficCircleItem::TrafficCircleItem(Vehicle *_vehicle, QGraphicsItem *parent) :
+TrafficCircleItem::TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem *parent) :
     TrafficCircleItem(_vehicle->position(), _vehicle->symbol(), _vehicle->pen, _vehicle, parent)
   /*
       QGraphicsEllipseItem(parent),
@@ -44,7 +44,7 @@ TrafficCircleItem::TrafficCircleItem(Vehicle *_vehicle, QGraphicsItem *parent) :
     //auto pos = vehicle->position();
 }
 
-void TrafficCircleItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void TrafficCircleItem::paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     /*
     // updating position here is not ideal
