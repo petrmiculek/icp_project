@@ -20,7 +20,7 @@ QRectF CenterRect(QRectF rect, QPointF point)
 }
 
 
-QPointF CenterRectTopLeft(QRectF rect, QPointF point)
+QPointF PositionOnLine(const Street& street, double street_percentage)
 {
     auto top_left_x = point.x() - rect.width()/2.0;
     auto top_left_y = point.y() - rect.height()/2.0;

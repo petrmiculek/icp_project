@@ -39,7 +39,7 @@ void MainWindow::AddZoomButtons()
     if (zoom_buttons_exist)
         return;
 
-    QWidget* parent = new QWidget(this->ui->graphicsView);
+    auto* parent = new QWidget(this->ui->graphicsView);
     parent->resize(45, 80);
     parent->raise();
 

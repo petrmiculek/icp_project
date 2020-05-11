@@ -10,8 +10,6 @@
 #include <QAbstractItemModel>
 #include <QHeaderView>
 
-#include <assert.h>
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "streetitem.h"
@@ -46,10 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // initialize lines in tree view
     auto* model = new QStandardItemModel();
-    for (auto trip : data->trips) {
+    for (const auto& trip : data->trips) {
         auto* lineItem = new QStandardItem("Line " + trip.name());
-        for (auto street_dir : trip.route())
-            for (auto stop : street_dir.first.stops) {
+        for (const auto street_dir : trip.route())
+            for (const auto& stop : street_dir.first.stops) {
                 auto* stopItem = new QStandardItem(stop.name);
                 lineItem->appendRow(stopItem);
             }
@@ -88,7 +86,7 @@ void MainWindow::InitScene(DataModel* data)
     ui->graphicsView->scale(3, 3);
 
     // streets
-    for (auto street : data->streets) {
+    for (const auto& street : data->streets) {
         StreetItem* scene_street = new StreetItem(street);
         scene->addItem(scene_street);
 
@@ -96,8 +94,8 @@ void MainWindow::InitScene(DataModel* data)
     }
 
     // stops
-    for (auto street : data->streets) {
-        for (auto stop: street.stops)
+    for (const auto& street : data->streets) {
+        for (const auto& stop: street.stops)
         {
             auto* scene_stop2 = new TrafficCircleItem(
                         PositionOnLine(street, stop.street_percentage), bus_symbol);
@@ -248,7 +246,7 @@ void MainWindow::selectionChanged()
     ui->strttrafficLbl->setEnabled(true);
 
     auto line = dynamic_cast<StreetItem*>(items.first());
-    for(unsigned int i = 0; i < data->streets.size(); i++)
+    for(unsigned long i = 0; i < data->streets.size(); i++)
     {
         auto street = data->streets.at(i);
 
@@ -261,9 +259,9 @@ void MainWindow::selectionChanged()
                 && pt2.y() == street.point2->y())
         {
             selected_streets.push_back(street); // unused
-            selected_street = i;
+            selected_street = static_cast<int>(i);
 
-            ui->strttrafficSlider->setValue(street.trafficDensity());
+            ui->strttrafficSlider->setValue(qRound(street.trafficDensity()));
             break;
         }
     }

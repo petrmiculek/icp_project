@@ -23,7 +23,7 @@ MapTimer::~MapTimer()
 
 QTime MapTimer::currentTime() const
 {
-    return setTime->currentTime();
+    return QTime::currentTime();
 }
 
 QString MapTimer::currentTime(const QString &format) const
@@ -85,7 +85,7 @@ double MapTimer::getMultiplier() const
 
 void MapTimer::privateTimeout()
 {
-    updateTime(internalTimer->interval() * timeMultiplier, &setTime);
+    updateTime(qRound(internalTimer->interval() * timeMultiplier), &setTime);
     emit this->timeout(*setTime);
 }
 
