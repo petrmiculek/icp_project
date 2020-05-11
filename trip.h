@@ -30,7 +30,7 @@ public:
     void setLastTime(QTime time);
 
     void updateVehiclesAt(QTime time);
-    std::vector<int> createNewVehiclesAt(QTime time);
+    std::vector<std::shared_ptr<Vehicle>> createNewVehiclesAt(QTime time);
 
     std::vector<std::shared_ptr<Vehicle>> vehiclePool;
 private:

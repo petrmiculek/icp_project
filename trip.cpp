@@ -129,9 +129,9 @@ void Trip::updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs
 }
 
 
-std::vector<int> Trip::createNewVehiclesAt(QTime time)
+std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
 {
-    std::vector<int> new_vehicles {};
+    std::vector<std::shared_ptr<Vehicle>> new_vehicles {};
     if (departures.size() == 0)
         return new_vehicles;
 
@@ -144,8 +144,8 @@ std::vector<int> Trip::createNewVehiclesAt(QTime time)
             if (t == time) {
                 std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(lineRoute.front(), name(), pen, stopsPositions.front());
                 vehiclePool.push_back(vehicle);
-                vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN; // wait at least 750 msecs, max 3250 msecs
-                new_vehicles.push_back(vehiclePool.size() - 1);
+                vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN; // TODO Check if it does what it's supposed to
+                new_vehicles.push_back(vehicle);
             }
     }
     else {
@@ -154,8 +154,8 @@ std::vector<int> Trip::createNewVehiclesAt(QTime time)
             if (*lastTime < t && t <= time) {
                 std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(lineRoute.front(), name(), pen, stopsPositions.front());
                 vehiclePool.push_back(vehicle);
-                vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN; // wait at least 750 msecs, max 3250 msecs
-                new_vehicles.push_back(vehiclePool.size() - 1);
+                vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
+                new_vehicles.push_back(vehicle);
             }
     }
     return new_vehicles;

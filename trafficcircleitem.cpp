@@ -5,7 +5,7 @@
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) :
     TrafficCircleItem(center, content, NextColor(), nullptr, parent)
 {
-
+    // nothing
 }
 
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent) :
@@ -24,7 +24,7 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
     color.setAlpha(66);
     setBrush(color);
 
-    // inner text bounding box
+    // text bounding box
     text_space = QRectF(rect);
     text_space.setWidth(text_space.width() * inscribed_square_size);
     text_space.setHeight(text_space.height() * inscribed_square_size);
@@ -34,31 +34,13 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
 
 TrafficCircleItem::TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem *parent) :
     TrafficCircleItem(_vehicle->position(), _vehicle->symbol(), _vehicle->pen, _vehicle, parent)
-  /*
-      QGraphicsEllipseItem(parent),
-      text(_vehicle->symbol()),
-      pen(_vehicle->pen),
-      vehicle (_vehicle)
-          */
+
 {
-    //auto pos = vehicle->position();
+    // nothing
 }
 
 void TrafficCircleItem::paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    /*
-    // updating position here is not ideal
-    if (vehicle != nullptr
-            && vehicle->isinvalid() == false)
-    {
-        auto street_copy = vehicle->street;
-        qDebug() << street_copy.name << vehicle->speed << vehicle->isinvalid() << vehicle->progress << vehicle->internal_street_index;
-
-        MoveTo(vehicle->position());
-
-    }
-    */
-
     // circle
     QGraphicsEllipseItem::paint(painter, option, widget);
 
@@ -76,7 +58,7 @@ void TrafficCircleItem::MoveTo(QPointF center)
     setRect({top_left, top_left + point_circle_size});
 
 
-    // text label
+    // text
     auto text_top_left = CenterRectTopLeft(text_space, center);
     text_space = QRectF(text_top_left, text_space.size());
 
