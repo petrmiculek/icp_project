@@ -219,10 +219,12 @@ void MainWindow::selectionChanged()
     {
         ui->strttrafficSlider->setEnabled(false);
         ui->strttrafficSlider->setValue(QSlider::NoTicks);
+        ui->strttrafficLbl->setEnabled(false);
         return;
     }
 
     ui->strttrafficSlider->setEnabled(true);
+    ui->strttrafficLbl->setEnabled(true);
 
     auto line = dynamic_cast<StreetItem*>(items.first());
     for(unsigned int i = 0; i < data->streets.size(); i++)
