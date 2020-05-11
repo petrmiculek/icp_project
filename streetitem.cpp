@@ -13,10 +13,10 @@ StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent
     is_selected = false;
     is_closed = false;
 
-    setPen(color_default);
+    setPen(color_default());
     setFlag(QGraphicsItem::ItemIsSelectable);
 
-    label.setFont(font_label);
+    label.setFont(font_label());
 
     SetLabelPosition();
 }
@@ -53,6 +53,12 @@ void StreetItem::SetLabelPosition()
     label.setRotation(-line().angle());
 }
 
+void StreetItem::SetLineWidth(int value)
+{
+    line_width = 1 + (value > 1 ?  qRound(log2(value)) : 0);
+}
+
+
 void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )
 {
     // Label
@@ -61,19 +67,19 @@ void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * op
     // Line
     if (!is_closed && !is_selected)
     {
-        setPen(color_default);
+        setPen(color_default());
     }
     else if(is_closed && !is_selected)
     {
-        setPen(color_closed);
+        setPen(color_closed());
     }
     else if(is_closed && !is_selected)
     {
-        setPen(color_closed);
+        setPen(color_closed());
     }
     else // closed and highlighted
     {
-        setPen(color_closed_and_highlighted);
+        setPen(color_closed_and_highlighted());
     }
 
     QGraphicsLineItem::paint(painter, option, widget);

@@ -183,18 +183,28 @@ void MainWindow::TrafficSliderChanged(int value)
     {
         return;
     }
-    // static constexpr auto max_density_penalty = 10;
 
-    auto& street = selected_streets.front();
+    // auto& street = selected_streets.front();  // unused
 
-    data->streets.at(selected_street).SetTrafficDensity(value);
+    auto& street = data->streets.at(selected_street);
+    street.SetTrafficDensity(value);
 
-    /*
-    for (auto str:scene_streets)
+    for (auto& str:scene_streets)
     {
         // find scene street to highlight accordingly
+        auto pt1 = str->line().p1();
+        auto pt2 = str->line().p2();
+
+        if (pt1.x() == street.point1->x()
+                && pt1.y() == street.point1->y()
+                && pt2.x() == street.point2->x()
+                && pt2.y() == street.point2->y())
+        {
+            str->SetLineWidth(value);
+            break;
+        }
     }
-    */
+
 }
 
 
@@ -227,7 +237,7 @@ void MainWindow::selectionChanged()
                 && pt2.x() == street.point2->x()
                 && pt2.y() == street.point2->y())
         {
-            selected_streets.push_back(street);
+            selected_streets.push_back(street); // unused
             selected_street = i;
 
             ui->strttrafficSlider->setValue(street.trafficDensity());

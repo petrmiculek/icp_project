@@ -86,6 +86,7 @@ private:
 
     std::vector<Street> selected_streets;
     int selected_street;
+    int selected_scene_street;
     bool selecting;
 
     static constexpr qreal zoom_scale_factor = 5.0/4;

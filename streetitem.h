@@ -19,20 +19,42 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     void SetLabelPosition();
+    void SetLineWidth(int value);
 
     QString name;
 
     bool is_selected;
     bool is_closed;
 
+
     QGraphicsSimpleTextItem label;
 
-    // cannot get this to work as static
-    const QPen color_default = QPen(Qt::lightGray);
-    const QPen color_closed = QPen(Qt::red);
-    const QPen color_highlighted = QPen(Qt::blue);
-    const QPen color_closed_and_highlighted = QPen(Qt::darkRed);
-    const QFont font_label = QFont("Helvetica", 2);
+    int line_width = 1;
+
+    inline QPen color_default()
+    {
+        return QPen(Qt::lightGray, line_width);
+    }
+
+    inline QPen color_closed()
+    {
+        return QPen(Qt::red, line_width);
+    }
+
+    inline QPen color_highlighted()
+    {
+        return QPen(Qt::blue, line_width);
+    }
+
+    inline QPen color_closed_and_highlighted()
+    {
+        return QPen(Qt::darkRed, line_width);
+    }
+
+    inline QFont font_label()
+    {
+        return QFont("Helvetica", 2);
+    }
 };
 
 
