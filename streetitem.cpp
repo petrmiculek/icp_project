@@ -6,6 +6,7 @@
 
 StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent) :
     QGraphicsLineItem(parent),
+    street({}),
     label(QGraphicsSimpleTextItem(_street_name, this))
 {
     setLine(_line);
@@ -21,10 +22,10 @@ StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent
     SetLabelPosition();
 }
 
-StreetItem::StreetItem(Street street, QGraphicsItem * parent) :
-    StreetItem({*street.point1, *street.point2}, street.name + "-" + QString::number(street.id), parent)
+StreetItem::StreetItem(Street _street, QGraphicsItem * parent) :
+    StreetItem({*_street.point1, *_street.point2}, _street.name + "-" + QString::number(_street.id), parent)
 {
-
+    street = _street;
 }
 
 void StreetItem::SetLabelPosition()

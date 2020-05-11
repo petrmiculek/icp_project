@@ -8,7 +8,7 @@
 #include <QGraphicsSimpleTextItem>
 #include <QFont>
 
-class Street;
+#include "street.h"
 
 class StreetItem : public QGraphicsLineItem
 {
@@ -26,6 +26,7 @@ public:
     bool is_selected;
     bool is_closed;
 
+    Street street;
 
     QGraphicsSimpleTextItem label;
 

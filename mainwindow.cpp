@@ -57,8 +57,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     // creating routes, deleted, keeping code for later - objížďky
     // QObject::connect(ui->createRouteBtn, &QPushButton::clicked, this, &MainWindow::RouteCreateToggled);
+
+    // Selecting streets
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
+
+    // Selecting traffic density (slider)
     QObject::connect(ui->strttrafficSlider, &QSlider::valueChanged, this, &MainWindow::TrafficSliderChanged);
+
+    // Choosing line from list
+    QObject::connect(transport_tree_view, &QTreeView::clicked, this, &MainWindow::ListSelectionChanged);
 
     initializeTimers();
 
@@ -265,6 +272,55 @@ void MainWindow::selectionChanged()
 
 }
 
+
+
+void MainWindow::ListSelectionChanged(QModelIndex index)
+{
+
+    if(ui->pttreeView->selectionModel()->selectedIndexes().size() != 1)
+    {
+        return;
+    }
+
+    auto line_name = ui->pttreeView->model()->data(index);
+
+    int index_found = -1;
+    for(unsigned int i = 0; i < data->trips.size(); i++)
+    {
+        auto trip = data->trips.at(i);
+        if ("Line " + trip.name() == line_name)
+        {
+            index_found = i;
+            break;
+        }
+    }
+
+    if (index_found == -1)
+    {
+        return;
+    }
+
+    // selected a line => clear highlight of all others
+    for (auto scene_street: scene_streets)
+    {
+        scene_street->is_selected = false;
+    }
+
+    auto route = data->trips.at(index_found).route();
+
+    // highlight all streets in selected line
+    for (auto street_dir : route)
+    {
+        for (auto scene_street: scene_streets)
+        {
+            if(street_dir.first.id == scene_street->street.id)
+            {
+                scene_street->is_selected = true;
+            }
+        }
+    }
+
+}
 
 /*
 void MainWindow::RouteCreateToggled()

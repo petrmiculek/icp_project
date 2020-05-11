@@ -39,6 +39,9 @@ public:
     void SceneZoomIn();
     void SceneZoomOut();
 
+public slots:
+    void ListSelectionChanged(QModelIndex index);
+
 private slots:
 
     void on_toggleTimeBtn_clicked();

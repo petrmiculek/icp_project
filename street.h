@@ -24,6 +24,9 @@ public:
         time_cost = euclid_distance(point1, point2);
     }
 
+    Street(){}
+
+
     ~Street()
     {
         // delete point1;
