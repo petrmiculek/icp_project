@@ -224,6 +224,7 @@ void MainWindow::TrafficSliderChanged(int value)
                 && pt2.y() == street.point2->y())
         {
             str->SetLineWidth(value);
+            scene->update();
             break;
         }
     }
@@ -309,9 +310,9 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     auto route = data->trips.at(index_found).route();
 
     // highlight all streets in selected line
-    for (auto street_dir : route)
+    for (const auto& street_dir : route)
     {
-        for (auto scene_street: scene_streets)
+        for (auto* const scene_street: scene_streets)
         {
             if(street_dir.first.id == scene_street->street.id)
             {
@@ -319,6 +320,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
             }
         }
     }
+    scene->update();
 
 }
 
