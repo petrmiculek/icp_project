@@ -30,7 +30,7 @@ public:
     void setLastTime(QTime time);
 
     void updateVehiclesAt(QTime time);
-    void createNewVehiclesAt(QTime time);
+    std::vector<Vehicle*> createNewVehiclesAt(QTime time);
 
 private:
     QPen pen;

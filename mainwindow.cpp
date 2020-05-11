@@ -114,21 +114,34 @@ void MainWindow::redrawVehicles(QTime time)
 {
     deleteDrawnVehicles();
 
+    // move existing + spawn new
     for (auto& trip : data->trips) {
         trip.updateVehiclesAt(time);
-        trip.createNewVehiclesAt(time);
+        std::vector<Vehicle*> new_vehicles = trip.createNewVehiclesAt(time);
         trip.setLastTime(time);
-        for (auto& vehicle : trip.vehicles()) {
-            if (vehicle.isinvalid())
-                continue;
 
-            auto* v = new TrafficCircleItem(
-                        PositionOnLine(vehicle.street,
-                                       vehicle.streetPercentage(vehicle.street.time_cost)),
-                        vehicle.symbol(), vehicle.pen);
+        // create new vehicles
+        for (auto* vehicle : new_vehicles) {
+            if (vehicle->isinvalid())
+            {
+                qDebug() << "redrawVehicles: invalid vehicle";
+                continue;
+            }
+            auto* v = new TrafficCircleItem(vehicle);
             scene->addItem(v);
             drawnVehicles.push_back(v);
         }
+    }
+
+    // propagate changes to gui items
+    for (auto* item : drawnVehicles) {
+
+        if (item->vehicle == nullptr || item->vehicle->isinvalid())
+        {
+            continue;
+        }
+
+        item->MoveTo(item->vehicle->position());
     }
 }
 
@@ -157,10 +170,18 @@ void MainWindow::invalidateVehicles()
 void MainWindow::deleteDrawnVehicles()
 {
     for (size_t i = 0; i < drawnVehicles.size(); i++) {
-        scene->removeItem(drawnVehicles[i]);
-        delete drawnVehicles[i];
+
+        // only delete invalid
+        if(drawnVehicles.at(i)->vehicle != nullptr
+                && drawnVehicles.at(i)->vehicle->isinvalid())
+        {
+            scene->removeItem(drawnVehicles.at(i));
+            delete drawnVehicles.at(i);
+            drawnVehicles.at(i) = nullptr;
+            drawnVehicles.erase(drawnVehicles.begin() + i);
+        }
     }
-    drawnVehicles.clear();
+    // drawnVehicles.clear();
 }
 
 /*

@@ -11,12 +11,21 @@ double euclid_distance(QPointF * point1, QPointF * point2)
 }
 
 
-QRectF CenterRectToPoint(QRectF rect, QPointF point)
+QRectF CenterRect(QRectF rect, QPointF point)
 {
-    auto top_left_x = point.x() - rect.width()/2;
-    auto top_left_y = point.y() - rect.height()/2;
+    auto top_left_x = point.x() - rect.width()/2.0;
+    auto top_left_y = point.y() - rect.height()/2.0;
 
     return QRectF(top_left_x, top_left_y, rect.width(), rect.height());
+}
+
+
+QPointF CenterRectTopLeft(QRectF rect, QPointF point)
+{
+    auto top_left_x = point.x() - rect.width()/2.0;
+    auto top_left_y = point.y() - rect.height()/2.0;
+
+    return QPointF(top_left_x, top_left_y);
 }
 
 

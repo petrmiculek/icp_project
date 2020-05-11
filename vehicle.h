@@ -33,8 +33,10 @@ public:
     void invalidate();
     bool isinvalid();
     double streetPercentage(double street_cost);
+    double streetPercentage(Street street);
     double fromMSecsToProgress(double msecs);
     double fromProgressToMSecs(double progress);
+    QPointF position();
 
     QString symbol() const;
 private:

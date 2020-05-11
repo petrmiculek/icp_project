@@ -18,7 +18,23 @@ struct DataLoadingException : public std::exception {
 
 
 double euclid_distance(QPointF * point1, QPointF * point2);
-QRectF CenterRectToPoint(QRectF rect, QPointF point);
+
+/**
+ * @brief CenterRect Get rectangle with its center aligned to a specified point
+ * @param rect rectangle to be aligned (only width-height are relevant)
+ * @param point point to align to
+ * @return QRectF aligned rectangle
+ */
+QRectF CenterRect(QRectF rect, QPointF point);
+
+/**
+ * @brief CenterRect Get Top-Left corner of rectangle with its center aligned to a specified point
+ * @param rect rectangle to be aligned (only width-height are relevant)
+ * @param point point to align to
+ * @return QPointF Top-Left point of aligned rectangle
+ */
+QPointF CenterRectTopLeft(QRectF rect, QPointF point);
+
 QPointF PositionOnLine(Street street, double street_percentage);
 QPen NextColor();
 QString toCamelCase(QString& s);

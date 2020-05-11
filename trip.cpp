@@ -124,10 +124,12 @@ void Trip::updateVehiclePosition(Vehicle &v, double elapsedMSecs)
     }
 }
 
-void Trip::createNewVehiclesAt(QTime time)
+
+std::vector<Vehicle*> Trip::createNewVehiclesAt(QTime time)
 {
+    std::vector<Vehicle*> new_vehicles {};
     if (departures.size() == 0)
-        return;
+        return new_vehicles;
 
     // unpacking not needed currently, keeping for reference
     // auto& [street, Direction] = lineRoute.front();
@@ -136,19 +138,25 @@ void Trip::createNewVehiclesAt(QTime time)
         // first call, lastTime was not set yet
         for (auto t : departures)
             if (t == time) {
-                vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, stopsPositions.front()));
+                Vehicle vehicle = Vehicle(lineRoute.front(), name(), pen, stopsPositions.front());
+                vehiclePool.push_back(vehicle);
                 vehiclePool.back().restMSecs = rand() % 2500 + 750; // wait at least 750 msecs, max 3250 msecs
+                new_vehicles.push_back(&vehiclePool.back());
             }
     }
     else {
         // lastTime set => check if time is past this point
         for (auto t : departures)
             if (*lastTime < t && t <= time) {
-                vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, stopsPositions.front()));
+                Vehicle vehicle = Vehicle(lineRoute.front(), name(), pen, stopsPositions.front());
+                vehiclePool.push_back(vehicle);
                 vehiclePool.back().restMSecs = rand() % 2500 + 750; // wait at least 750 msecs, max 3250 msecs
+                new_vehicles.push_back(&vehiclePool.back());
             }
     }
+    return new_vehicles;
 }
+
 
 void Trip::initStopsPositions()
 {

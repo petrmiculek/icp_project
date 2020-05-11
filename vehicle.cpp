@@ -47,10 +47,22 @@ bool Vehicle::isinvalid()
 
 double Vehicle::streetPercentage(double street_cost)
 {
+    double tmp;
     if (direction == dir_forward)
-        return progress / street_cost * 100;
+        tmp = progress / street_cost * 100;
     else
-        return 100 - (progress / street_cost * 100);
+        tmp = 100 - (progress / street_cost * 100);
+
+    if(tmp < 0.0 || tmp > 100.0)
+    {
+        throw std::out_of_range("street_percentage");
+    }
+    return tmp;
+}
+
+double Vehicle::streetPercentage(Street street)
+{
+    return streetPercentage(street.time_cost);
 }
 
 double Vehicle::fromMSecsToProgress(double msecs)
@@ -61,4 +73,9 @@ double Vehicle::fromMSecsToProgress(double msecs)
 double Vehicle::fromProgressToMSecs(double progress)
 {
     return progress / speed;
+}
+
+QPointF Vehicle::position()
+{
+    return PositionOnLine(street,streetPercentage(street));
 }
