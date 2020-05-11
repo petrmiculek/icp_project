@@ -1,15 +1,22 @@
 #include "vehicle.h"
 #include <QDebug>
 
-Vehicle::Vehicle(Street_dir _street_dir, QString lineName, double _progress, double _speed) :
-    Vehicle(_street_dir, lineName, NextColor(), _progress, _speed)
+Vehicle::Vehicle(Street_dir _street_dir, QString _line_name, double _progress, double _speed) :
+    Vehicle(_street_dir, _line_name, NextColor(), _progress, _speed)
 {
+    // nothing
 }
 
-Vehicle::Vehicle(Street_dir _street_dir, QString lineName, QPen pen, double _progress, double _speed) :
-     pen(pen), street(_street_dir.first) , direction(_street_dir.second), progress(_progress), speed(_speed), _symbol(lineName)
+Vehicle::Vehicle(Street_dir _street_dir, QString _line_name, QPen _pen, double _progress, double _speed) :
+     pen(_pen),
+     street(_street_dir.first),
+     direction(_street_dir.second),
+     internal_street_index(0),
+     progress(_progress),
+     speed(_speed),
+     vehicle_symbol(_line_name)
 {
-    internal_street_index = 0;
+    // nothing
 }
 
 /*QString Vehicle::getSymbol() const
@@ -25,7 +32,7 @@ Vehicle::Vehicle(Street_dir _street_dir, QString lineName, QPen pen, double _pro
 
 QString Vehicle::symbol() const
 {
-    return _symbol;
+    return vehicle_symbol;
 }
 
 void Vehicle::invalidate()

@@ -2,6 +2,7 @@
 #define VEHICLE_H
 
 #include <QString>
+#include <QTime>
 #include "street.h"
 #include "util.h"
 
@@ -27,6 +28,8 @@ public:
     double speed;
     double restMSecs; // milliseconds to rest (i.e. on a bus stop)
 
+    QTime spawn_time;
+
     void invalidate();
     bool isinvalid();
     double streetPercentage(double street_cost);
@@ -36,7 +39,7 @@ public:
     QString symbol() const;
 private:
     //QString getSymbol() const;
-    QString _symbol;
+    QString vehicle_symbol;
 
     static constexpr double speed_default = 0.01;
 };
