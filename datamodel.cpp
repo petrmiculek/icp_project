@@ -13,38 +13,6 @@
  */
 
 
-// sample route
-void CreateSampleTrip(DataModel* data)
-{
-    // temporary
-    std::vector<Street_dir> tmp_route;
-
-    auto street_ids = {15, 16, 17, 18};
-
-    for (auto s_id : street_ids)
-    {
-        bool found = false;
-        for (Street& street : data->streets)
-        {
-            if (street.id == s_id)
-            {
-                tmp_route.emplace_back(street, dir_forward);
-                found = true;
-                break;
-            }
-        }
-
-        if (! found)
-        {
-            qDebug() << "err creating route";
-            return;
-        }
-    }
-
-    data->trips.emplace_back(QString("Test-linka"), tmp_route);
-}
-
-
 DataModel::DataModel(QObject *parent) : QObject(parent)
 {
     auto res = LoadData();
@@ -52,9 +20,6 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
     {
         throw DataLoadingException(); // general exc
     }
-
-    // Creating mock trip, not used anymore
-    // CreateSampleTrip(this);
 }
 
 
@@ -72,7 +37,7 @@ bool DataModel::LoadData()
  * @param file_name
  * @return
  */
-bool DataModel::LoadJSONFile(QString file_name)
+bool DataModel::LoadJSONFile(const QString& file_name)
 {
     QFile file(":/" + file_name + ".json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -180,7 +145,7 @@ bool DataModel::LoadJSONFile(QString file_name)
     }
     else if(file_name == "trips")
     {
-        if (streets.size() == 0)
+        if (streets.empty())
         {
             qDebug() << "trips must be loaded after streets";
             return false;

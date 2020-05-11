@@ -1,9 +1,12 @@
 #include "trip.h"
 
-#include <math.h>
+#include <cmath>
 #include <qdebug.h>
 
 using namespace std;
+
+constexpr int WAIT_MIN = 750;
+constexpr int WAIT_MAX = 3250;
 
 Trip::Trip(QString name) : lineName(name), lastTime (nullptr)
 {
@@ -64,7 +67,7 @@ void Trip::setLastTime(QTime time)
 
 void Trip::advanceVehicleRoute(Vehicle *v)
 {
-    v->restMSecs = rand() % 2500 + 750; // wait at least 750 msecs, max 3250 msecs
+    v->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
     v->internal_street_index++;
     if (v->internal_street_index < lineRoute.size()) {
         std::tie(v->street, v->direction) = lineRoute.at(v->internal_street_index);
@@ -137,7 +140,7 @@ void Trip::createNewVehiclesAt(QTime time)
         for (auto t : departures)
             if (t == time) {
                 vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, stopsPositions.front()));
-                vehiclePool.back().restMSecs = rand() % 2500 + 750; // wait at least 750 msecs, max 3250 msecs
+                vehiclePool.back().restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
             }
     }
     else {
@@ -145,7 +148,7 @@ void Trip::createNewVehiclesAt(QTime time)
         for (auto t : departures)
             if (*lastTime < t && t <= time) {
                 vehiclePool.push_back(Vehicle(lineRoute.front(), name(), pen, stopsPositions.front()));
-                vehiclePool.back().restMSecs = rand() % 2500 + 750; // wait at least 750 msecs, max 3250 msecs
+                vehiclePool.back().restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
             }
     }
 }

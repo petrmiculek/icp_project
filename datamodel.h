@@ -22,7 +22,7 @@ public:
 
     bool LoadData();
 
-    bool LoadJSONFile(QString file_name);
+    bool LoadJSONFile(const QString& file_name);
     void Read(const QJsonObject &json);
 
 // private:

@@ -16,8 +16,8 @@
 class Vehicle
 {
 public:
-    Vehicle(Street_dir _street_dir, QString lineName, double _progress = 0.0, double _speed = speed_default);
-    Vehicle(Street_dir _street_dir, QString lineName, QPen pen, double _progress = 0.0, double _speed = speed_default);
+    Vehicle(Street_dir _street_dir, QString _line_name, double _progress = 0.0, double _speed = speed_default);
+    Vehicle(Street_dir _street_dir, QString _line_name, QPen pen, double _progress = 0.0, double _speed = speed_default);
 
     const QPen pen;
 

@@ -1,5 +1,5 @@
-#define BASEINCREMENT 0.1
-#define MAXMULTIPLIER 10000 // maximum multiplier value (absolute value)
+constexpr double BASEINCREMENT = 0.1;
+constexpr int MAXMULTIPLIER =  10000; // maximum multiplier value (absolute value)
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
