@@ -254,7 +254,7 @@ void MainWindow::selectionChanged()
 
     ui->strttrafficSlider->setEnabled(true);
     ui->strttrafficLbl->setEnabled(true);
-    ui->strtnameLbl->setText(line->name);
+    ui->strtnameLbl->setText(line->Name());
 
     for(unsigned long i = 0; i < data->streets.size(); i++)
     {
@@ -310,7 +310,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     // selected a line => clear highlight of all others
     for (auto scene_street: scene_streets)
     {
-        scene_street->is_highlighted = false;
+        scene_street->SetHighlight(false);
     }
 
     auto route = data->trips.at(index_found).route();
@@ -320,9 +320,10 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     {
         for (auto* const scene_street: scene_streets)
         {
-            if(street_dir.first.id == scene_street->street.id)
+            Street* curr_street = scene_street->GetStreet();
+            if(curr_street && street_dir.first.id == curr_street->id)
             {
-                scene_street->is_highlighted = true;
+                scene_street->SetHighlight(true);
             }
         }
     }

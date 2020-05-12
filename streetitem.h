@@ -16,11 +16,31 @@ public:
     StreetItem(QLineF _line, QString _street_name, QGraphicsItem * parent = nullptr);    
     StreetItem(Street street, QGraphicsItem * parent = nullptr);
 
+    /**
+     * @brief StreetItem::paint Reimplemented paint event handler - decide line color based on street state
+     * @param painter see QGraphicsLineItem::paint
+     * @param option see QGraphicsLineItem::paint
+     * @param widget see QGraphicsLineItem::paint
+     */
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
+    /**
+     * @brief StreetItem::SetLabelPosition Align label (street name) next to the street
+     */
     void SetLabelPosition();
+
+    /**
+     * @brief StreetItem::SetLineWidth Set line width based on the street's traffic density
+     * @param traffic_density traffic density of the street
+     */
     void SetLineWidth(int value);
 
+    QString Name();
+    void SetHighlight(bool highlighted);
+
+    Street* GetStreet();
+
+private:
     QString name;
 
     bool is_highlighted;
@@ -56,6 +76,8 @@ public:
     {
         return QFont("Helvetica", 2);
     }
+
+    qreal distance_from_line_to_label = 3.0;
 };
 
 

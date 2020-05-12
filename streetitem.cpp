@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QFont>
 
+
 StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent) :
     QGraphicsLineItem(parent),
     street({}),
@@ -28,6 +29,7 @@ StreetItem::StreetItem(Street _street, QGraphicsItem * parent) :
     street = _street;
 }
 
+
 void StreetItem::SetLabelPosition()
 {
     // get center point of line
@@ -38,8 +40,9 @@ void StreetItem::SetLabelPosition()
     auto tmp = line().p2() - center;
 
     normal.translate(tmp);
-    normal.setLength(3);
 
+    // calculate length of the beforementioned shift, so that it's far enough (street's thickness may vary)
+    normal.setLength(line_width * 2.0/3 + distance_from_line_to_label);
     auto text_center = normal.p2();
 
     // compute top left corner of text
@@ -54,9 +57,38 @@ void StreetItem::SetLabelPosition()
     label.setRotation(-line().angle());
 }
 
-void StreetItem::SetLineWidth(int value)
+
+void StreetItem::SetLineWidth(int traffic_density)
 {
-    line_width = 1 + (value > 1 ?  qRound(log2(value)) : 0);
+    line_width = 1 + (traffic_density > 1 ?  qRound(log2(traffic_density)) : 0);
+    SetLabelPosition();
+}
+
+QString StreetItem::Name()
+{
+    return name;
+}
+
+void StreetItem::SetHighlight(bool highlighted)
+{
+    is_highlighted = highlighted;
+}
+
+/**
+ * @brief StreetItem::GetStreet Get street if valid
+ * @return Street pointer if the street is valid.
+ *         Nullptr if the street is a default Street object
+ */
+Street * StreetItem::GetStreet()
+{
+    if (street.id != Street().id)
+    {
+        return &street;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 
