@@ -271,7 +271,7 @@ void MainWindow::selectionChanged()
             selected_streets.push_back(street); // unused
             selected_street = static_cast<int>(i);
 
-            ui->strttrafficSlider->setValue(qRound(street.trafficDensity()));
+            ui->strttrafficSlider->setValue(street.trafficDensity());
             break;
         }
     }
