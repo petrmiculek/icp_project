@@ -24,7 +24,13 @@ StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent
 }
 
 StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
-    StreetItem({*_street->point1, *_street->point2}, _street->name + "-" + QString::number(_street->id), parent)
+    StreetItem({*_street->point1, *_street->point2},
+#ifndef NDEBUG
+    _street->name + "-" + QString::number(_street->id),
+#else
+    _street->name,
+#endif
+    parent)
 {
     street = _street;
 }
