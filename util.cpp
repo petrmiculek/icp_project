@@ -11,16 +11,34 @@ double euclid_distance(QPointF * point1, QPointF * point2)
 }
 
 
-QRectF CenterRectToPoint(QRectF rect, QPointF point)
+QRectF CenteredSizeToRect(QSizeF dimensions, QPointF point)
 {
-    auto top_left_x = point.x() - rect.width()/2;
-    auto top_left_y = point.y() - rect.height()/2;
+    auto top_left_x = point.x() - dimensions.width()/2.0;
+    auto top_left_y = point.y() - dimensions.height()/2.0;
+
+    return QRectF(top_left_x, top_left_y, dimensions.width(), dimensions.height());
+}
+
+
+QRectF CenteredRectToRect(QRectF rect, QPointF point)
+{
+    auto top_left_x = point.x() - rect.width()/2.0;
+    auto top_left_y = point.y() - rect.height()/2.0;
 
     return QRectF(top_left_x, top_left_y, rect.width(), rect.height());
 }
 
 
-QPointF PositionOnLine(const Street& street, double street_percentage)
+QPointF CenteredRectToPoint(QRectF rect, QPointF point)
+{
+    auto top_left_x = point.x() - rect.width()/2.0;
+    auto top_left_y = point.y() - rect.height()/2.0;
+
+    return QPointF(top_left_x, top_left_y);
+}
+
+
+QPointF PositionOnLine(Street street, double street_percentage)
 {
     auto x_diff = street.point2->x() - street.point1->x();
     auto y_diff = street.point2->y() - street.point1->y();
@@ -32,27 +50,61 @@ QPointF PositionOnLine(const Street& street, double street_percentage)
 }
 
 
-QPen NextColor()
+QPen NextColorPen(int index) // index = -1  --> select random
 {
-    auto pens = std::vector<QPen>({
-                                      {{Qt::red}, 1},
-                                      {{Qt::blue}, 1},
-                                      {{Qt::black}, 1},
-                                      {{Qt::darkGreen}, 1},
-                                      {{Qt::gray}, 1},
-                                      {{Qt::darkBlue}, 1},
-                                  });
-    static int index = 0;
+    // zero-thickness pen == cosmetic == constant width on screen (1pt)
+    static constexpr int pen_thickness = 0;
 
-    return pens.at(index++ % pens.size());
+    return {NextColor(index), pen_thickness};
+
+}
+
+QColor MixColors(QColor c1, QColor c2, float ratio)
+{
+    if (ratio < 0 || ratio > 1)
+        throw std::out_of_range("wrong color ratio");
+    return QColor(
+                c1.red() * (1 - ratio) + c2.red() * ratio,
+                c1.green() * (1 - ratio) + c2.green() * ratio,
+                c1.blue() * (1 - ratio) + c2.blue() * ratio
+                );
 }
 
 QString toCamelCase(QString& s)
 {
-    // https://wiki.qt.io/Converting_Strings_from_and_to_Camel_Case
     QStringList parts = s.toLower().split(' ', QString::SkipEmptyParts);
-    for (int i = 0; i < parts.size(); ++i)
-        parts[i].replace(0, 1, parts[i][0].toUpper());
+    for (auto& part : parts)
+        part.replace(0, 1, part[0].toUpper());
 
     return parts.join(" ");
+}
+
+QColor NextColor(int index)
+{
+    auto pens = std::vector<QColor>({
+                                      {Qt::darkCyan},
+                                      {Qt::blue},
+                                      {Qt::black},
+                                      {Qt::darkMagenta},
+                                      {Qt::darkGray},
+                                      {Qt::darkBlue},
+                                  });
+    static int static_index = 0;
+
+    if(index == -1)
+    {
+        return pens.at(static_index++ % pens.size());
+    }
+    else
+    {
+        if (index < 0)
+        {
+            index = 0;
+        }
+        if (index >= static_cast<int>(pens.size()))
+        {
+            index = pens.size() - 1;
+        }
+        return pens.at(index);
+    }
 }

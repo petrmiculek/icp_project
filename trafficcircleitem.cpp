@@ -1,44 +1,83 @@
 #include "trafficcircleitem.h"
 #include "util.h"
 
+qreal TrafficCircleItem::scaling_ratio = 1.0;
+
+// this constructor is not for vehicles
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) :
-    TrafficCircleItem(center, content, NextColor(), parent)
+    TrafficCircleItem(center, content, NextColorPen(), nullptr, parent)
 {
-
+    // nothing
 }
 
-TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen pen, QGraphicsItem * parent) :
-    QGraphicsEllipseItem(parent), text(content), pen(pen)
+TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent) :
+    QGraphicsEllipseItem(parent),
+    pen(_pen),
+    vehicle(_vehicle),
+    text(content)
 {
-    QRectF rect = CenterRectToPoint(QRectF(center, center + point_ellipse_size), center);
+    MoveTo(center);
 
-    // circle bounding box
-    setRect(rect);
+    // color
+    setPen(pen);
+    QColor color = pen.color();
+    if(vehicle == nullptr)
+    {
+        color.setAlpha(90);
+    }
+    else
+    {
+        color.setAlpha(30);
 
-    QPen pen_stop = pen;
-    setPen(pen_stop);
-    QColor color_stop = pen_stop.color();
-    color_stop.setAlpha(66);
-    setBrush(color_stop);
-
-    // inner text bounding box
-    text_space = QRectF(rect);
-    text_space.setWidth(text_space.width() * inscribed_square_size);
-    text_space.setHeight(text_space.height() * inscribed_square_size);
-    text_space = CenterRectToPoint(text_space, center);
-    text_space.translate(0, -1);
-
-    // looking for something to keep buses/stops at a constant size on screen
-    // (this does not do the trick)
-    // setFlag(QGraphicsItem::ItemIgnoresTransformations);
+    }
+    setBrush(color);
 }
 
-void TrafficCircleItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+TrafficCircleItem::TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem *parent) :
+    TrafficCircleItem(_vehicle->position(), _vehicle->symbol(), _vehicle->pen, _vehicle, parent)
+
 {
+    // nothing
+}
+
+void TrafficCircleItem::paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+{
+    // circle
+    if(vehicle != nullptr)
+    {
+        // vehicle
+        MoveTo(vehicle->position());
+    }
+    else
+    {
+        // stop
+        MoveTo(this->boundingRect().center());
+    }
     QGraphicsEllipseItem::paint(painter, option, widget);
 
+    // text
     QFont font = painter->font();
-    font.setPixelSize(7);
+    font.setPointSizeF(TextSize());
     painter->setFont(font);
+
     painter->drawText(text_space, Qt::AlignCenter, text);
 }
+
+void TrafficCircleItem::MoveTo(QPointF center)
+{
+    // circle
+    QRectF rect = CenteredSizeToRect(PointCircleSize(), center);
+
+    setRect(rect);
+
+    // text
+    text_space = CenteredSizeToRect(PointCircleSize() * inscribed_square_size_ratio, center);
+}
+
+void TrafficCircleItem::UpdateEllipseSize()
+{
+    prepareGeometryChange();
+    setRect({this->boundingRect().topLeft(), this->PointCircleSize()});
+}
+
+

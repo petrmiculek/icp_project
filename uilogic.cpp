@@ -6,7 +6,7 @@ constexpr int MAXMULTIPLIER =  10000; // maximum multiplier value (absolute valu
 
 #include <QStringRef>
 
-#include <math.h>
+#include <cmath>
 
 void MainWindow::multiplyMultiplicator()
 {

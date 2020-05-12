@@ -16,7 +16,7 @@
 #include "util.h"
 
 static constexpr uint a[] = {0x1F68D}; // bus Unicode symbol
-static const QString bus_symbol = QString::fromUcs4(a,1);
+static const QString bus_symbol = "S";// QString::fromUcs4(a,1);
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     // initialize lines in tree view
     auto* model = new QStandardItemModel();
     for (const auto& trip : data->trips) {
-        auto* lineItem = new QStandardItem("Line " + trip.name());
+        auto* lineItem = new QStandardItem(trip.name());
         for (const auto street_dir : trip.route())
             for (const auto& stop : street_dir.first.stops) {
                 auto* stopItem = new QStandardItem(stop.name);
@@ -57,8 +57,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     // creating routes, deleted, keeping code for later - objížďky
     // QObject::connect(ui->createRouteBtn, &QPushButton::clicked, this, &MainWindow::RouteCreateToggled);
+
+    // Selecting streets
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
+
+    // Selecting traffic density (slider)
     QObject::connect(ui->strttrafficSlider, &QSlider::valueChanged, this, &MainWindow::TrafficSliderChanged);
+
+    // Choosing line from list
+    QObject::connect(transport_tree_view, &QTreeView::clicked, this, &MainWindow::ListSelectionChanged);
 
     initializeTimers();
 
@@ -86,8 +93,8 @@ void MainWindow::InitScene(DataModel* data)
     ui->graphicsView->scale(3, 3);
 
     // streets
-    for (const auto& street : data->streets) {
-        StreetItem* scene_street = new StreetItem(street);
+    for (auto& street : data->streets) {
+        auto* scene_street = new StreetItem(&street);
         scene->addItem(scene_street);
 
         scene_streets.push_back(scene_street);
@@ -98,13 +105,16 @@ void MainWindow::InitScene(DataModel* data)
         for (const auto& stop: street.stops)
         {
             auto* scene_stop2 = new TrafficCircleItem(
-                        PositionOnLine(street, stop.street_percentage), bus_symbol);
+                        PositionOnLine(street, stop.street_percentage), stop.name.front());
             scene->addItem(scene_stop2);
+
         }
     }
 
     connect(scene, &QGraphicsScene::selectionChanged,
             this, &MainWindow::selectionChanged);
+
+    // ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorViewCenter);
 }
 
 
@@ -112,27 +122,40 @@ void MainWindow::redrawVehicles(QTime time)
 {
     deleteDrawnVehicles();
 
+    // move existing + spawn new
     for (auto& trip : data->trips) {
         trip.updateVehiclesAt(time);
-        trip.createNewVehiclesAt(time);
+        std::vector<std::shared_ptr<Vehicle>> new_vehicles = trip.createNewVehiclesAt(time);
         trip.setLastTime(time);
-        for (auto& vehicle : trip.vehicles()) {
-            if (vehicle.isinvalid())
-                continue;
 
-            auto* v = new TrafficCircleItem(
-                        PositionOnLine(vehicle.street,
-                                       vehicle.streetPercentage(vehicle.street.time_cost)),
-                        vehicle.symbol(), vehicle.pen);
+        // create new vehicles
+        for (auto vehicle : new_vehicles) {
+            if (vehicle->isinvalid())
+            {
+                qDebug() << "redrawVehicles: invalid vehicle";
+                continue;
+            }
+            auto* v = new TrafficCircleItem(vehicle);
             scene->addItem(v);
             drawnVehicles.push_back(v);
         }
+    }
+
+    // propagate changes to gui items
+    for (auto* item : drawnVehicles) {
+
+        if (item->vehicle == nullptr || item->vehicle->isinvalid())
+        {
+            continue;
+        }
+
+        item->MoveTo(item->vehicle->position());
     }
 }
 
 void MainWindow::initTrips()
 {
-    // TODO remove
+    // TODO remove in final version
     for (auto& t : data->trips)
     {
         t.addSpawn(QTime(0,0,2));
@@ -148,17 +171,22 @@ void MainWindow::invalidateVehicles()
     for (auto& trip : data->trips) {
         trip.setLastTime(mapTimer->currentTime());
         for (auto& vehicle : trip.vehicles())
-            vehicle.invalidate();
+            vehicle->invalidate();
     }
 }
 
 void MainWindow::deleteDrawnVehicles()
 {
     for (size_t i = 0; i < drawnVehicles.size(); i++) {
-        scene->removeItem(drawnVehicles[i]);
-        delete drawnVehicles[i];
+
+        // only delete invalid
+        if(drawnVehicles.at(i)->vehicle != nullptr
+                && drawnVehicles.at(i)->vehicle->isinvalid())
+        {
+            scene->removeItem(drawnVehicles.at(i));
+            drawnVehicles.erase(drawnVehicles.begin() + i);
+        }
     }
-    drawnVehicles.clear();
 }
 
 /*
@@ -185,7 +213,7 @@ void MainWindow::TrafficSliderChanged(int value)
     // auto& street = selected_streets.front();  // unused
 
     auto& street = data->streets.at(selected_street);
-    street.SetTrafficDensity(value);
+    street.setTrafficDensity(value);
 
     for (auto& str:scene_streets)
     {
@@ -198,11 +226,11 @@ void MainWindow::TrafficSliderChanged(int value)
                 && pt2.x() == street.point2->x()
                 && pt2.y() == street.point2->y())
         {
-            str->SetLineWidth(value);
+            //str->SetLineWidth(value);
+            scene->update();
             break;
         }
     }
-
 }
 
 
@@ -218,13 +246,16 @@ void MainWindow::selectionChanged()
         ui->strttrafficSlider->setEnabled(false);
         ui->strttrafficSlider->setValue(QSlider::NoTicks);
         ui->strttrafficLbl->setEnabled(false);
+        ui->strtnameLbl->clear();
         return;
     }
 
+    auto line = dynamic_cast<StreetItem*>(items.first());
+
     ui->strttrafficSlider->setEnabled(true);
     ui->strttrafficLbl->setEnabled(true);
+    ui->strtnameLbl->setText(line->Name());
 
-    auto line = dynamic_cast<StreetItem*>(items.first());
     for(unsigned long i = 0; i < data->streets.size(); i++)
     {
         auto street = data->streets.at(i);
@@ -244,10 +275,59 @@ void MainWindow::selectionChanged()
             break;
         }
     }
-
-
 }
 
+
+
+void MainWindow::ListSelectionChanged(QModelIndex index)
+{
+
+    if(ui->pttreeView->selectionModel()->selectedIndexes().size() != 1)
+    {
+        return;
+    }
+
+    auto line_name = ui->pttreeView->model()->data(index);
+
+    int index_found = -1;
+    for(unsigned long i = 0; i < data->trips.size(); i++)
+    {
+        auto& trip = data->trips.at(i);
+        if (trip.name() == line_name)
+        {
+            index_found = i;
+            break;
+        }
+    }
+
+    if (index_found == -1)
+    {
+        return;
+    }
+
+    // selected a line => clear highlight of all others
+    for (auto& scene_street: scene_streets)
+    {
+        scene_street->SetHighlight(false);
+    }
+
+    auto route = data->trips.at(index_found).route();
+
+    // highlight all streets in selected line
+    for (const auto& street_dir : route)
+    {
+        for (auto* const scene_street: scene_streets)
+        {
+            Street* curr_street = scene_street->GetStreet();
+            if(curr_street && street_dir.first.id == curr_street->id)
+            {
+                scene_street->SetHighlight(true);
+            }
+        }
+    }
+    scene->update();
+
+}
 
 /*
 void MainWindow::RouteCreateToggled()

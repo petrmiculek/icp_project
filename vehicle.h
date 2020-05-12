@@ -13,15 +13,17 @@
 #define dir_forward false
 #define dir_backward true
 
+class Trip;
+
 class Vehicle
 {
 public:
     Vehicle(Street_dir _street_dir, QString _line_name, double _progress = 0.0, double _speed = speed_default);
-    Vehicle(Street_dir _street_dir, QString _line_name, QPen pen, double _progress = 0.0, double _speed = speed_default);
+    Vehicle(std::shared_ptr<Trip> trip);
 
-    const QPen pen;
+    QPen pen;
 
-    Street street;
+    Street* street;
     Direction direction;
     unsigned int internal_street_index;
     double progress;
@@ -33,8 +35,11 @@ public:
     void invalidate();
     bool isinvalid();
     double streetPercentage(double street_cost);
+    double streetPercentage(const Street* street);
     double fromMSecsToProgress(double msecs);
     double fromProgressToMSecs(double progress);
+    QPointF position();
+    std::shared_ptr<Trip> trip;
 
     QString symbol() const;
 private:

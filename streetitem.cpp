@@ -4,13 +4,15 @@
 #include <QDebug>
 #include <QFont>
 
+
 StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent) :
     QGraphicsLineItem(parent),
+    street(nullptr),
     label(QGraphicsSimpleTextItem(_street_name, this))
 {
     setLine(_line);
     name = _street_name;
-    is_selected = false;
+    is_highlighted = false;
     is_closed = false;
 
     setPen(color_default());
@@ -21,11 +23,12 @@ StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent
     SetLabelPosition();
 }
 
-StreetItem::StreetItem(Street street, QGraphicsItem * parent) :
-    StreetItem({*street.point1, *street.point2}, street.name + "-" + QString::number(street.id), parent)
+StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
+    StreetItem({*_street->point1, *_street->point2}, _street->name + "-" + QString::number(_street->id), parent)
 {
-
+    street = _street;
 }
+
 
 void StreetItem::SetLabelPosition()
 {
@@ -37,12 +40,13 @@ void StreetItem::SetLabelPosition()
     auto tmp = line().p2() - center;
 
     normal.translate(tmp);
-    normal.setLength(3);
 
+    // calculate length of the beforementioned shift, so that it's far enough (street's thickness may vary)
+    normal.setLength(line_width * 2.0/3 + distance_from_line_to_label);
     auto text_center = normal.p2();
 
     // compute top left corner of text
-    auto aligned_rect = CenterRectToPoint(label.boundingRect(), text_center);
+    auto aligned_rect = CenteredRectToRect(label.boundingRect(), text_center);
 
     label.setPos(aligned_rect.topLeft());
 
@@ -53,9 +57,38 @@ void StreetItem::SetLabelPosition()
     label.setRotation(-line().angle());
 }
 
-void StreetItem::SetLineWidth(int value)
+
+void StreetItem::SetLineWidth(int traffic_density)
 {
-    line_width = 1 + (value > 1 ?  qRound(log2(value)) : 0);
+    line_width = 1 + (traffic_density > 1 ?  qRound(log2(traffic_density)) : 0);
+    SetLabelPosition();
+}
+
+QString StreetItem::Name()
+{
+    return name;
+}
+
+void StreetItem::SetHighlight(bool highlighted)
+{
+    is_highlighted = highlighted;
+}
+
+/**
+ * @brief StreetItem::GetStreet Get street if valid
+ * @return Street pointer if the street is valid.
+ *         Nullptr if the street is a default Street object
+ */
+Street * StreetItem::GetStreet()
+{
+    if (street->id != Street().id)
+    {
+        return street;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 
@@ -65,15 +98,16 @@ void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * op
     label.paint(painter, option, widget);
 
     // Line
-    if (!is_closed && !is_selected)
+    if (!is_closed && !is_highlighted)
     {
-        setPen(color_default());
+        //setPen(color_default());
+        setPen(color_traffic(street ? street->trafficDensity() : 0));
     }
-    else if(is_closed && !is_selected)
+    else if(!is_closed && is_highlighted)
     {
-        setPen(color_closed());
+        setPen(color_highlighted());
     }
-    else if(is_closed && !is_selected)
+    else if(is_closed && !is_highlighted)
     {
         setPen(color_closed());
     }

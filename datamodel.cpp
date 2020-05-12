@@ -195,15 +195,15 @@ bool DataModel::LoadJSONFile(const QString& file_name)
                 {
                     QJsonArray departure_arr = departure_json.toArray();
 
-                    auto departure_hours = departure_arr[0].toInt();
-                    auto departure_minutes = departure_arr[1].toInt();
-                    auto departure_seconds = departure_arr[2].toInt();
+                    auto departure_hours = departure_arr.at(0).toInt();
+                    auto departure_minutes = departure_arr.at(1).toInt();
+                    auto departure_seconds = departure_arr.at(2).toInt();
 
                     departures.emplace_back(departure_hours, departure_minutes, departure_seconds);
                 }
 
                 // save trip to collection
-                trips.emplace_back(QString::number(trip_id), route, departures);
+                trips.emplace_back(trip_id, route, departures);
             }
         }
     }
