@@ -70,7 +70,9 @@ void Trip::advanceVehicleRoute(std::shared_ptr<Vehicle> v)
     v->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
     v->internal_street_index++;
     if (v->internal_street_index < lineRoute.size()) {
-        std::tie(v->street, v->direction) = lineRoute.at(v->internal_street_index);
+        Street_dir sd = lineRoute.at(v->internal_street_index);
+        v->street = &std::get<0>(sd);
+        v->direction = std::get<1>(sd);
         v->progress = 0;
     }
     else {
@@ -108,8 +110,8 @@ void Trip::updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs
     if (elapsedMSecs == 0)
         return;
 
-    v->progress += v->fromMSecsToProgress(elapsedMSecs);
-
+    const float traffic_multiplier = (100.0-v->street->trafficDensity())/100.0;
+    v->progress += (v->fromMSecsToProgress(elapsedMSecs) * traffic_multiplier);
 
     // begin waiting if the vehicle comes across a stop
     if (stopsPositions.at(v->internal_street_index) != -1 && v->progress > stopsPositions.at(v->internal_street_index)) {
@@ -122,7 +124,7 @@ void Trip::updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs
                 // if the vehicle is on the last stop (stopsPositions is one item bigger)
                 v->invalidate();
             }
-            v->progress += v->fromMSecsToProgress(fabs(v->restMSecs));
+            v->progress += v->fromMSecsToProgress(fabs(v->restMSecs));// * multiplier; // will introduce a weird bug when vehicles reverse back
             v->restMSecs = 0;
         }
     }

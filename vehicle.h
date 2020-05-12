@@ -21,7 +21,7 @@ public:
 
     const QPen pen;
 
-    Street street;
+    Street* street;
     Direction direction;
     unsigned int internal_street_index;
     double progress;
@@ -33,7 +33,7 @@ public:
     void invalidate();
     bool isinvalid();
     double streetPercentage(double street_cost);
-    double streetPercentage(const Street& street);
+    double streetPercentage(const Street* street);
     double fromMSecsToProgress(double msecs);
     double fromProgressToMSecs(double progress);
     QPointF position();
