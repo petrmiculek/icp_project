@@ -43,7 +43,7 @@ void MainWindow::SceneZoomIn()
     }
 
     ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
-    // scene->update();
+    scene->update();
 }
 
 
@@ -67,7 +67,7 @@ void MainWindow::SceneZoomOut()
     }
 
     ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
-    // scene->update();
+    scene->update();
 
 }
 
