@@ -43,7 +43,7 @@ void StreetItem::SetLabelPosition()
     auto text_center = normal.p2();
 
     // compute top left corner of text
-    auto aligned_rect = CenterRect(label.boundingRect(), text_center);
+    auto aligned_rect = CenteredRectToRect(label.boundingRect(), text_center);
 
     label.setPos(aligned_rect.topLeft());
 

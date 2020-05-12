@@ -11,7 +11,16 @@ double euclid_distance(QPointF * point1, QPointF * point2)
 }
 
 
-QRectF CenterRect(QRectF rect, QPointF point)
+QRectF CenteredSizeToRect(QSizeF dimensions, QPointF point)
+{
+    auto top_left_x = point.x() - dimensions.width()/2.0;
+    auto top_left_y = point.y() - dimensions.height()/2.0;
+
+    return QRectF(top_left_x, top_left_y, dimensions.width(), dimensions.height());
+}
+
+
+QRectF CenteredRectToRect(QRectF rect, QPointF point)
 {
     auto top_left_x = point.x() - rect.width()/2.0;
     auto top_left_y = point.y() - rect.height()/2.0;
@@ -20,7 +29,7 @@ QRectF CenterRect(QRectF rect, QPointF point)
 }
 
 
-QPointF CenterRectTopLeft(QRectF rect, QPointF point)
+QPointF CenteredRectToPoint(QRectF rect, QPointF point)
 {
     auto top_left_x = point.x() - rect.width()/2.0;
     auto top_left_y = point.y() - rect.height()/2.0;
@@ -58,7 +67,6 @@ QPen NextColor()
 
 QString toCamelCase(QString& s)
 {
-    // https://wiki.qt.io/Converting_Strings_from_and_to_Camel_Case
     QStringList parts = s.toLower().split(' ', QString::SkipEmptyParts);
     for (int i = 0; i < parts.size(); ++i)
         parts[i].replace(0, 1, parts[i][0].toUpper());

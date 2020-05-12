@@ -21,11 +21,11 @@ double euclid_distance(QPointF * point1, QPointF * point2);
 
 /**
  * @brief CenterRect Get rectangle with its center aligned to a specified point
- * @param rect rectangle to be aligned (only width-height are relevant)
+ * @param rect rectangle to be aligned (only width-height are used, position is ignored)
  * @param point point to align to
  * @return QRectF aligned rectangle
  */
-QRectF CenterRect(QRectF rect, QPointF point);
+QRectF CenteredRectToRect(QRectF rect, QPointF point);
 
 /**
  * @brief CenterRect Get Top-Left corner of rectangle with its center aligned to a specified point
@@ -33,10 +33,27 @@ QRectF CenterRect(QRectF rect, QPointF point);
  * @param point point to align to
  * @return QPointF Top-Left point of aligned rectangle
  */
-QPointF CenterRectTopLeft(QRectF rect, QPointF point);
+QPointF CenteredRectToPoint(QRectF rect, QPointF point);
 
+/**
+ * @brief CenteredSizeToRect Get rectangle with its center aligned to a specified point
+ * @param dimensions size of desired rectangle
+ * @param point point to align to
+ * @return QRectF aligned rectangle
+ */
+QRectF CenteredSizeToRect(QSizeF dimensions, QPointF point);
+
+/**
+ * @brief PositionOnLine Get coordinates of element on a street
+ * @param street Street that the element is on
+ * @param street_percentage position of element within the street
+ * @return QPointF element position as coordinates
+ */
 QPointF PositionOnLine(Street street, double street_percentage);
+
 QPen NextColor();
+
+// https://wiki.qt.io/Converting_Strings_from_and_to_Camel_Case
 QString toCamelCase(QString& s);
 
 #endif // UTIL_H

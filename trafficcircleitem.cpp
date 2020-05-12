@@ -1,6 +1,8 @@
 #include "trafficcircleitem.h"
 #include "util.h"
 
+int TrafficCircleItem::scaling_ratio = 1;
+
 // this constructor is not for vehicles
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) :
     TrafficCircleItem(center, content, NextColor(), nullptr, parent)
@@ -14,22 +16,13 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
     pen(_pen),
     vehicle(_vehicle)
 {
-    QRectF rect = CenterRect(QRectF(center, center + point_circle_size), center);
+    MoveTo(center);
 
-    // circle bounding box
-    setRect(rect);
-
+    // color
     setPen(pen);
     QColor color = pen.color();
     color.setAlpha(66);
     setBrush(color);
-
-    // text bounding box
-    text_space = QRectF(rect);
-    text_space.setWidth(text_space.width() * inscribed_square_size);
-    text_space.setHeight(text_space.height() * inscribed_square_size);
-    text_space = CenterRect(text_space, center);
-    text_space.translate(0, -1);
 }
 
 TrafficCircleItem::TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem *parent) :
@@ -54,14 +47,12 @@ void TrafficCircleItem::paint (QPainter * painter, const QStyleOptionGraphicsIte
 void TrafficCircleItem::MoveTo(QPointF center)
 {
     // circle
-    QPointF top_left = CenterRectTopLeft(boundingRect(), center);
-    setRect({top_left, top_left + point_circle_size});
+    QRectF rect = CenteredSizeToRect(PointCircleSize(), center);
 
+    setRect(rect);
 
     // text
-    auto text_top_left = CenterRectTopLeft(text_space, center);
-    text_space = QRectF(text_top_left, text_space.size());
-
+    text_space = CenteredSizeToRect(PointCircleSize() * inscribed_square_size_ratio, center);
 }
 
 void TrafficCircleItem::SetRectCoords(QPointF point)
