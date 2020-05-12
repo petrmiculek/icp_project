@@ -210,7 +210,7 @@ void MainWindow::TrafficSliderChanged(int value)
     // auto& street = selected_streets.front();  // unused
 
     auto& street = data->streets.at(selected_street);
-    street.SetTrafficDensity(value);
+    street.setTrafficDensity(value);
 
     for (auto& str:scene_streets)
     {
@@ -243,13 +243,16 @@ void MainWindow::selectionChanged()
         ui->strttrafficSlider->setEnabled(false);
         ui->strttrafficSlider->setValue(QSlider::NoTicks);
         ui->strttrafficLbl->setEnabled(false);
+        ui->strtnameLbl->clear();
         return;
     }
 
+    auto line = dynamic_cast<StreetItem*>(items.first());
+
     ui->strttrafficSlider->setEnabled(true);
     ui->strttrafficLbl->setEnabled(true);
+    ui->strtnameLbl->setText(line->name);
 
-    auto line = dynamic_cast<StreetItem*>(items.first());
     for(unsigned long i = 0; i < data->streets.size(); i++)
     {
         auto street = data->streets.at(i);
@@ -265,7 +268,7 @@ void MainWindow::selectionChanged()
             selected_streets.push_back(street); // unused
             selected_street = static_cast<int>(i);
 
-            ui->strttrafficSlider->setValue(qRound(street.trafficDensity()));
+            ui->strttrafficSlider->setValue(street.trafficDensity());
             break;
         }
     }

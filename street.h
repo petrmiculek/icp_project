@@ -1,6 +1,8 @@
 #ifndef STREET_H
 #define STREET_H
 
+#include <assert.h>
+
 #include <QPointF>
 #include <QDebug>
 #include <QString>
@@ -19,7 +21,7 @@ public:
         point1(new QPointF(_x1, _y1)),
         point2(new QPointF(_x2, _y2)),
         name(_name),
-        traffic_density(0.0)
+        traffic_density(0)
     {
         time_cost = euclid_distance(point1, point2);
     }
@@ -33,19 +35,21 @@ public:
         // delete point2;
     }
 
-    double cost()
+    /*double cost()
     {
         return time_cost + (traffic_density > 1 ? log2(traffic_density) : 0);
-    }
+    }*/
 
-    double trafficDensity()
+    int trafficDensity() const
     {
         return traffic_density;
     }
 
-    void SetTrafficDensity(double slider_value)
+    void setTrafficDensity(int value)
     {
-        traffic_density = slider_value;
+        assert(value >= 0 && value <= 100);
+
+        traffic_density = value;
     }
 
     int id;
@@ -58,7 +62,9 @@ public:
     std::vector<Stop> stops;
 
     double time_cost;
-    double traffic_density;
+
+private:
+    int traffic_density; // 0 = normal traffic
 };
 
 #endif // STREET_H

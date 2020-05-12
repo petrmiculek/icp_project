@@ -4,19 +4,19 @@
 Vehicle::Vehicle(Street_dir _street_dir, QString _line_name, double _progress, double _speed) :
     Vehicle(_street_dir, _line_name, NextColor(), _progress, _speed)
 {
-    // nothing
+
 }
 
 Vehicle::Vehicle(Street_dir _street_dir, QString _line_name, QPen _pen, double _progress, double _speed) :
      pen(_pen),
-     street(_street_dir.first),
+     street(&_street_dir.first),
      direction(_street_dir.second),
      internal_street_index(0),
      progress(_progress),
      speed(_speed),
      vehicle_symbol(_line_name)
 {
-    // nothing
+
 }
 
 /*QString Vehicle::getSymbol() const
@@ -60,9 +60,9 @@ double Vehicle::streetPercentage(double street_cost)
     return tmp;
 }
 
-double Vehicle::streetPercentage(const Street& street)
+double Vehicle::streetPercentage(const Street* street)
 {
-    return streetPercentage(street.time_cost);
+    return streetPercentage(street->time_cost);
 }
 
 double Vehicle::fromMSecsToProgress(double msecs)
@@ -77,5 +77,5 @@ double Vehicle::fromProgressToMSecs(double progress)
 
 QPointF Vehicle::position()
 {
-    return PositionOnLine(street,streetPercentage(street));
+    return PositionOnLine(*street,streetPercentage(street));
 }
