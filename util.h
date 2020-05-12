@@ -51,7 +51,10 @@ QRectF CenteredSizeToRect(QSizeF dimensions, QPointF point);
  */
 QPointF PositionOnLine(Street street, double street_percentage);
 
-QPen NextColor();
+
+QColor NextColor(int index = -1); // index = -1  --> select random
+
+QPen NextColorPen(int index = -1); // index = -1  --> select random
 
 QColor MixColors(QColor c1, QColor c2, float ratio);
 

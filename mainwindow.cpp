@@ -105,7 +105,7 @@ void MainWindow::InitScene(DataModel* data)
         for (const auto& stop: street.stops)
         {
             auto* scene_stop2 = new TrafficCircleItem(
-                        PositionOnLine(street, stop.street_percentage), stop.name[0]);
+                        PositionOnLine(street, stop.street_percentage), stop.name.front());
             scene->addItem(scene_stop2);
 
         }
@@ -275,8 +275,6 @@ void MainWindow::selectionChanged()
             break;
         }
     }
-
-
 }
 
 

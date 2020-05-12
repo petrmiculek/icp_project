@@ -35,13 +35,13 @@ public:
     }
 
     QRectF text_space;
-    QString text;
 
     const QPen pen;
     std::shared_ptr<Vehicle> vehicle;
 
     static qreal scaling_ratio;
 private:
+    QString text;
     static constexpr qreal circle_diameter = 12;
 
     static constexpr QSizeF point_circle_size = {circle_diameter, circle_diameter};

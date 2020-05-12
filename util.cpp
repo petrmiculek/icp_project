@@ -50,20 +50,13 @@ QPointF PositionOnLine(Street street, double street_percentage)
 }
 
 
-QPen NextColor()
+QPen NextColorPen(int index) // index = -1  --> select random
 {
     // zero-thickness pen == cosmetic == constant width on screen (1pt)
-    auto pens = std::vector<QPen>({
-                                      {{Qt::darkCyan}, 0},
-                                      {{Qt::blue}, 0},
-                                      {{Qt::black}, 0},
-                                      {{Qt::darkMagenta},0},
-                                      {{Qt::darkGray}, 0},
-                                      {{Qt::darkBlue}, 0},
-                                  });
-    static int index = 0;
+    static constexpr int pen_thickness = 0;
 
-    return pens.at(index++ % pens.size());
+    return {NextColor(index), pen_thickness};
+
 }
 
 QColor MixColors(QColor c1, QColor c2, float ratio)
@@ -80,8 +73,38 @@ QColor MixColors(QColor c1, QColor c2, float ratio)
 QString toCamelCase(QString& s)
 {
     QStringList parts = s.toLower().split(' ', QString::SkipEmptyParts);
-    for (int i = 0; i < parts.size(); ++i)
-        parts[i].replace(0, 1, parts[i][0].toUpper());
+    for (auto& part : parts)
+        part.replace(0, 1, part[0].toUpper());
 
     return parts.join(" ");
+}
+
+QColor NextColor(int index)
+{
+    auto pens = std::vector<QColor>({
+                                      {Qt::darkCyan},
+                                      {Qt::blue},
+                                      {Qt::black},
+                                      {Qt::darkMagenta},
+                                      {Qt::darkGray},
+                                      {Qt::darkBlue},
+                                  });
+    static int static_index = 0;
+
+    if(index == -1)
+    {
+        return pens.at(static_index++ % pens.size());
+    }
+    else
+    {
+        if (index < 0)
+        {
+            index = 0;
+        }
+        if (index >= static_cast<int>(pens.size()))
+        {
+            index = pens.size() - 1;
+        }
+        return pens.at(index);
+    }
 }
