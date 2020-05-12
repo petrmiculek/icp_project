@@ -38,9 +38,9 @@ public:
 private:
     int id;
     std::vector<QTime> departures; // when to spawn new vehicles
-    const QString lineName; // "N95"
+    const QString lineName;
     std::vector<Street_dir> lineRoute;
-    QTime *lastTime;
+    QTime *lastTime{nullptr};
     std::vector<double> stopsPositions;
 
     void advanceVehicleRoute(std::shared_ptr<Vehicle> v);

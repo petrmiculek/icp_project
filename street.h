@@ -20,8 +20,7 @@ public:
         id(_id),
         point1(new QPointF(_x1, _y1)),
         point2(new QPointF(_x2, _y2)),
-        name(_name),
-        traffic_density(0)
+        name(_name)
     {
         time_cost = euclid_distance(point1, point2);
     }
@@ -52,19 +51,19 @@ public:
         traffic_density = value;
     }
 
-    int id;
+    int id{0};
 
-    QPointF * point1;
-    QPointF * point2;
+    QPointF * point1{nullptr};
+    QPointF * point2{nullptr};
 
-    QString name;
+    QString name{};
 
-    std::vector<Stop> stops;
+    std::vector<Stop> stops{};
 
     double time_cost;
 
 private:
-    int traffic_density; // 0 = normal traffic
+    int traffic_density{0}; // 0 = normal traffic
 };
 
 #endif // STREET_H

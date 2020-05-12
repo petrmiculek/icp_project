@@ -292,7 +292,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     int index_found = -1;
     for(unsigned long i = 0; i < data->trips.size(); i++)
     {
-        auto trip = data->trips.at(i);
+        auto& trip = data->trips.at(i);
         if (trip.name() == line_name)
         {
             index_found = i;
@@ -306,7 +306,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     }
 
     // selected a line => clear highlight of all others
-    for (auto scene_street: scene_streets)
+    for (auto& scene_street: scene_streets)
     {
         scene_street->SetHighlight(false);
     }

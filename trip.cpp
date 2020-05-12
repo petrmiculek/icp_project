@@ -139,11 +139,8 @@ void Trip::updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs
 std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
 {
     std::vector<std::shared_ptr<Vehicle>> new_vehicles {};
-    if (departures.size() == 0)
+    if (departures.empty())
         return new_vehicles;
-
-    // unpacking not needed currently, keeping for reference
-    // auto& [street, Direction] = lineRoute.front();
 
     if (!lastTime) {
         // first call, lastTime was not set yet
@@ -151,7 +148,7 @@ std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
             if (t == time) {
                 std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(std::shared_ptr<Trip>(this));
                 vehiclePool.push_back(vehicle);
-                vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN; // TODO Check if it does what it's supposed to
+                vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
                 new_vehicles.push_back(vehicle);
             }
     }
@@ -159,7 +156,7 @@ std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
         // lastTime set => check if time is past this point
         for (auto t : departures)
             if (*lastTime < t && t <= time) {
-                std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(std::shared_ptr<Trip>(this)); //lineRoute.front(), name(), stopsPositions.front()
+                std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(std::shared_ptr<Trip>(this));
                 vehiclePool.push_back(vehicle);
                 vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
                 new_vehicles.push_back(vehicle);
