@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     // initialize lines in tree view
     auto* model = new QStandardItemModel();
     for (const auto& trip : data->trips) {
-        auto* lineItem = new QStandardItem("Line " + trip.name());
+        auto* lineItem = new QStandardItem(trip.name());
         for (const auto street_dir : trip.route())
             for (const auto& stop : street_dir.first.stops) {
                 auto* stopItem = new QStandardItem(stop.name);
@@ -94,7 +94,7 @@ void MainWindow::InitScene(DataModel* data)
 
     // streets
     for (auto& street : data->streets) {
-        StreetItem* scene_street = new StreetItem(&street);
+        auto* scene_street = new StreetItem(&street);
         scene->addItem(scene_street);
 
         scene_streets.push_back(scene_street);
@@ -290,10 +290,10 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     auto line_name = ui->pttreeView->model()->data(index);
 
     int index_found = -1;
-    for(unsigned int i = 0; i < data->trips.size(); i++)
+    for(unsigned long i = 0; i < data->trips.size(); i++)
     {
         auto trip = data->trips.at(i);
-        if ("Line " + trip.name() == line_name)
+        if (trip.name() == line_name)
         {
             index_found = i;
             break;

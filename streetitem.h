@@ -34,7 +34,7 @@ public:
      * @brief StreetItem::SetLineWidth Set line width based on the street's traffic density
      * @param traffic_density traffic density of the street
      */
-    void SetLineWidth(int value);
+    void SetLineWidth(int traffic_density);
 
     QString Name();
     void SetHighlight(bool highlighted);

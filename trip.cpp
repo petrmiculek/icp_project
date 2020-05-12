@@ -115,7 +115,7 @@ void Trip::updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs
     if (elapsedMSecs == 0)
         return;
 
-    const float traffic_multiplier = (100.0-v->street->trafficDensity())/100.0;
+    const qreal traffic_multiplier = (100.0-v->street->trafficDensity())/100.0;
     v->progress += (v->fromMSecsToProgress(elapsedMSecs) * traffic_multiplier);
 
     // begin waiting if the vehicle comes across a stop
