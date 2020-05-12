@@ -2,16 +2,72 @@
 #include "ui_mainwindow.h"
 
 #include <QPushButton>
+#include <QResizeEvent>
+
+static constexpr qreal scale_min = 2.5;
+static constexpr qreal scale_max = 10.0;
+// scale_default = 3.0
+
+/*
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+    if(event->oldSize().width() == 0.0 || event->oldSize().height() == 0.0)
+    {
+        return;
+    }
+    auto scaling_factor = 0.5 * (event->size().width() / event->oldSize().width() +
+                           event->size().height() / event->oldSize().height());
+    ui->graphicsView->scale(scaling_factor, scaling_factor);
+
+    QMainWindow::resizeEvent(event);
+}
+*/
 
 void MainWindow::SceneZoomIn()
 {
-    ui->graphicsView->scale(zoom_scale_factor, zoom_scale_factor);
+    btn_zoom_out->setEnabled(true);
+
+    auto scale_change = zoom_scale_factor;
+    auto m = ui->graphicsView->transform();
+    auto scale_old = m.m11(); // == m.m22(), scaling equally for horizontal and vertical
+
+    auto scale_new = scale_old * scale_change;
+
+    TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE
+
+
+    if(scale_new >= scale_max)
+    {
+        scale_new = scale_max;
+        btn_zoom_in->setEnabled(false);
+    }
+
+    ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
+    // scene->update();
 }
 
 
 void MainWindow::SceneZoomOut()
 {
-    ui->graphicsView->scale(1/zoom_scale_factor, 1/zoom_scale_factor);
+    btn_zoom_in->setEnabled(true);
+
+    auto scale_change = 1.0/zoom_scale_factor; // INVERSE
+
+    auto m = ui->graphicsView->transform();
+    auto scale_old = m.m11(); // == m.m22(), scaling equally for horizontal and vertical
+
+    auto scale_new = scale_old * scale_change;
+
+    TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE to INVERSE
+
+    if(scale_new <= scale_min)
+    {
+        scale_new = scale_min;
+        btn_zoom_out->setEnabled(false);
+    }
+
+    ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
+    // scene->update();
 
 }
 
@@ -21,7 +77,6 @@ void MainWindow::ZoomInBtn_clicked()
     // add checks?
     // maximum zoom level
     SceneZoomIn();
-
 }
 
 
@@ -29,6 +84,7 @@ void MainWindow::ZoomOutBtn_clicked(){
     // add checks?
     // minimum zoom level - when outer box of all objects gets too small or idk
     SceneZoomOut();
+
 }
 
 
@@ -40,23 +96,24 @@ void MainWindow::AddZoomButtons()
         return;
 
     auto* parent = new QWidget(this->ui->graphicsView);
-    parent->resize(45, 80);
+
+    const auto button_size = 30; // h = w
+    const auto base_offset = 15; // h = w
+    const auto spacing = 3; // height of space between buttons
+
+    parent->resize(base_offset + button_size, base_offset + 2 * button_size + spacing);
     parent->raise();
 
-    const auto button_size = 30;
+    btn_zoom_in = new QPushButton(parent);
+    btn_zoom_in->setText("+");
+    btn_zoom_in->setGeometry(base_offset, base_offset, button_size, button_size);
 
-    auto* zoom_in = new QPushButton(parent);
-    zoom_in->setText("+");
-    zoom_in->setGeometry(15, 15, button_size, button_size);
-    // zoom_in->raise();
+    btn_zoom_out = new QPushButton(parent);
+    btn_zoom_out->setText("-");
+    btn_zoom_out->setGeometry(base_offset, base_offset + button_size + spacing, button_size, button_size);
 
-    auto* zoom_out = new QPushButton(parent);
-    zoom_out->setText("-");
-    zoom_out->setGeometry(15, 15 + button_size + 3, button_size, button_size);
-    // zoom_out->raise();
-
-    QObject::connect(zoom_in, &QPushButton::clicked, this, &MainWindow::ZoomInBtn_clicked);
-    QObject::connect(zoom_out, &QPushButton::clicked, this, &MainWindow::ZoomOutBtn_clicked);
+    QObject::connect(btn_zoom_in, &QPushButton::clicked, this, &MainWindow::ZoomInBtn_clicked);
+    QObject::connect(btn_zoom_out, &QPushButton::clicked, this, &MainWindow::ZoomOutBtn_clicked);
 
     zoom_buttons_exist = true;
 }

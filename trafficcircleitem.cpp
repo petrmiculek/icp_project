@@ -1,7 +1,7 @@
 #include "trafficcircleitem.h"
 #include "util.h"
 
-int TrafficCircleItem::scaling_ratio = 1;
+qreal TrafficCircleItem::scaling_ratio = 1.0;
 
 // this constructor is not for vehicles
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) :
@@ -21,7 +21,15 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
     // color
     setPen(pen);
     QColor color = pen.color();
-    color.setAlpha(66);
+    if(vehicle == nullptr)
+    {
+        color.setAlpha(90);
+    }
+    else
+    {
+        color.setAlpha(30);
+
+    }
     setBrush(color);
 }
 
@@ -35,12 +43,23 @@ TrafficCircleItem::TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphic
 void TrafficCircleItem::paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     // circle
+    if(vehicle != nullptr)
+    {
+
+        MoveTo(vehicle->position());
+    }
+    else
+    {
+        MoveTo(this->boundingRect().center());
+
+    }
     QGraphicsEllipseItem::paint(painter, option, widget);
 
     // text
     QFont font = painter->font();
-    font.setPixelSize(7);
+    font.setPointSizeF(TextSize());
     painter->setFont(font);
+
     painter->drawText(text_space, Qt::AlignCenter, text);
 }
 
@@ -55,9 +74,10 @@ void TrafficCircleItem::MoveTo(QPointF center)
     text_space = CenteredSizeToRect(PointCircleSize() * inscribed_square_size_ratio, center);
 }
 
-void TrafficCircleItem::SetRectCoords(QPointF point)
+void TrafficCircleItem::UpdateEllipseSize()
 {
-    QSizeF curr_rect_size = boundingRect().size();
-    QRectF temp_rect = QRectF(point, curr_rect_size);
-    setRect(temp_rect);
+    prepareGeometryChange();
+    setRect({this->boundingRect().topLeft(), this->PointCircleSize()});
 }
+
+

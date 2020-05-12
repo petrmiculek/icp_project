@@ -16,7 +16,7 @@
 #include "util.h"
 
 static constexpr uint a[] = {0x1F68D}; // bus Unicode symbol
-static const QString bus_symbol = QString::fromUcs4(a,1);
+static const QString bus_symbol = "S";// QString::fromUcs4(a,1);
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -105,13 +105,16 @@ void MainWindow::InitScene(DataModel* data)
         for (const auto& stop: street.stops)
         {
             auto* scene_stop2 = new TrafficCircleItem(
-                        PositionOnLine(street, stop.street_percentage), bus_symbol);
+                        PositionOnLine(street, stop.street_percentage), stop.name[0]);
             scene->addItem(scene_stop2);
+
         }
     }
 
     connect(scene, &QGraphicsScene::selectionChanged,
             this, &MainWindow::selectionChanged);
+
+    // ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorViewCenter);
 }
 
 

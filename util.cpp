@@ -52,13 +52,14 @@ QPointF PositionOnLine(Street street, double street_percentage)
 
 QPen NextColor()
 {
+    // zero-thickness pen == cosmetic == constant width on screen (1pt)
     auto pens = std::vector<QPen>({
-                                      {{Qt::red}, 1},
-                                      {{Qt::blue}, 1},
-                                      {{Qt::black}, 1},
-                                      {{Qt::darkGreen}, 1},
-                                      {{Qt::gray}, 1},
-                                      {{Qt::darkBlue}, 1},
+                                      {{Qt::darkCyan}, 0},
+                                      {{Qt::blue}, 0},
+                                      {{Qt::black}, 0},
+                                      {{Qt::darkMagenta},0},
+                                      {{Qt::darkGray}, 0},
+                                      {{Qt::darkBlue}, 0},
                                   });
     static int index = 0;
 

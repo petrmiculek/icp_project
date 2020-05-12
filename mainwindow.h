@@ -15,6 +15,7 @@
 #include <QTimer>
 #include <QTreeView>
 #include <QMutex>
+#include <QPushButton>
 
 #define NONE_SELECTED (-1)
 
@@ -60,13 +61,18 @@ private slots:
 private:
     void initializeTimers();
     void updateTime();
-    void redrawVehicles(QTime time);
     void incrementMultiplier();
     void startAutoIncrement();
     void multiplyMultiplicator();
+
     void initTrips();
+    void redrawVehicles(QTime time);
     void invalidateVehicles();
     void deleteDrawnVehicles();
+
+    // currently unused, "override" to rescale view on window size change
+    // void resizeEvent(QResizeEvent*);
+
 
     Ui::MainWindow *ui;
 
@@ -86,6 +92,8 @@ private:
     QGraphicsScene * scene;
     std::vector<StreetItem*> scene_streets;
     std::vector<QGraphicsEllipseItem*> scene_stops;
+    QPushButton* btn_zoom_in;
+    QPushButton* btn_zoom_out;
 
     std::vector<Street> selected_streets;
     int selected_street;

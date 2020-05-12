@@ -53,10 +53,16 @@ double Vehicle::streetPercentage(double street_cost)
     else
         tmp = 100 - (progress / street_cost * 100);
 
-    if(tmp < 0.0 || tmp > 100.0)
+    if(tmp < 0.0)
     {
-        throw std::out_of_range("street_percentage");
+        return 0.0;
     }
+
+    if(tmp > 100.0)
+    {
+        return 100.0;
+    }
+
     return tmp;
 }
 
