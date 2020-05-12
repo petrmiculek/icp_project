@@ -11,7 +11,7 @@ StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent
 {
     setLine(_line);
     name = _street_name;
-    is_selected = false;
+    is_highlighted = false;
     is_closed = false;
 
     setPen(color_default());
@@ -66,15 +66,15 @@ void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * op
     label.paint(painter, option, widget);
 
     // Line
-    if (!is_closed && !is_selected)
+    if (!is_closed && !is_highlighted)
     {
         setPen(color_default());
     }
-    else if(is_closed && !is_selected)
+    else if(!is_closed && is_highlighted)
     {
-        setPen(color_closed());
+        setPen(color_highlighted());
     }
-    else if(is_closed && !is_selected)
+    else if(is_closed && !is_highlighted)
     {
         setPen(color_closed());
     }

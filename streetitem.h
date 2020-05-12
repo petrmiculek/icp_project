@@ -23,7 +23,7 @@ public:
 
     QString name;
 
-    bool is_selected;
+    bool is_highlighted;
     bool is_closed;
 
     Street street;
@@ -44,7 +44,7 @@ public:
 
     inline QPen color_highlighted()
     {
-        return QPen(Qt::blue, line_width);
+        return QPen(Qt::darkGray, line_width);
     }
 
     inline QPen color_closed_and_highlighted()

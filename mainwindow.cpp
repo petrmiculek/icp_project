@@ -310,7 +310,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     // selected a line => clear highlight of all others
     for (auto scene_street: scene_streets)
     {
-        scene_street->is_selected = false;
+        scene_street->is_highlighted = false;
     }
 
     auto route = data->trips.at(index_found).route();
@@ -322,7 +322,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
         {
             if(street_dir.first.id == scene_street->street.id)
             {
-                scene_street->is_selected = true;
+                scene_street->is_highlighted = true;
             }
         }
     }
