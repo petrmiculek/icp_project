@@ -6,7 +6,7 @@
 
 StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent) :
     QGraphicsLineItem(parent),
-    street({}),
+    street(nullptr),
     label(QGraphicsSimpleTextItem(_street_name, this))
 {
     setLine(_line);
@@ -22,8 +22,8 @@ StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent
     SetLabelPosition();
 }
 
-StreetItem::StreetItem(Street _street, QGraphicsItem * parent) :
-    StreetItem({*_street.point1, *_street.point2}, _street.name + "-" + QString::number(_street.id), parent)
+StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
+    StreetItem({*_street->point1, *_street->point2}, _street->name + "-" + QString::number(_street->id), parent)
 {
     street = _street;
 }
@@ -68,7 +68,8 @@ void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * op
     // Line
     if (!is_closed && !is_selected)
     {
-        setPen(color_default());
+        //setPen(color_default());
+        setPen(color_traffic(street ? street->trafficDensity() : 0));
     }
     else if(is_closed && !is_selected)
     {

@@ -93,8 +93,8 @@ void MainWindow::InitScene(DataModel* data)
     ui->graphicsView->scale(3, 3);
 
     // streets
-    for (const auto& street : data->streets) {
-        StreetItem* scene_street = new StreetItem(street);
+    for (auto& street : data->streets) {
+        StreetItem* scene_street = new StreetItem(&street);
         scene->addItem(scene_street);
 
         scene_streets.push_back(scene_street);
@@ -226,7 +226,7 @@ void MainWindow::TrafficSliderChanged(int value)
                 && pt2.x() == street.point2->x()
                 && pt2.y() == street.point2->y())
         {
-            str->SetLineWidth(value);
+            //str->SetLineWidth(value);
             scene->update();
             break;
         }
@@ -320,7 +320,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     {
         for (auto* const scene_street: scene_streets)
         {
-            if(street_dir.first.id == scene_street->street.id)
+            if(street_dir.first.id == scene_street->street->id)
             {
                 scene_street->is_selected = true;
             }

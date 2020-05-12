@@ -66,6 +66,17 @@ QPen NextColor()
     return pens.at(index++ % pens.size());
 }
 
+QColor MixColors(QColor c1, QColor c2, float ratio)
+{
+    if (ratio < 0 || ratio > 1)
+        throw std::out_of_range("wrong color ratio");
+    return QColor(
+                c1.red() * (1 - ratio) + c2.red() * ratio,
+                c1.green() * (1 - ratio) + c2.green() * ratio,
+                c1.blue() * (1 - ratio) + c2.blue() * ratio
+                );
+}
+
 QString toCamelCase(QString& s)
 {
     QStringList parts = s.toLower().split(' ', QString::SkipEmptyParts);

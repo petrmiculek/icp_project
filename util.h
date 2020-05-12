@@ -53,6 +53,8 @@ QPointF PositionOnLine(Street street, double street_percentage);
 
 QPen NextColor();
 
+QColor MixColors(QColor c1, QColor c2, float ratio);
+
 // https://wiki.qt.io/Converting_Strings_from_and_to_Camel_Case
 QString toCamelCase(QString& s);
 

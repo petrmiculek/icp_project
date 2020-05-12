@@ -7,6 +7,7 @@
 #include <QGraphicsLineItem>
 #include <QGraphicsSimpleTextItem>
 #include <QFont>
+#include <algorithm>
 
 #include "street.h"
 
@@ -14,7 +15,7 @@ class StreetItem : public QGraphicsLineItem
 {
 public:
     StreetItem(QLineF _line, QString _street_name, QGraphicsItem * parent = nullptr);    
-    StreetItem(Street street, QGraphicsItem * parent = nullptr);
+    StreetItem(Street* street, QGraphicsItem * parent = nullptr);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
@@ -22,11 +23,12 @@ public:
     void SetLineWidth(int value);
 
     QString name;
+    const Qt::GlobalColor default_color = Qt::lightGray;
 
     bool is_selected;
     bool is_closed;
 
-    Street street;
+    Street* street;
 
     QGraphicsSimpleTextItem label;
 
@@ -34,7 +36,14 @@ public:
 
     inline QPen color_default()
     {
-        return QPen(Qt::lightGray, line_width);
+        return QPen(default_color, line_width);
+    }
+
+    inline QPen color_traffic(int traffic)
+    {
+        // use at least 15 % red shade with 10 % steps
+        const float ratio = traffic ? std::max(0.15, std::round(traffic/10.0)/10.0) : 0;
+        return QPen(MixColors(default_color, Qt::red, ratio), line_width);
     }
 
     inline QPen color_closed()
