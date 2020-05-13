@@ -94,7 +94,6 @@ Street * StreetItem::GetStreet()
 
 void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )
 {
-    label.paint(painter, option, widget);
     const float ratio = traffic_ratio(street->trafficDensity());
 
     // Line
