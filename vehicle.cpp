@@ -1,29 +1,33 @@
+/* vehicle.cpp
+ * Project: CPP
+ * Description: Vehicle class holds internal vehicle data.
+ * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ */
+
 #include "vehicle.h"
 #include "trip.h"
 #include <QDebug>
 
-Vehicle::Vehicle(Street_dir _street_dir, QString _line_name, double _progress, double _speed) :
+Vehicle::Vehicle(Street_dir *street_dir, QString line_name, double progress, double speed) :
+     trip(nullptr),
+     vehicle_symbol(line_name.back()),
      pen(NextColorPen()),
-     street(&_street_dir.first),
-     direction(_street_dir.second),
+     street(&street_dir->first),
+     direction(street_dir->second),
      internal_street_index(0),
-     progress(_progress),
-     speed(_speed),
-     vehicle_symbol(_line_name.back())
+     progress(progress),
+     speed(speed)
 {
 
 }
 
-Vehicle::Vehicle(Trip *trip) :
-    trip(trip)
+Vehicle::Vehicle(Trip *trip, QTime spawn_time) : Vehicle(&trip->route().front(),
+                                        trip->name(),
+                                        trip->StopsPositions().front())
 {
-    street = &trip->route().front().first;
-    direction = trip->route().front().second;
-    internal_street_index = 0;
-    progress = trip->StopsPositions().front(); // first stop
-    speed = speed_default;
-    vehicle_symbol = trip->name().back();
     pen = NextColorPen(trip->Id());
+    this->trip = trip;
+    this->spawn_time = QTime(spawn_time);
 }
 
 QString Vehicle::symbol() const
@@ -33,15 +37,15 @@ QString Vehicle::symbol() const
 
 void Vehicle::invalidate()
 {
-    speed = SPEED_INVALID;
+    speed = INVALIDSPEED;
 }
 
-bool Vehicle::isinvalid()
+bool Vehicle::isinvalid() const
 {
-    return speed == SPEED_INVALID;
+    return speed == INVALIDSPEED;
 }
 
-double Vehicle::streetPercentage(double street_cost)
+double Vehicle::streetPercentage(double street_cost) const
 {
     double tmp;
     if (direction == DIRFORWARD)
@@ -62,7 +66,7 @@ double Vehicle::streetPercentage(double street_cost)
     return tmp;
 }
 
-double Vehicle::streetPercentage(const Street* street)
+double Vehicle::streetPercentage(const Street* street) const
 {
     return streetPercentage(street->time_cost);
 }
@@ -77,7 +81,12 @@ double Vehicle::fromProgressToMSecs(double progress)
     return progress / speed;
 }
 
-QPointF Vehicle::position()
+QPointF Vehicle::position() const
 {
     return PositionOnLine(*street,streetPercentage(street));
+}
+
+QTime Vehicle::spawnTime() const
+{
+    return spawn_time;
 }

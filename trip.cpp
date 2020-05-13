@@ -141,7 +141,7 @@ std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
 
     for (auto t : departures)
         if (lastTime < t && t <= time) {
-            std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(this);
+            std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(this, t);
             vehiclePool.push_back(vehicle);
             vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
             new_vehicles.push_back(vehicle);
