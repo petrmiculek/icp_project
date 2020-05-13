@@ -1,3 +1,9 @@
+/* util.cpp
+ * Project: CPP
+ * Description: Helpful utilities
+ * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ */
+
 #include "street.h"
 
 #include "util.h"
@@ -67,8 +73,9 @@ QColor MixColors(QColor c1, QColor c2, float ratio)
                 );
 }
 
-QString toCamelCase(QString& s)
+QString ToCamelCase(QString& s)
 {
+    // https://wiki.qt.io/Converting_Strings_from_and_to_Camel_Case
     QStringList parts = s.toLower().split(' ', QString::SkipEmptyParts);
     for (auto& part : parts)
         part.replace(0, 1, part[0].toUpper());
@@ -106,7 +113,7 @@ QColor NextColor(int index)
     }
 }
 
-int randomInRange(int min, int max)
+int RandomInRange(int min, int max)
 {
     return rand() % (max - min) + min;
 }

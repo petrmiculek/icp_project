@@ -1,3 +1,9 @@
+/* util.h
+ * Project: CPP
+ * Description: Helpful utilities
+ * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ */
+
 #ifndef UTIL_H
 #define UTIL_H
 
@@ -16,6 +22,12 @@ struct DataLoadingException : public std::exception {
    }
 };
 
+/**
+ * @brief Returns euclid distance of two points
+ * @param point1 First point
+ * @param point2 Second point
+ * @return distance of two points
+ */
 double euclid_distance(QPointF * point1, QPointF * point2);
 
 /**
@@ -50,16 +62,43 @@ QRectF CenteredSizeToRect(QSizeF dimensions, QPointF point);
  */
 QPointF PositionOnLine(Street street, double street_percentage);
 
-
+/**
+ * @brief Returns a color from the internal color list at the given index.
+ * If the index is -1, returns the next color from the list.
+ * @param index Index to return the color from.
+ * @return color from the list at given index
+ */
 QColor NextColor(int index = -1); // index = -1  --> select random
 
 QPen NextColorPen(int index = -1); // index = -1  --> select random
 
+/**
+ * @brief Mixes two colors in given ratio.
+ * @param c1 First color.
+ * @param c2 Second color.
+ * @param ratio Mixing ratio. 0 means only the first color.
+ * @return mixed color
+ * @pre \p c1 and \p c2 must be valid colors.
+ * @pre \p ratio must be in range [0,1].
+ */
 QColor MixColors(QColor c1, QColor c2, float ratio);
 
-// https://wiki.qt.io/Converting_Strings_from_and_to_Camel_Case
-QString toCamelCase(QString& s);
+/**
+ * @brief Converts given string to camel case. Spaces are preserved.
+ * @param s String to be converted.
+ * @return converted string
+ */
+QString ToCamelCase(QString& s);
 
-int randomInRange(int min, int max);
+/**
+ * @brief Returns random integer from given range (inclusive).
+ * @param min Minimum value.
+ * @param max Maximum value.
+ * @return Random integer in given range.
+ * @pre \p min value must be less than \p max.
+ * @remarks Function uses a pseudo-random number generator.
+ * Generated values are not cryptographically safe.
+ */
+int RandomInRange(int min, int max);
 
 #endif // UTIL_H
