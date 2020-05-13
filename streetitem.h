@@ -56,7 +56,7 @@ private:
 
     QGraphicsSimpleTextItem * label;
 
-    int line_width = 1;
+    int line_width = 2;
 
     QPen get_pen(const QColor& color = default_color);
     qreal traffic_ratio(int traffic);

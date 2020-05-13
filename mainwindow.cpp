@@ -280,6 +280,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
 
     if(ui->pttreeView->selectionModel()->selectedIndexes().size() != 1)
     {
+        scene->update();
         return;
     }
 
@@ -298,7 +299,9 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
 
     if (index_found == -1)
     {
+        scene->update();
         return;
+
     }
 
     auto route = data->trips.at(index_found).route();
