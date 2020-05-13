@@ -1,3 +1,9 @@
+/* trip.cpp
+ * Project: CPP
+ * Description: Trip class holds information about a bus line
+ * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ */
+
 #include "trip.h"
 
 #include <cmath>
@@ -5,13 +11,9 @@
 
 using namespace std;
 
-constexpr int WAIT_MIN = 750;
-constexpr int WAIT_MAX = 3250;
-const QString line_name_prefix = "Line ";
-
 Trip::Trip(int id) :
     id(id),
-    lineName(line_name_prefix + QString::number(id)),
+    lineName("Line " + QString::number(id)),
     lastTime(QTime(0, 0))
 {
 
@@ -27,6 +29,11 @@ Trip::Trip(int id, std::vector<Street_dir> route, std::vector<QTime> departures)
 {
     this->departures = departures;
     initStopsPositions();
+}
+
+int Trip::Id() const
+{
+    return id;
 }
 
 QString Trip::name() const
@@ -129,7 +136,7 @@ void Trip::updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs
 std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
 {
     std::vector<std::shared_ptr<Vehicle>> new_vehicles {};
-    if (departures.empty())
+    if (departures.empty() || lineRoute.empty())
         return new_vehicles;
 
     for (auto t : departures)
