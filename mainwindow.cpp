@@ -282,11 +282,13 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
 
     if(ui->pttreeView->selectionModel()->selectedIndexes().size() != 1)
     {
+        scene->update();
         return;
     }
 
     auto line_name = ui->pttreeView->model()->data(index);
 
+    qDebug() << line_name;
     int index_found = -1;
     for(unsigned long i = 0; i < data->trips.size(); i++)
     {
@@ -300,7 +302,9 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
 
     if (index_found == -1)
     {
+        scene->update();
         return;
+
     }
 
     auto route = data->trips.at(index_found).route();
