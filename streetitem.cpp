@@ -7,19 +7,16 @@
 
 StreetItem::StreetItem(QLineF _line, QString _street_name, QGraphicsItem *parent) :
     QGraphicsLineItem(parent),
+    name(_street_name),
+    is_highlighted(false),
     street(nullptr),
     label(QGraphicsSimpleTextItem(_street_name, this))
 {
     setLine(_line);
-    name = _street_name;
-    is_highlighted = false;
-    is_closed = false;
-
-    setPen(color_default());
+    setPen(get_pen(default_color));
     setFlag(QGraphicsItem::ItemIsSelectable);
 
     label.setFont(font_label());
-
     SetLabelPosition();
 }
 
@@ -87,40 +84,43 @@ void StreetItem::SetHighlight(bool highlighted)
  */
 Street * StreetItem::GetStreet()
 {
-    if (street->id != Street().id)
-    {
+    if (street->id != Street().id) {
         return street;
     }
-    else
-    {
+    else {
         return nullptr;
     }
 }
 
-
 void StreetItem::paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )
 {
-    // Label
     label.paint(painter, option, widget);
+    const float ratio = traffic_ratio(street->trafficDensity());
 
     // Line
-    if (!is_closed && !is_highlighted)
-    {
+    if (!is_highlighted) {
         //setPen(color_default());
-        setPen(color_traffic(street ? street->trafficDensity() : 0));
+        setPen(get_pen(MixColors(default_color, default_traffic, ratio)));
     }
-    else if(!is_closed && is_highlighted)
-    {
-        setPen(color_highlighted());
-    }
-    else if(is_closed && !is_highlighted)
-    {
-        setPen(color_closed());
-    }
-    else // closed and highlighted
-    {
-        setPen(color_closed_and_highlighted());
+    else {
+        setPen(get_pen(MixColors(highlight_color, highlight_traffic, ratio)));
     }
 
     QGraphicsLineItem::paint(painter, option, widget);
+}
+
+float StreetItem::traffic_ratio(int traffic)
+{
+    // use at least 15 % red shade with 10 % steps
+    return traffic ? std::max(0.15, std::round(traffic/10.0)/10.0) : 0;
+}
+
+QFont StreetItem::font_label()
+{
+    return QFont("Helvetica", 2);
+}
+
+QPen StreetItem::get_pen(QColor color)
+{
+    return QPen(color, line_width);
 }

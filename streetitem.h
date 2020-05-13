@@ -41,12 +41,15 @@ public:
 
     Street* GetStreet();
 
+    static constexpr Qt::GlobalColor default_color = Qt::lightGray;
+    static constexpr Qt::GlobalColor highlight_color = Qt::darkGray;
+    static constexpr Qt::GlobalColor default_traffic = Qt::red;
+    static constexpr Qt::GlobalColor highlight_traffic = Qt::darkRed;
+
 private:
     QString name;
-    const Qt::GlobalColor default_color = Qt::lightGray;
 
     bool is_highlighted;
-    bool is_closed;
 
     Street* street;
 
@@ -54,37 +57,9 @@ private:
 
     int line_width = 1;
 
-    inline QPen color_default()
-    {
-        return QPen(default_color, line_width);
-    }
-
-    inline QPen color_traffic(int traffic)
-    {
-        // use at least 15 % red shade with 10 % steps
-        const float ratio = traffic ? std::max(0.15, std::round(traffic/10.0)/10.0) : 0;
-        return QPen(MixColors(default_color, Qt::red, ratio), line_width);
-    }
-
-    inline QPen color_closed()
-    {
-        return QPen(Qt::red, line_width);
-    }
-
-    inline QPen color_highlighted()
-    {
-        return QPen(Qt::darkGray, line_width);
-    }
-
-    inline QPen color_closed_and_highlighted()
-    {
-        return QPen(Qt::darkRed, line_width);
-    }
-
-    inline QFont font_label()
-    {
-        return QFont("Helvetica", 2);
-    }
+    QPen get_pen(QColor color = default_color);
+    float traffic_ratio(int traffic);
+    QFont font_label();
 
     qreal distance_from_line_to_label = 3.0;
 };
