@@ -108,3 +108,8 @@ QColor NextColor(int index)
         return pens.at(index);
     }
 }
+
+int randomInRange(int min, int max)
+{
+    return rand() % (max - min) + min;
+}
