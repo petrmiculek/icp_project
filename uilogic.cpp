@@ -71,7 +71,8 @@ void MainWindow::incrementMultiplier()
         currentMltplr = currentMltplr < 0 ? -MAXMULTIPLIER : MAXMULTIPLIER;
     }
 
-    mapTimer->setMultiplier(currentMltplr);
+    if (mapTimer->isRunning())
+        mapTimer->setMultiplier(currentMltplr);
 }
 
 void MainWindow::startAutoIncrement()
