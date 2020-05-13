@@ -156,10 +156,12 @@ void MainWindow::redrawVehicles(QTime time)
 void MainWindow::initTrips()
 {
     // TODO remove in final version
+#ifndef NDEBUG
     for (auto& t : data->trips)
     {
-        t.addSpawn(QTime(0,0,2));
+        t.addSpawn(QTime(0,0,1));
     }
+#endif
 
     // can connect to Trip's functions only through an intermediary as Trip is not a QObject
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
