@@ -79,7 +79,6 @@ void StreetItem::SetHighlight(bool highlighted)
  */
 Street * StreetItem::GetStreet()
 {
-    qDebug() << street->id;
     if (street->id != Street().id) {
         return street;
     }

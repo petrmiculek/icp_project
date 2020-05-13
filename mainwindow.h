@@ -56,7 +56,6 @@ private slots:
     void selectionChanged();
     void on_resetBtn_clicked();
     void TrafficSliderChanged(int value);
-    // void RouteCreateToggled();
 
 private:
     void initializeTimers();
@@ -69,10 +68,6 @@ private:
     void redrawVehicles(QTime time);
     void invalidateVehicles();
     void deleteDrawnVehicles();
-
-    // currently unused, "override" to rescale view on window size change
-    // void resizeEvent(QResizeEvent*);
-
 
     Ui::MainWindow *ui;
 
@@ -97,8 +92,6 @@ private:
 
     std::vector<Street> selected_streets;
     int selected_street;
-    int selected_scene_street;
-    bool selecting;
 
     static constexpr qreal zoom_scale_factor = 5.0/4;
 };

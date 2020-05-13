@@ -195,7 +195,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTreeView" name="pttreeView">
+         <widget class="DeselectableTreeView" name="pttreeView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -315,6 +315,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DeselectableTreeView</class>
+   <extends>QTreeView</extends>
+   <header>deselectabletreeview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -14,6 +14,7 @@
 #include "ui_mainwindow.h"
 #include "streetitem.h"
 #include "util.h"
+#include "deselectabletreeview.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -52,9 +53,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
     transport_tree_view->setModel(model);
 
-    // creating routes, deleted, keeping code for later - objížďky
-    // QObject::connect(ui->createRouteBtn, &QPushButton::clicked, this, &MainWindow::RouteCreateToggled);
-
     // Selecting streets
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
 
@@ -66,9 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     initializeTimers();
 
-    // temporary
     selected_streets = {};
-    selecting = false;
 
     initTrips(); // goes last
 }
@@ -110,8 +106,6 @@ void MainWindow::InitScene(DataModel* data)
 
     connect(scene, &QGraphicsScene::selectionChanged,
             this, &MainWindow::selectionChanged);
-
-    // ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorViewCenter);
 }
 
 
@@ -268,7 +262,7 @@ void MainWindow::selectionChanged()
                 && pt2.x() == street.point2->x()
                 && pt2.y() == street.point2->y())
         {
-            selected_streets.push_back(street); // unused
+            selected_streets.push_back(street);
             selected_street = static_cast<int>(i);
 
             ui->strttrafficSlider->setValue(street.trafficDensity());
@@ -278,9 +272,13 @@ void MainWindow::selectionChanged()
 }
 
 
-
 void MainWindow::ListSelectionChanged(QModelIndex index)
 {
+    // selected a line => clear highlight of all others
+    for (auto& scene_street: scene_streets)
+    {
+        scene_street->SetHighlight(false);
+    }
 
     if(ui->pttreeView->selectionModel()->selectedIndexes().size() != 1)
     {
@@ -305,12 +303,6 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
         return;
     }
 
-    // selected a line => clear highlight of all others
-    for (auto& scene_street: scene_streets)
-    {
-        scene_street->SetHighlight(false);
-    }
-
     auto route = data->trips.at(index_found).route();
 
     // highlight all streets in selected line
@@ -328,28 +320,3 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     scene->update();
 
 }
-
-/*
-void MainWindow::RouteCreateToggled()
-{
-    // toggle state
-    selecting = ! selecting;
-
-    if(selecting)
-    {
-        ui->createRouteBtn->setText(QString("Save route"));
-        selected_streets.clear();
-    }
-    else
-    {
-        ui->createRouteBtn->setText(QString("Start creating route"));
-        // create path from streets
-
-        qDebug() << "Total streets selected:" << selected_streets.size();
-
-        for (auto street : selected_streets) {
-            qDebug() << street.id;
-        }
-    }
-}
-*/
