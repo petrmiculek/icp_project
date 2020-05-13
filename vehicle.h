@@ -5,13 +5,9 @@
 #include <QTime>
 #include "street.h"
 #include "util.h"
+#include "direction.h"
 
 #define SPEED_INVALID -1
-
-// using clauses are in street.h
-
-#define dir_forward false
-#define dir_backward true
 
 class Trip;
 

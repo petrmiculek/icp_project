@@ -167,7 +167,7 @@ void Trip::initStopsPositions()
 
         double value =
             lineRoute.at(i).first.stops.front().street_percentage / 100 * lineRoute.at(i).first.time_cost;
-        if (lineRoute.at(i).second == dir_backward)
+        if (lineRoute.at(i).second == DIRBACKWARD)
             value = lineRoute.at(i).first.time_cost - value;
         stopsPositions.push_back(value);
     }

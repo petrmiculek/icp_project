@@ -31,6 +31,7 @@ SOURCES += \
 
 HEADERS += \
     datamodel.h \
+    direction.h \
     mainwindow.h \
     maptimer.h \
     stop.h \

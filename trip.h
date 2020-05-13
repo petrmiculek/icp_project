@@ -13,9 +13,7 @@
 #include "vehicle.h"
 #include "maptimer.h"
 #include "util.h"
-
-#define dir_forward false //!< Boolean value describing forward direction.
-#define dir_backward true //!< Boolean value describing backward direction.
+#include "direction.h"
 
 /**
  * @brief The Trip class holding information about a line and its vehicles.
@@ -74,7 +72,7 @@ public:
      * @param s Street
      * @param d Direction
      */
-    void addStreetToRoute(Street s, Direction d = dir_forward);
+    void addStreetToRoute(Street s, Direction d = DIRFORWARD);
     /**
      * @brief Adds spawn time to the line.
      * @details Adds new spawn time at which a vehicle should be spawned.

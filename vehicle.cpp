@@ -44,7 +44,7 @@ bool Vehicle::isinvalid()
 double Vehicle::streetPercentage(double street_cost)
 {
     double tmp;
-    if (direction == dir_forward)
+    if (direction == DIRFORWARD)
         tmp = progress / street_cost * 100;
     else
         tmp = 100 - (progress / street_cost * 100);
