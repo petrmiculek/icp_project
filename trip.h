@@ -16,10 +16,9 @@
 class Trip
 {
 public:
-    Trip(int _id);
-    Trip(int _id, std::vector<Street_dir> route);
-    Trip(int _id, std::vector<Street_dir> route, std::vector<QTime> departures);
-    ~Trip();
+    Trip(int id);
+    Trip(int id, std::vector<Street_dir> route);
+    Trip(int id, std::vector<Street_dir> route, std::vector<QTime> departures);
 
     QString name() const;
     std::vector<Street_dir> route() const;
@@ -32,7 +31,7 @@ public:
     void updateVehiclesAt(QTime time);
     std::vector<std::shared_ptr<Vehicle>> createNewVehiclesAt(QTime time);
     std::vector<double> StopsPositions();
-    int Id() { return id; }
+    int Id() const { return id; }
 
     std::vector<std::shared_ptr<Vehicle>> vehiclePool;
 private:
@@ -40,7 +39,7 @@ private:
     std::vector<QTime> departures; // when to spawn new vehicles
     const QString lineName;
     std::vector<Street_dir> lineRoute;
-    QTime *lastTime{nullptr};
+    QTime lastTime;
     std::vector<double> stopsPositions;
 
     void advanceVehicleRoute(std::shared_ptr<Vehicle> v);
