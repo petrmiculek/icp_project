@@ -24,9 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
       ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     data = new DataModel();
-
     InitScene(data);
     AddZoomButtons();
 
@@ -41,25 +39,22 @@ MainWindow::MainWindow(QWidget *parent)
     for (const auto& trip : data->trips) {
         auto* lineItem = new QStandardItem(trip.name());
         for (const auto& street_dir : trip.route())
-            for (const auto& stop : street_dir.first.stops) {
-                auto* stopItem = new QStandardItem(stop.name);
-                lineItem->appendRow(stopItem);
-            }
+            for (const auto& stop : street_dir.first.stops)
+                lineItem->appendRow(new QStandardItem(stop.name));
         model->appendRow(lineItem);
     }
     ui->pttreeView->setModel(model);
 
     // Selecting streets
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
-
     // Selecting traffic density (slider)
     QObject::connect(ui->strttrafficSlider, &QSlider::valueChanged, this, &MainWindow::TrafficSliderChanged);
-
     // Choosing line from list
     QObject::connect(ui->pttreeView, &QTreeView::clicked, this, &MainWindow::ListSelectionChanged);
+    // Redrawing vehicles when timer ticks
+    QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
 
     initializeTimers();
-
     selected_streets = {};
 
 #ifndef NDEBUG
@@ -67,8 +62,6 @@ MainWindow::MainWindow(QWidget *parent)
         t.addSpawn(QTime(0,0,1));
     }
 #endif
-
-    QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
 }
 
 

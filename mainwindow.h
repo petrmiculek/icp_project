@@ -37,7 +37,6 @@ public slots:
     void ListSelectionChanged(QModelIndex index);
 
 private slots:
-
     void on_toggleTimeBtn_clicked();
     void on_fasterBtn_pressed();
     void on_fasterBtn_released();
@@ -49,7 +48,6 @@ private slots:
     void selectionChanged();
     void on_resetBtn_clicked();
     void TrafficSliderChanged(int value);
-
     void on_resettrafficBtn_clicked();
 
 private:

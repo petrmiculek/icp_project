@@ -1,5 +1,5 @@
 constexpr double BASEINCREMENT = 0.1;
-constexpr int MAXMULTIPLIER =  10000; // maximum multiplier value (absolute value)
+constexpr int MAXMULTIPLIER = 1000; // maximum multiplier value (absolute value)
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -10,9 +10,9 @@ constexpr int MAXMULTIPLIER =  10000; // maximum multiplier value (absolute valu
 
 void MainWindow::multiplyMultiplicator()
 {
-    currentIncrement += currentIncrement*100;
-    if (fabs(currentIncrement) > MAXMULTIPLIER/100) {
-        currentIncrement = currentIncrement < 0 ? -MAXMULTIPLIER/100 : MAXMULTIPLIER/100;
+    currentIncrement += currentIncrement*10;
+    if (fabs(currentIncrement) > MAXMULTIPLIER/10) {
+        currentIncrement = currentIncrement < 0 ? -MAXMULTIPLIER/10 : MAXMULTIPLIER/10;
     }
 }
 
