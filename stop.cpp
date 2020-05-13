@@ -3,7 +3,8 @@
 
 Stop::Stop(int id, double street_percentage, QString name) :
     id(id),
-    street_percentage(street_percentage)
+    street_percentage(street_percentage),
+    name(ToCamelCase(name))
 {
-    name = ToCamelCase(name);
+
 }
