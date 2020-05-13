@@ -27,17 +27,7 @@ public:
 
     Street(){}
 
-
-    ~Street()
-    {
-        // delete point1;
-        // delete point2;
-    }
-
-    /*double cost()
-    {
-        return time_cost + (traffic_density > 1 ? log2(traffic_density) : 0);
-    }*/
+    ~Street(){}
 
     int trafficDensity() const
     {
@@ -51,7 +41,7 @@ public:
         traffic_density = value;
     }
 
-    int id{0};
+    int id{-1}; // if not initialized, must not collide with regular street IDs
 
     QPointF * point1{nullptr};
     QPointF * point2{nullptr};

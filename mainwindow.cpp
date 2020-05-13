@@ -15,9 +15,6 @@
 #include "streetitem.h"
 #include "util.h"
 
-static constexpr uint a[] = {0x1F68D}; // bus Unicode symbol
-static const QString bus_symbol = "S";// QString::fromUcs4(a,1);
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow)
@@ -31,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // initialize map timer
     mapTimer = new MapTimer(0, 0, 0, 1.0, this);
-    mapTimer->setInterval(50); // setting refresh interval to 50 milliseconds
+    mapTimer->setInterval(50); // default refresh interval
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
 
@@ -129,7 +126,7 @@ void MainWindow::redrawVehicles(QTime time)
         trip.setLastTime(time);
 
         // create new vehicles
-        for (auto vehicle : new_vehicles) {
+        for (const auto& vehicle : new_vehicles) {
             if (vehicle->isinvalid())
             {
                 qDebug() << "redrawVehicles: invalid vehicle";

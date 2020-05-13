@@ -14,7 +14,6 @@
 class StreetItem : public QGraphicsLineItem
 {
 public:
-    StreetItem(QLineF _line, QString _street_name, QGraphicsItem * parent = nullptr);    
     StreetItem(Street* street, QGraphicsItem * parent = nullptr);
 
     /**
@@ -53,12 +52,12 @@ private:
 
     Street* street;
 
-    QGraphicsSimpleTextItem label;
+    QGraphicsSimpleTextItem * label;
 
     int line_width = 1;
 
-    QPen get_pen(QColor color = default_color);
-    float traffic_ratio(int traffic);
+    QPen get_pen(const QColor& color = default_color);
+    qreal traffic_ratio(int traffic);
     QFont font_label();
 
     qreal distance_from_line_to_label = 3.0;
