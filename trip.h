@@ -109,8 +109,8 @@ public:
     std::vector<double> StopsPositions();
 
 private:
-    static constexpr int WAIT_MIN = 750; //!< Minimum time in milliseconds a vehicle will wait on a bus stop.
-    static constexpr int WAIT_MAX = 3250;//!< Maximum time in milliseconds a vehicle will wait on a bus stop.
+    static constexpr int wait_min = 750; //!< Minimum time in milliseconds a vehicle will wait on a bus stop.
+    static constexpr int wait_max = 3250;//!< Maximum time in milliseconds a vehicle will wait on a bus stop.
 
     const int id; //!< Line number.
     const QString lineName; //!< Line name.

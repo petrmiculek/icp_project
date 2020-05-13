@@ -68,7 +68,7 @@ void Trip::setLastTime(QTime time)
 
 void Trip::advanceVehicleRoute(std::shared_ptr<Vehicle> v)
 {
-    v->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
+    v->restMSecs = randomInRange(wait_min, wait_max);
     v->internal_street_index++;
     if (v->internal_street_index < lineRoute.size()) {
         Street_dir sd = lineRoute.at(v->internal_street_index);
@@ -143,7 +143,7 @@ std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
         if (lastTime < t && t <= time) {
             std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(this, t);
             vehiclePool.push_back(vehicle);
-            vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
+            vehiclePool.back()->restMSecs = randomInRange(wait_min, wait_max);
             new_vehicles.push_back(vehicle);
         }
     return new_vehicles;
