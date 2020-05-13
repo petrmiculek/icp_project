@@ -64,7 +64,6 @@ private:
     void startAutoIncrement();
     void multiplyMultiplicator();
 
-    void initTrips();
     void redrawVehicles(QTime time);
     void invalidateVehicles();
     void deleteDrawnVehicles();

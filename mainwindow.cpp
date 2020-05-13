@@ -66,7 +66,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     selected_streets = {};
 
-    initTrips(); // goes last
+    // TODO remove in final version
+#ifndef NDEBUG
+    for (auto& t : data->trips)
+    {
+        t.addSpawn(QTime(0,0,1));
+    }
+#endif
+
+    QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
 }
 
 
@@ -145,19 +153,6 @@ void MainWindow::redrawVehicles(QTime time)
     scene->update();
 }
 
-void MainWindow::initTrips()
-{
-    // TODO remove in final version
-#ifndef NDEBUG
-    for (auto& t : data->trips)
-    {
-        t.addSpawn(QTime(0,0,1));
-    }
-#endif
-
-    // can connect to Trip's functions only through an intermediary as Trip is not a QObject
-    QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
-}
 
 void MainWindow::invalidateVehicles()
 {
