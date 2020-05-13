@@ -316,3 +316,11 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     scene->update();
 
 }
+
+void MainWindow::on_resettrafficBtn_clicked()
+{
+    ui->strttrafficSlider->setValue(QSlider::NoTicks);
+    for (auto& street : data->streets) {
+        street.setTrafficDensity(0);
+    }
+}

@@ -50,6 +50,8 @@ private slots:
     void on_resetBtn_clicked();
     void TrafficSliderChanged(int value);
 
+    void on_resettrafficBtn_clicked();
+
 private:
     void initializeTimers();
     void updateTime();
