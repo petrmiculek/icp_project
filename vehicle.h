@@ -9,9 +9,10 @@
 
 #include <QString>
 #include <QTime>
+
+#include "direction.h"
 #include "street.h"
 #include "util.h"
-#include "direction.h"
 
 class Trip;
 
@@ -20,7 +21,7 @@ class Trip;
  * @see Vehicle::invalidate
  * @see Vehicle::isinvalid
  */
-#define INVALIDSPEED -1
+#define INVALIDSPEED (-1)
 
 /**
  * @brief Vehicle on a route.

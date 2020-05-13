@@ -1,9 +1,6 @@
-#include "util.h"
 #include "street.h"
 
-#include <QPen>
-#include <QRectF>
-#include <cmath>
+#include "util.h"
 
 double euclid_distance(QPointF * point1, QPointF * point2)
 {

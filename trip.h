@@ -9,11 +9,9 @@
 
 #include <QTime>
 
+#include "direction.h"
 #include "street.h"
 #include "vehicle.h"
-#include "maptimer.h"
-#include "util.h"
-#include "direction.h"
 
 /**
  * @brief The Trip class holding information about a line and its vehicles.

@@ -1,18 +1,12 @@
 #ifndef DATAMODEL_H
 #define DATAMODEL_H
 
+#include <QJsonObject>
 #include <QObject>
-#include <QIODevice>
-#include <exception>
-#include <QPoint>
-#include <math.h>
+#include <QString>
 
 #include "street.h"
 #include "trip.h"
-#include "stop.h"
-#include "vehicle.h"
-
-
 
 class DataModel : public QObject
 {
@@ -25,12 +19,9 @@ public:
     bool LoadJSONFile(const QString& file_name);
     void Read(const QJsonObject &json);
 
-// private:
+//private:
     std::vector<Street> streets;
     std::vector<Trip> trips;
-
-signals:
-
 };
 
 #endif // DATAMODEL_H

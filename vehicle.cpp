@@ -4,9 +4,11 @@
  * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
  */
 
-#include "vehicle.h"
-#include "trip.h"
 #include <QDebug>
+
+#include "trip.h"
+
+#include "vehicle.h"
 
 Vehicle::Vehicle(Street_dir *street_dir, QString line_name, double progress, double speed) :
      trip(nullptr),

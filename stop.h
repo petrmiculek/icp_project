@@ -6,7 +6,7 @@
 class Stop
 {
 public:
-    Stop(int _id, double _street_percentage, QString _name);
+    Stop(int id, double street_percentage, QString name);
 
     int id;
     double street_percentage; // fraction of distance from point1 to point2

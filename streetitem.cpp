@@ -1,8 +1,10 @@
-#include "streetitem.h"
-#include "util.h"
-#include "street.h"
 #include <QDebug>
 #include <QFont>
+
+#include "street.h"
+#include "util.h"
+
+#include "streetitem.h"
 
 StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
     QGraphicsLineItem({*_street->point1, *_street->point2},parent) // line //

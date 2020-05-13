@@ -1,21 +1,23 @@
-#include <QFile>
-#include <QTextStream>
+#include <QAbstractItemModel>
 #include <QDebug>
-#include <QStandardItem>
+#include <QFile>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
-#include <QWheelEvent>
-#include <QPen>
-
-#include <QAbstractItemModel>
+#include <QGraphicsLineItem>
 #include <QHeaderView>
+#include <QPen>
+#include <QStandardItem>
+#include <QStandardItemModel>
+#include <QTextStream>
+#include <QWheelEvent>
+
+#include "deselectabletreeview.h"
+#include "streetitem.h"
+#include "trafficcircleitem.h"
+#include "ui_mainwindow.h"
+#include "util.h"
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "streetitem.h"
-#include "util.h"
-#include "deselectabletreeview.h"
-#include "trafficcircleitem.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -33,13 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
     mapTimer->setInterval(50); // default refresh interval
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
-
-    // setup ui pointers
-    //time_label = ui->timeLbl;
-    //status_label = ui->statusLbl;
-    //transport_tree_view = ui->pttreeView;
-    //strttraffic_label = ui->strttrafficLbl;
-    //traffic_slider = ui->strttrafficSlider;
 
     // initialize lines in tree view
     auto* model = new QStandardItemModel();

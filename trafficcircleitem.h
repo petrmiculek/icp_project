@@ -3,8 +3,8 @@
 
 #include <QGraphicsEllipseItem>
 #include <QPainter>
-#include "vehicle.h"
 
+#include "vehicle.h"
 
 class TrafficCircleItem : public QGraphicsEllipseItem
 {

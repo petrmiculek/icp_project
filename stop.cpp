@@ -1,9 +1,9 @@
 #include "stop.h"
 #include "util.h"
 
-Stop::Stop(int _id, double _street_percentage, QString _name) :
-    id(_id),
-    street_percentage(_street_percentage)
+Stop::Stop(int id, double street_percentage, QString name) :
+    id(id),
+    street_percentage(street_percentage)
 {
-    name = toCamelCase(_name);
+    name = toCamelCase(name);
 }

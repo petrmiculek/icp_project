@@ -4,10 +4,13 @@
  * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
  */
 
-#include "trip.h"
-
 #include <cmath>
-#include <qdebug.h>
+#include <QDebug>
+
+#include "maptimer.h"
+#include "util.h"
+
+#include "trip.h"
 
 using namespace std;
 

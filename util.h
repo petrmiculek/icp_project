@@ -1,21 +1,20 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include <exception>
-#include <QPointF>
 #include <QPen>
+#include <QPointF>
 #include <QRectF>
+
 #include <cmath>
+#include <exception>
 
 class Street;
-
 
 struct DataLoadingException : public std::exception {
    const char * what () const throw () {
       return "Custom";
    }
 };
-
 
 double euclid_distance(QPointF * point1, QPointF * point2);
 

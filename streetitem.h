@@ -1,13 +1,10 @@
 #ifndef STREETITEM_H
 #define STREETITEM_H
 
-#include <QPen>
-#include <QPointF>
-#include <QRectF>
 #include <QGraphicsLineItem>
 #include <QGraphicsSimpleTextItem>
-#include <QFont>
-#include <algorithm>
+#include <QPen>
+#include <QString>
 
 #include "street.h"
 

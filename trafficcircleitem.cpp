@@ -1,5 +1,6 @@
-#include "trafficcircleitem.h"
 #include "util.h"
+
+#include "trafficcircleitem.h"
 
 qreal TrafficCircleItem::scaling_ratio = 1.0;
 

@@ -1,17 +1,18 @@
-#include <QXmlSimpleReader>
-#include <QXmlInputSource>
 #include <QDebug>
+#include <QIODevice>
 #include <QJsonArray>
 #include <QJsonDocument>
-#include <QJsonObject>
+#include <QPoint>
+#include <QXmlSimpleReader>
+#include <QXmlInputSource>
+
+#include <exception>
+#include <cmath>
+
+#include "stop.h"
+#include "vehicle.h"
 
 #include "datamodel.h"
-
-/* TODO
- * error handling -> exceptions (separate file?)
- *
- */
-
 
 DataModel::DataModel(QObject *parent) : QObject(parent)
 {
