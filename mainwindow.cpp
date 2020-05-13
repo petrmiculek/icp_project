@@ -148,6 +148,7 @@ void MainWindow::redrawVehicles(QTime time)
 
         item->MoveTo(item->vehicle->position());
     }
+    scene->update();
 }
 
 void MainWindow::initTrips()
