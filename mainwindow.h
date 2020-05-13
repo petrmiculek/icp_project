@@ -72,11 +72,11 @@ private:
 
     std::vector<TrafficCircleItem*> drawnVehicles;
     MapTimer *mapTimer;
-    QLabel *time_label;
-    QLabel *status_label;
-    QLabel *strttraffic_label;
-    QTreeView *transport_tree_view;
-    QSlider *traffic_slider;
+    //QLabel *time_label;
+    //QLabel *status_label;
+    //QLabel *strttraffic_label;
+    //QTreeView *transport_tree_view;
+    //QSlider *traffic_slider;
     double currentIncrement; // multiplier increment
     QTimer *incrementsModifierTimer; // when timeout is signalled, enlarges the multiplier increment value
     QTimer *incrementTimer; // automatically modifies time multiplicator with the user holding the button down

@@ -1,3 +1,9 @@
+/* maptimer.cpp
+ * Project: CPP
+ * Description: Timer sending periodic signals.
+ * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ */
+
 #include "maptimer.h"
 
 #include <stdexcept>
@@ -5,7 +11,7 @@
 MapTimer::MapTimer(int h, int m, int s, double multiplier, QObject *parent) : QObject(parent)
 {
     setTime = new QTime(h, m, s);
-    internalTimer = new QTimer(this);
+    internalTimer = new QTimer();
     timeMultiplier = multiplier;
 
     this->setInterval(1000); // default value
@@ -15,9 +21,7 @@ MapTimer::MapTimer(int h, int m, int s, double multiplier, QObject *parent) : QO
 
 MapTimer::~MapTimer()
 {
-    // 'internalTimer' is destroyed automatically with MapTimer class
-    // since it's its QObject parent
-
+    delete internalTimer;
     delete setTime;
 }
 

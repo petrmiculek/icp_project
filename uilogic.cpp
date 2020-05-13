@@ -55,12 +55,12 @@ void MainWindow::updateTime()
     // remove unwanted decimal digits
     const QStringRef displayed_multiplier(&string_multiplier, 0, mltplr_length); // substring
 
-    time_label->setText(mapTimer->currentTime("hh:mm:ss")
+    ui->timeLbl->setText(mapTimer->currentTime("hh:mm:ss")
                       // workaround because can't get format "hh:mm:ss.z" to work properly
                       + mapTimer->currentTime(".z").remove(2,50));
 
     // returns current multiplier if the time is running, otherwise "Stopped"
-    status_label->setText("(" + (mapTimer->isRunning()?displayed_multiplier.toString()+"x":"Stopped") + ")");
+    ui->statusLbl->setText("(" + (mapTimer->isRunning()?displayed_multiplier.toString()+"x":"Stopped") + ")");
 }
 
 void MainWindow::incrementMultiplier()

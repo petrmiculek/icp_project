@@ -29,30 +29,30 @@ MainWindow::MainWindow(QWidget *parent)
     AddZoomButtons();
 
     // initialize map timer
-    mapTimer = new MapTimer(0, 0, 0, 1.0, this);
+    mapTimer = new MapTimer(0, 0, 0, 1.0);
     mapTimer->setInterval(50); // default refresh interval
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
 
     // setup ui pointers
-    time_label = ui->timeLbl;
-    status_label = ui->statusLbl;
-    transport_tree_view = ui->pttreeView;
-    strttraffic_label = ui->strttrafficLbl;
-    traffic_slider = ui->strttrafficSlider;
+    //time_label = ui->timeLbl;
+    //status_label = ui->statusLbl;
+    //transport_tree_view = ui->pttreeView;
+    //strttraffic_label = ui->strttrafficLbl;
+    //traffic_slider = ui->strttrafficSlider;
 
     // initialize lines in tree view
     auto* model = new QStandardItemModel();
     for (const auto& trip : data->trips) {
         auto* lineItem = new QStandardItem(trip.name());
-        for (const auto street_dir : trip.route())
+        for (const auto& street_dir : trip.route())
             for (const auto& stop : street_dir.first.stops) {
                 auto* stopItem = new QStandardItem(stop.name);
                 lineItem->appendRow(stopItem);
             }
         model->appendRow(lineItem);
     }
-    transport_tree_view->setModel(model);
+    ui->pttreeView->setModel(model);
 
     // Selecting streets
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
@@ -61,16 +61,14 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->strttrafficSlider, &QSlider::valueChanged, this, &MainWindow::TrafficSliderChanged);
 
     // Choosing line from list
-    QObject::connect(transport_tree_view, &QTreeView::clicked, this, &MainWindow::ListSelectionChanged);
+    QObject::connect(ui->pttreeView, &QTreeView::clicked, this, &MainWindow::ListSelectionChanged);
 
     initializeTimers();
 
     selected_streets = {};
 
-    // TODO remove in final version
 #ifndef NDEBUG
-    for (auto& t : data->trips)
-    {
+    for (auto& t : data->trips) {
         t.addSpawn(QTime(0,0,1));
     }
 #endif
