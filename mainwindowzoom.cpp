@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "trafficcircleitem.h"
 
 #include <QPushButton>
 #include <QResizeEvent>
@@ -8,20 +9,6 @@ static constexpr qreal scale_min = 2.5;
 static constexpr qreal scale_max = 10.0;
 // scale_default = 3.0
 
-/*
-void MainWindow::resizeEvent(QResizeEvent* event)
-{
-    if(event->oldSize().width() == 0.0 || event->oldSize().height() == 0.0)
-    {
-        return;
-    }
-    auto scaling_factor = 0.5 * (event->size().width() / event->oldSize().width() +
-                           event->size().height() / event->oldSize().height());
-    ui->graphicsView->scale(scaling_factor, scaling_factor);
-
-    QMainWindow::resizeEvent(event);
-}
-*/
 
 void MainWindow::SceneZoomIn()
 {
@@ -33,12 +20,15 @@ void MainWindow::SceneZoomIn()
 
     auto scale_new = scale_old * scale_change;
 
-    TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE
-
-
-    if(scale_new >= scale_max)
+    if(scale_new < scale_max) // OK, in range
+    {
+        TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE
+    }
+    else
     {
         scale_new = scale_max;
+
+        TrafficCircleItem::scaling_ratio *= scale_old / scale_max;
         btn_zoom_in->setEnabled(false);
     }
 
@@ -58,11 +48,16 @@ void MainWindow::SceneZoomOut()
 
     auto scale_new = scale_old * scale_change;
 
-    TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE to INVERSE
 
-    if(scale_new <= scale_min)
+    if(scale_new > scale_min) // OK, in range
+    {
+        TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE to INVERSE
+    }
+    else
     {
         scale_new = scale_min;
+        TrafficCircleItem::scaling_ratio *= scale_old / scale_min;
+
         btn_zoom_out->setEnabled(false);
     }
 

@@ -87,6 +87,11 @@ Street * StreetItem::GetStreet()
     }
 }
 
+void StreetItem::SetStreetTrafficDensity(int value)
+{
+    street->setTrafficDensity(value);
+}
+
 void StreetItem::paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )
 {
     const float ratio = traffic_ratio(street->trafficDensity());

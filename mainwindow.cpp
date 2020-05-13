@@ -15,6 +15,7 @@
 #include "streetitem.h"
 #include "util.h"
 #include "deselectabletreeview.h"
+#include "trafficcircleitem.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -194,32 +195,12 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 
 void MainWindow::TrafficSliderChanged(int value)
 {
-    if(selected_streets.size() != 1 || selected_street == NONE_SELECTED)
+    for (auto& street: selected_streets)
     {
-        return;
+        street->SetStreetTrafficDensity(value);
     }
 
-    // auto& street = selected_streets.front();  // unused
-
-    auto& street = data->streets.at(selected_street);
-    street.setTrafficDensity(value);
-
-    for (auto& str:scene_streets)
-    {
-        // find scene street to highlight accordingly
-        auto pt1 = str->line().p1();
-        auto pt2 = str->line().p2();
-
-        if (pt1.x() == street.point1->x()
-                && pt1.y() == street.point1->y()
-                && pt2.x() == street.point2->x()
-                && pt2.y() == street.point2->y())
-        {
-            //str->SetLineWidth(value);
-            scene->update();
-            break;
-        }
-    }
+    scene->update();
 }
 
 
@@ -230,21 +211,44 @@ void MainWindow::selectionChanged()
     selected_streets.clear();
     selected_street = NONE_SELECTED;
 
-    if (items.size() != 1)
+    if (items.empty())
     {
         ui->strttrafficSlider->setEnabled(false);
-        ui->strttrafficSlider->setValue(QSlider::NoTicks);
+        ui->strttrafficSlider->setValue(QSlider::NoTicks); // set slider to zero-value
         ui->strttrafficLbl->setEnabled(false);
         ui->strtnameLbl->clear();
         return;
     }
 
-    auto line = dynamic_cast<StreetItem*>(items.first());
+
+    for(const auto& item: items)
+    {
+        auto line = dynamic_cast<StreetItem*>(item);
+        if (line != nullptr)
+        {
+            selected_streets.push_back(line);
+        }
+    }
 
     ui->strttrafficSlider->setEnabled(true);
     ui->strttrafficLbl->setEnabled(true);
-    ui->strtnameLbl->setText(line->Name());
 
+    QString text;
+
+    if(selected_streets.size() == 1)
+    {
+        text = selected_streets.front()->Name();
+        ui->strttrafficSlider->setValue(selected_streets.front()->GetStreet()->trafficDensity()); // set slider to street's value
+
+    }
+    else
+    {
+        text = "More streets(" + QString::number(selected_streets.size()) + ")";
+    }
+    ui->strtnameLbl->setText(text);
+
+
+/*
     for(unsigned long i = 0; i < data->streets.size(); i++)
     {
         auto street = data->streets.at(i);
@@ -264,6 +268,7 @@ void MainWindow::selectionChanged()
             break;
         }
     }
+    */
 }
 
 

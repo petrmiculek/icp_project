@@ -3,7 +3,6 @@
 
 #include "datamodel.h"
 #include "maptimer.h"
-#include "trafficcircleitem.h"
 
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>
@@ -20,6 +19,7 @@
 #define NONE_SELECTED (-1)
 
 class StreetItem;
+class TrafficCircleItem;
 
 
 QT_BEGIN_NAMESPACE
@@ -89,7 +89,7 @@ private:
     QPushButton* btn_zoom_in;
     QPushButton* btn_zoom_out;
 
-    std::vector<Street> selected_streets;
+    std::vector<StreetItem*> selected_streets;
     int selected_street;
 
     static constexpr qreal zoom_scale_factor = 5.0/4;

@@ -40,6 +40,8 @@ public:
 
     Street* GetStreet();
 
+    void SetStreetTrafficDensity(int value);
+
     static constexpr Qt::GlobalColor default_color = Qt::lightGray;
     static constexpr Qt::GlobalColor highlight_color = Qt::darkGray;
     static constexpr Qt::GlobalColor default_traffic = Qt::red;
@@ -60,7 +62,7 @@ private:
     qreal traffic_ratio(int traffic);
     QFont font_label();
 
-    qreal distance_from_line_to_label = 3.0;
+    qreal distance_from_line_to_label = line_width + 2.0;
 };
 
 
