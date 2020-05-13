@@ -19,7 +19,7 @@ class Vehicle
 {
 public:
     Vehicle(Street_dir _street_dir, QString _line_name, double _progress = 0.0, double _speed = speed_default);
-    Vehicle(std::shared_ptr<Trip> trip);
+    Vehicle(Trip *trip);
 
     QPen pen;
 
@@ -39,7 +39,7 @@ public:
     double fromMSecsToProgress(double msecs);
     double fromProgressToMSecs(double progress);
     QPointF position();
-    std::shared_ptr<Trip> trip;
+    Trip *trip;
 
     QString symbol() const;
 private:

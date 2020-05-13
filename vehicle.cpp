@@ -16,8 +16,8 @@ Vehicle::Vehicle(Street_dir _street_dir, QString _line_name, double _progress, d
 
 }
 
-Vehicle::Vehicle(std::shared_ptr<Trip> _trip) :
-    trip(_trip)
+Vehicle::Vehicle(Trip *trip) :
+    trip(trip)
 {
     street = &trip->route().front().first;
     direction = trip->route().front().second;

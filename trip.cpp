@@ -146,7 +146,7 @@ std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
         // first call, lastTime was not set yet
         for (auto t : departures)
             if (t == time) {
-                std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(std::shared_ptr<Trip>(this));
+                std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(this);
                 vehiclePool.push_back(vehicle);
                 vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
                 new_vehicles.push_back(vehicle);
@@ -156,7 +156,7 @@ std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
         // lastTime set => check if time is past this point
         for (auto t : departures)
             if (*lastTime < t && t <= time) {
-                std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(std::shared_ptr<Trip>(this));
+                std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(this);
                 vehiclePool.push_back(vehicle);
                 vehiclePool.back()->restMSecs = rand() % (WAIT_MAX - WAIT_MIN) + WAIT_MIN;
                 new_vehicles.push_back(vehicle);
@@ -189,37 +189,3 @@ void Trip::initStopsPositions()
     }
     stopsPositions.push_back(-1);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
