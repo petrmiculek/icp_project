@@ -2,8 +2,6 @@
 #include "trip.h"
 #include <QDebug>
 
-
-
 Vehicle::Vehicle(Street_dir _street_dir, QString _line_name, double _progress, double _speed) :
      pen(NextColorPen()),
      street(&_street_dir.first),
@@ -27,19 +25,6 @@ Vehicle::Vehicle(Trip *trip) :
     vehicle_symbol = trip->name().back();
     pen = NextColorPen(trip->Id());
 }
-
-/*
-QString Vehicle::getSymbol() const
-{
-    #define FIRST_SYMB 'A'
-    static char currentSymbol = FIRST_SYMB;
-
-    if (currentSymbol == 'Z' + 1)
-        currentSymbol = FIRST_SYMB;
-
-    return QString(currentSymbol++);
-}
-*/
 
 QString Vehicle::symbol() const
 {

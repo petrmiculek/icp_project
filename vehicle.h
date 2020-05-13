@@ -43,10 +43,14 @@ public:
 
     QString symbol() const;
 private:
-    //QString getSymbol() const;
     QString vehicle_symbol;
 
-    static constexpr double speed_default = 0.01;
+    static constexpr double speed_default =
+#ifndef NDEBUG
+    0.025; // debug speed
+#else
+    0.001; // release speed
+#endif
 };
 
 #endif // VEHICLE_H
