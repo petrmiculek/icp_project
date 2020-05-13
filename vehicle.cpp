@@ -2,8 +2,6 @@
 #include "trip.h"
 #include <QDebug>
 
-
-
 Vehicle::Vehicle(Street_dir _street_dir, QString _line_name, double _progress, double _speed) :
      pen(NextColorPen()),
      street(&_street_dir.first),
