@@ -288,7 +288,6 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
 
     auto line_name = ui->pttreeView->model()->data(index);
 
-    qDebug() << line_name;
     int index_found = -1;
     for(unsigned long i = 0; i < data->trips.size(); i++)
     {
