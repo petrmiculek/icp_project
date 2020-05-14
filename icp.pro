@@ -71,4 +71,6 @@ clean.depends = cleandoc cleantarget
 distclean.depends = cleanpack
 doxygen.commands = doxygen;
 pack.commands = mkdir -p doc; zip $${PACKAGENAME}.zip doc; zip -9r $${PACKAGENAME}.zip Doxyfile Makefile README.txt *.{qrc,pro,cpp,h,ui,json} src/ examples/;
-QMAKE_EXTRA_TARGETS += clean cleandoc cleantarget cleanpack distclean doxygen pack
+run.commands = ./$${TARGET};
+run.depends = all doxygen
+QMAKE_EXTRA_TARGETS += clean cleandoc cleantarget cleanpack distclean doxygen pack run
