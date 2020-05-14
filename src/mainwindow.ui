@@ -326,7 +326,7 @@
   <customwidget>
    <class>DeselectableTreeView</class>
    <extends>QTreeView</extends>
-   <header>deselectabletreeview.h</header>
+   <header>src/deselectabletreeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
