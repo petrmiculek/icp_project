@@ -1,7 +1,8 @@
 /* trip.cpp
  * Project: CPP
- * Description: Trip class holds information about a bus line
- * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ * Description: Trip class represents a (bus) line - its route and departures
+ * Authors: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ *          Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
 
 #include <cmath>

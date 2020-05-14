@@ -2,6 +2,11 @@
 
 #include <QApplication>
 
+/* main.cpp
+ * Project: CPP
+ * Description: Driver code - pregenerated
+ */
+
 int main(int argc, char *argv[])
 {
 #ifndef NDEBUG

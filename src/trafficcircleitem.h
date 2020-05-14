@@ -1,6 +1,12 @@
 #ifndef TRAFFICCIRCLEITEM_H
 #define TRAFFICCIRCLEITEM_H
 
+/* trafficircleitem.h
+ * Project: CPP
+ * Description: GUI representation of a stop or a vehicle
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include <QGraphicsEllipseItem>
 #include <QPainter>
 

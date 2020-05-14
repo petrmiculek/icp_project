@@ -1,6 +1,12 @@
 #ifndef STOP_H
 #define STOP_H
 
+/* stop.h
+ * Project: CPP
+ * Description: Stop class
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include <QString>
 
 class Stop

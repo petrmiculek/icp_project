@@ -1,3 +1,9 @@
+/* stop.cpp
+ * Project: CPP
+ * Description: Stop class
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include "stop.h"
 #include "util.h"
 

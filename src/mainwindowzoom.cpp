@@ -1,3 +1,11 @@
+/* mainwindowzoom.cpp
+ * Project: CPP
+ * Description: MainWindow class - Zoom-related part
+ * (mainwindow.h + mainwindow.cpp + mainwindowzoom.cpp + uilogic.cpp)
+ *
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "trafficcircleitem.h"

@@ -1,16 +1,21 @@
+/* trafficircleitem.cpp
+ * Project: CPP
+ * Description: GUI representation of a stop or a vehicle
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
 #include "util.h"
-
 #include "trafficcircleitem.h"
 
 qreal TrafficCircleItem::scaling_ratio = 1.0;
 
-// this constructor is not for vehicles
+// stops
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) :
     TrafficCircleItem(center, content, NextColorPen(), nullptr, parent)
 {
     // nothing
 }
 
+// vehicles
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent) :
     QGraphicsEllipseItem(parent),
     pen(_pen),
@@ -24,12 +29,13 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
     QColor color = pen.color();
     if(vehicle == nullptr)
     {
+        // stop
         color.setAlpha(90);
     }
     else
     {
+        // vehicle
         color.setAlpha(30);
-
     }
     setBrush(color);
 }

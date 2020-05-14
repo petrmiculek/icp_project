@@ -1,7 +1,8 @@
 /* vehicle.h
  * Project: CPP
- * Description: Vehicle class holds internal vehicle data.
- * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ * Description: Vehicle class - single trip departure
+ * Authors: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ *          Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
 
 #ifndef VEHICLE_H
@@ -163,7 +164,7 @@ protected:
 #ifndef NDEBUG
     0.075; // debug speed
 #else
-    0.003; // release speed
+    0.015; // release speed
 #endif
 };
 
