@@ -316,4 +316,5 @@ void MainWindow::on_resettrafficBtn_clicked()
     for (auto& street : data->streets) {
         street.setTrafficDensity(0);
     }
+    scene->update();
 }
