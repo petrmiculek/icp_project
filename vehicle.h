@@ -161,9 +161,9 @@ protected:
      */
     static constexpr double speed_default =
 #ifndef NDEBUG
-    0.025; // debug speed
+    0.075; // debug speed
 #else
-    0.001; // release speed
+    0.003; // release speed
 #endif
 };
 

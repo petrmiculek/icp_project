@@ -27,10 +27,11 @@ public:
     void SetLabelPosition();
 
     /**
+       UNUSED
      * @brief StreetItem::SetLineWidth Set line width based on the street's traffic density
      * @param traffic_density traffic density of the street
      */
-    void SetLineWidth(int traffic_density);
+    // void SetLineWidth(int traffic_density);
 
     QString Name();
     void SetHighlight(bool highlighted);
@@ -44,6 +45,26 @@ public:
     static constexpr Qt::GlobalColor default_traffic = Qt::red;
     static constexpr Qt::GlobalColor highlight_traffic = Qt::darkRed;
 
+    qreal FontSize()
+    {
+        return font_size * scaling_ratio;
+    }
+    qreal LineWidth()
+    {
+        return line_width * scaling_ratio;
+    }
+
+    qreal LabelDistance()
+    {
+        auto value = (line_width/2.0 + label_distance) * scaling_ratio;
+        return value;
+    }
+
+    static void Scale(qreal factor)
+    {
+        scaling_ratio *= factor;
+    }
+
 private:
     QString name;
 
@@ -52,14 +73,18 @@ private:
     Street* street;
 
     QGraphicsSimpleTextItem * label;
+    QPointF text_center; // verify that it's needed
 
-    int line_width = 2;
+    static constexpr qreal line_width = 6.0;
+    static constexpr qreal font_size = 9.0;
 
-    QPen get_pen(const QColor& color = default_color);
-    qreal traffic_ratio(int traffic);
-    QFont font_label();
+    QPen Pen(const QColor& color = default_color);
+    qreal TrafficDensity(int traffic);
+    QFont FontLabel();
 
-    qreal distance_from_line_to_label = line_width + 2.0;
+    qreal label_distance = 12.0; // from street
+
+    static qreal scaling_ratio; // 1.0 by default
 };
 
 

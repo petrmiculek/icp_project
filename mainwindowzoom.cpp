@@ -1,14 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "trafficcircleitem.h"
+#include "streetitem.h"
 
 #include <QPushButton>
 #include <QResizeEvent>
 
-static constexpr qreal scale_min = 2.5;
-static constexpr qreal scale_max = 10.0;
-// scale_default = 3.0
-
+int MainWindow::zoom_current = 2;
 
 void MainWindow::SceneZoomIn()
 {
@@ -20,19 +18,20 @@ void MainWindow::SceneZoomIn()
 
     auto scale_new = scale_old * scale_change;
 
-    if(scale_new < scale_max) // OK, in range
-    {
-        TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE
-    }
-    else
-    {
-        scale_new = scale_max;
 
-        TrafficCircleItem::scaling_ratio *= scale_old / scale_max;
+    ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
+
+    // drawn items scale inversely so as to keep a constant size on screen
+    TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE
+    StreetItem::Scale(1.0/scale_change); // INVERSE
+
+    zoom_current++;
+
+    if(zoom_current == zoom_max)
+    {
         btn_zoom_in->setEnabled(false);
     }
 
-    ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
     scene->update();
 }
 
@@ -49,37 +48,31 @@ void MainWindow::SceneZoomOut()
     auto scale_new = scale_old * scale_change;
 
 
-    if(scale_new > scale_min) // OK, in range
-    {
-        TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE to INVERSE
-    }
-    else
-    {
-        scale_new = scale_min;
-        TrafficCircleItem::scaling_ratio *= scale_old / scale_min;
+    ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
 
+    // drawn items scale inversely so as to keep a constant size on screen
+    TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE to INVERSE
+    StreetItem::Scale(1.0/scale_change); // INVERSE to INVERSE
+
+    zoom_current--;
+
+    if(zoom_current == zoom_min) // reached min zoom level
+    {
         btn_zoom_out->setEnabled(false);
     }
 
-    ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
     scene->update();
-
 }
 
 
 void MainWindow::ZoomInBtn_clicked()
 {
-    // add checks?
-    // maximum zoom level
     SceneZoomIn();
 }
 
 
 void MainWindow::ZoomOutBtn_clicked(){
-    // add checks?
-    // minimum zoom level - when outer box of all objects gets too small or idk
     SceneZoomOut();
-
 }
 
 

@@ -78,7 +78,7 @@ void MainWindow::InitScene(DataModel* data)
     scene = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    ui->graphicsView->scale(3, 3);
+    // ui->graphicsView->scale(3, 3);
 
     // streets
     for (auto& street : data->streets) {

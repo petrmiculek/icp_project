@@ -3,11 +3,12 @@
 
 #include "street.h"
 #include "util.h"
-
 #include "streetitem.h"
 
+qreal StreetItem::scaling_ratio = 1.0;
+
 StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
-    QGraphicsLineItem({*_street->point1, *_street->point2},parent) // line //
+    QGraphicsLineItem({*_street->point1, *_street->point2},parent) // line
 {
     street = _street;
 
@@ -17,7 +18,7 @@ StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
     name = street->name;
 #endif
 
-    setPen(get_pen(default_color));
+    setPen(Pen(default_color));
     setFlag(QGraphicsItem::ItemIsSelectable);
 
     is_highlighted = false;
@@ -25,7 +26,7 @@ StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
     label = new QGraphicsSimpleTextItem(street->name, (this)); // label
 
     label->setPos(line().center());
-    label->setFont(font_label());
+    label->setFont(FontLabel());
     SetLabelPosition();
 }
 
@@ -41,14 +42,14 @@ void StreetItem::SetLabelPosition()
 
     normal.translate(tmp);
 
-    // calculate length of the beforementioned shift, so that it's far enough (street's thickness may vary)
-    normal.setLength(distance_from_line_to_label);
-    auto text_center = normal.p2();
+    // calculate length of the beforementioned shift, so that it's far enough
+    normal.setLength(LabelDistance());
+    text_center = normal.p2(); // useful later VERIFY
 
     // compute top left corner of text
-    auto aligned_rect = CenteredRectToRect(label->boundingRect(), text_center);
+    QPointF aligned_rect = CenteredRectToPoint(label->boundingRect(), text_center);
 
-    label->setPos(aligned_rect.topLeft());
+    label->setPos(aligned_rect);
 
     // rotate around its center
     label->setTransformOriginPoint(label->boundingRect().center());
@@ -57,12 +58,13 @@ void StreetItem::SetLabelPosition()
     label->setRotation(-line().angle());
 }
 
-
+/*
 void StreetItem::SetLineWidth(int traffic_density)
 {
     line_width = 1 + (traffic_density > 1 ?  qRound(log2(traffic_density)) : 0);
     SetLabelPosition();
 }
+*/
 
 QString StreetItem::Name()
 {
@@ -96,31 +98,40 @@ void StreetItem::SetStreetTrafficDensity(int value)
 
 void StreetItem::paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )
 {
-    const float ratio = traffic_ratio(street->trafficDensity());
+    const float ratio = TrafficDensity(street->trafficDensity());
+    label->setFont(FontLabel());
+    // auto aligned_rect = CenteredRectToPoint(label->boundingRect(), text_center);
+
+    // label->setPos(aligned_rect);
+
+    SetLabelPosition();
+
 
     if (!is_highlighted) {
         //setPen(color_default());
-        setPen(get_pen(MixColors(default_color, default_traffic, ratio)));
+        setPen(Pen(MixColors(default_color, default_traffic, ratio)));
     }
     else {
-        setPen(get_pen(MixColors(highlight_color, highlight_traffic, ratio)));
+        setPen(Pen(MixColors(highlight_color, highlight_traffic, ratio)));
     }
 
     QGraphicsLineItem::paint(painter, option, widget);
 }
 
-qreal StreetItem::traffic_ratio(int traffic)
+qreal StreetItem::TrafficDensity(int traffic)
 {
     // use at least 15 % red shade with 10 % steps
     return traffic ? std::max(0.15, std::round(traffic/10.0)/10.0) : 0.0;
 }
 
-QFont StreetItem::font_label()
+QFont StreetItem::FontLabel()
 {
-    return QFont("Helvetica", 2);
+    auto font = QFont("Helvetica", FontSize()); // truncates to int
+    font.setPointSizeF(FontSize());
+    return font;
 }
 
-QPen StreetItem::get_pen(const QColor& color)
+QPen StreetItem::Pen(const QColor& color)
 {
-    return QPen(color, line_width);
+    return QPen(color, LineWidth());
 }

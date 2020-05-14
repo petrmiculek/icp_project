@@ -42,11 +42,11 @@ public:
     static qreal scaling_ratio;
 private:
     QString text;
-    static constexpr qreal circle_diameter = 12;
+    static constexpr qreal circle_diameter = 36;
 
     static constexpr QSizeF point_circle_size = {circle_diameter, circle_diameter};
 
-    // size of square inside circle, so that the square fits inside it
+    // size of a square inside a circle, so that the square fits inside it
     static constexpr qreal inscribed_square_size_ratio = 0.707;
 
     static constexpr qreal text_size_default = circle_diameter / 2.0;
