@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>stops.json</file>
-        <file>streets.json</file>
-        <file>trips.json</file>
+        <file>examples/stops.json</file>
+        <file>examples/streets.json</file>
+        <file>examples/trips.json</file>
     </qresource>
 </RCC>

@@ -16,35 +16,35 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    datamodel.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    mainwindowzoom.cpp \
-    maptimer.cpp \
-    stop.cpp \
-    streetitem.cpp \
-    trafficcircleitem.cpp \
-    trip.cpp \
-    uilogic.cpp \
-    util.cpp \
-    vehicle.cpp
+    src/datamodel.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/mainwindowzoom.cpp \
+    src/maptimer.cpp \
+    src/stop.cpp \
+    src/streetitem.cpp \
+    src/trafficcircleitem.cpp \
+    src/trip.cpp \
+    src/uilogic.cpp \
+    src/util.cpp \
+    src/vehicle.cpp
 
 HEADERS += \
-    datamodel.h \
-    deselectabletreeview.h \
-    direction.h \
-    mainwindow.h \
-    maptimer.h \
-    stop.h \
-    street.h \
-    streetitem.h \
-    trafficcircleitem.h \
-    trip.h \
-    util.h \
-    vehicle.h
+    src/datamodel.h \
+    src/deselectabletreeview.h \
+    src/direction.h \
+    src/mainwindow.h \
+    src/maptimer.h \
+    src/stop.h \
+    src/street.h \
+    src/streetitem.h \
+    src/trafficcircleitem.h \
+    src/trip.h \
+    src/util.h \
+    src/vehicle.h
 
 FORMS += \
-    mainwindow.ui
+    src/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -57,3 +57,6 @@ RESOURCES += \
 CONFIG(release, debug|release) {
     DEFINES += NDEBUG
 }
+
+DISTFILES += \
+    README.txt

@@ -26,11 +26,14 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
 
 bool DataModel::LoadData()
 {
-    bool res = LoadJSONFile("streets");
-    res &= LoadJSONFile("stops");
-    res &= LoadJSONFile("trips");
+    static const QString files_prefix = "examples/";
+    static const QString files[] = { "streets", "stops", "trips" };
 
-    return res;
+    for (QString file : files)
+        if (!LoadJSONFile(files_prefix, file))
+            return false;
+
+    return true;
 }
 
 /**
@@ -38,9 +41,9 @@ bool DataModel::LoadData()
  * @param file_name
  * @return
  */
-bool DataModel::LoadJSONFile(const QString& file_name)
+bool DataModel::LoadJSONFile(const QString file_name_prefix, const QString file_name)
 {
-    QFile file(":/" + file_name + ".json");
+    QFile file(":/" + file_name_prefix + file_name + ".json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "could not open file" << file_name;
