@@ -1,13 +1,20 @@
 #ifndef DESELECTABLETREEVIEW_H
 #define DESELECTABLETREEVIEW_H
 
+/* deselectabletreeview.h
+ * Project: CPP
+ * Description: Treeview that supports de-selection
+ * (header-only)
+ *
+ * source:
+ * https://stackoverflow.com/a/10826787/10501005
+ * original author: Yassir Ennazk
+ */
+
 #include "QTreeView"
 #include "QMouseEvent"
 #include "QDebug"
 
-// source:
-// https://stackoverflow.com/a/10826787/10501005
-// original author: Yassir Ennazk
 
 class DeselectableTreeView : public QTreeView
 {

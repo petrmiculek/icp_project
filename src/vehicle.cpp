@@ -1,7 +1,8 @@
 /* vehicle.cpp
  * Project: CPP
- * Description: Vehicle class holds internal vehicle data.
- * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ * Description: Vehicle class - single trip departure
+ * Authors: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ *          Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
 
 #include <QDebug>

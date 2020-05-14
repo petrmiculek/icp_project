@@ -14,6 +14,12 @@
 
 #include "datamodel.h"
 
+/* datamodel.cpp
+ * Project: CPP
+ * Description: Data model and its setup
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 DataModel::DataModel(QObject *parent) : QObject(parent)
 {
     auto res = LoadData();
@@ -47,46 +53,13 @@ bool DataModel::LoadJSONFile(const QString file_name_prefix, const QString file_
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "could not open file" << file_name;
-        throw DataLoadingException(); // "cannot open file"
+        throw DataLoadingException();
     }
 
     QJsonDocument doc(QJsonDocument::fromJson(file.readAll()));
 
-    QJsonObject json(doc.object()); // top level item { ... }
-    /*
+    QJsonObject json(doc.object());
 
-    // We don't currently load points separately, so this is not needed.
-    // Keeping this, in case we change the structure of JSON data
-
-    if(file_name == "points")
-    {
-
-        if (json.contains("points") && json["points"].isArray())
-        {
-            QJsonArray points_json = json["points"].toArray(); // "points": [ ... ]
-
-            this->points.clear();
-
-            // fill vector with data
-            for (int i = 0; i < points_json.size(); ++i) {
-                QJsonObject point = points_json[i].toObject(); // { "x": ... }
-
-                // qDebug() << "json_points:" << point["point_id"] << point["x"] << point["y"];
-
-                int x = point["x"].toInt();
-                int y = point["y"].toInt();
-
-                points.emplace_back(x, y);
-            }
-        }
-        else
-        {
-            qDebug() << "points: main item not an array";
-        }
-
-    }
-    else
-    */
     if(file_name == "streets")
     {
         if (json.contains("streets") && json["streets"].isArray())
@@ -113,14 +86,6 @@ bool DataModel::LoadJSONFile(const QString file_name_prefix, const QString file_
     }
     else if(file_name == "stops")
     {
-
-        /*
-               "stop_id": 1,
-               "street_id": 1,
-               "street_percentage": 20,
-               "name": "ABBEY LANE"
-         */
-
         if (json.contains("stops") && json["stops"].isArray())
         {
             QJsonArray stops_json = json["stops"].toArray();
@@ -142,6 +107,7 @@ bool DataModel::LoadJSONFile(const QString file_name_prefix, const QString file_
                 else
                 {
                     qDebug() << "stops: invalid street";
+                    return false;
                 }
             }
         }

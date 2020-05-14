@@ -1,6 +1,14 @@
 #ifndef STREET_H
 #define STREET_H
 
+/* vehicle.cpp
+ * Project: CPP
+ * Description: Street class - coordinates, stops, name
+ * (header only)
+ * Authors: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ *          Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include <assert.h>
 
 #include <QPointF>

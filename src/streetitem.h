@@ -1,6 +1,12 @@
 #ifndef STREETITEM_H
 #define STREETITEM_H
 
+/* streetitem.h
+ * Project: CPP
+ * Description: StreetItem class - GUI representation of a street
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include <QGraphicsLineItem>
 #include <QGraphicsSimpleTextItem>
 #include <QPen>

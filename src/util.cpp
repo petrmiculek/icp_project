@@ -1,7 +1,8 @@
 /* util.cpp
  * Project: CPP
- * Description: Helpful utilities
- * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ * Description: Helpful utilities - positioning items, coloring items, miscellaneous
+ * Authors: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ *          Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
 
 #include "street.h"
