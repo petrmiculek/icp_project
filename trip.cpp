@@ -129,7 +129,9 @@ void Trip::updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs
                 // if the vehicle is on the last stop (stopsPositions is one item bigger)
                 v->invalidate();
             }
-            v->progress += v->fromMSecsToProgress(fabs(v->restMSecs));// * multiplier; // will introduce a weird bug: vehicles reverse back
+            else {
+                v->progress += v->fromMSecsToProgress(fabs(v->restMSecs));// * multiplier; // will introduce a weird bug: vehicles reverse back
+            }
             v->restMSecs = 0;
         }
     }
