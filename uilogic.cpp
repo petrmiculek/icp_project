@@ -1,3 +1,11 @@
+/* uilogic.cpp
+ * Project: CPP
+ * Description: MainWindow class - Timer related part
+ * (mainwindow.h + mainwindow.cpp + mainwindowzoom.cpp + uilogic.cpp)
+ *
+ * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ */
+
 constexpr double BASEINCREMENT = 0.1;
 constexpr int MAXMULTIPLIER = 1000; // maximum multiplier value (absolute value)
 

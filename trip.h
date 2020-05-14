@@ -1,11 +1,11 @@
-/* trip.h
- * Project: CPP
- * Description: Trip class holds information about a bus line
- * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
- */
-
 #ifndef TRIP_H
 #define TRIP_H
+
+/* trip.h
+ * Project: CPP
+ * Description: Trip class represents a (bus) line - its route and departures
+ * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ */
 
 #include <QTime>
 

@@ -1,6 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+/* datamodel.h
+ * Project: CPP
+ * Description: MainWindow class - whole GUI
+ * (mainwindow.h + mainwindow.cpp + mainwindowzoom.cpp + uilogic.cpp)
+ *
+ * Authors: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ *          Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include <QGraphicsEllipseItem>
 #include <QMainWindow>
 #include <QPushButton>

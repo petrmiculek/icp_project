@@ -1,6 +1,12 @@
 #ifndef DATAMODEL_H
 #define DATAMODEL_H
 
+/* datamodel.h
+ * Project: CPP
+ * Description: Data model and its setup
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include <QJsonObject>
 #include <QObject>
 #include <QString>

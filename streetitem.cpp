@@ -1,3 +1,9 @@
+/* streetitem.h
+ * Project: CPP
+ * Description: StreetItem class - GUI representation of a street
+ * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+ */
+
 #include <QDebug>
 #include <QFont>
 
@@ -58,23 +64,18 @@ void StreetItem::SetLabelPosition()
     label->setRotation(-line().angle());
 }
 
-/*
-void StreetItem::SetLineWidth(int traffic_density)
-{
-    line_width = 1 + (traffic_density > 1 ?  qRound(log2(traffic_density)) : 0);
-    SetLabelPosition();
-}
-*/
 
 QString StreetItem::Name()
 {
     return name;
 }
 
+
 void StreetItem::SetHighlight(bool highlighted)
 {
     is_highlighted = highlighted;
 }
+
 
 /**
  * @brief StreetItem::GetStreet Get street if valid
@@ -91,10 +92,12 @@ Street * StreetItem::GetStreet()
     }
 }
 
+
 void StreetItem::SetStreetTrafficDensity(int value)
 {
     street->setTrafficDensity(value);
 }
+
 
 void StreetItem::paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )
 {
@@ -118,11 +121,13 @@ void StreetItem::paint( QPainter * painter, const QStyleOptionGraphicsItem * opt
     QGraphicsLineItem::paint(painter, option, widget);
 }
 
+
 qreal StreetItem::TrafficDensity(int traffic)
 {
     // use at least 15 % red shade with 10 % steps
     return traffic ? std::max(0.15, std::round(traffic/10.0)/10.0) : 0.0;
 }
+
 
 QFont StreetItem::FontLabel()
 {
@@ -130,6 +135,7 @@ QFont StreetItem::FontLabel()
     font.setPointSizeF(FontSize());
     return font;
 }
+
 
 QPen StreetItem::Pen(const QColor& color)
 {

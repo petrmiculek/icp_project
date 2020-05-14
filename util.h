@@ -1,7 +1,9 @@
 /* util.h
  * Project: CPP
- * Description: Helpful utilities
- * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ * Description: Helpful utilities - positioning items, coloring items, miscellaneous
+ * Authors: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ *          Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
+
  */
 
 #ifndef UTIL_H
@@ -18,7 +20,7 @@ class Street;
 
 struct DataLoadingException : public std::exception {
    const char * what () const throw () {
-      return "Custom";
+      return "JSON data loading failed";
    }
 };
 
