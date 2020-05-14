@@ -59,4 +59,5 @@ CONFIG(release, debug|release) {
 }
 
 DISTFILES += \
-    README.txt
+    README.txt \
+    Doxyfile
