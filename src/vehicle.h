@@ -47,7 +47,7 @@ public:
     const Trip *trip;
     /**
      * @brief Vehicle's symbol.
-     * Vehicle's symbol, usually a shortened version of line name.
+     * @details Vehicle's symbol, usually a shortened version of line name.
      */
     const QString vehicle_symbol;
 
@@ -118,7 +118,7 @@ public:
     double fromMSecsToProgress(double msecs);
     /**
      * @brief Converts traveled distance to time in milliseconds.
-     * Converts distance to time in which a vehicle would travel such distance.
+     * @details Converts distance to time in which a vehicle would travel such distance.
      * @param progress Traveled distance to be converted.
      * @return Time in milliseconds needed to travel given distance.
      */

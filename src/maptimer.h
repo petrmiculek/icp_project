@@ -13,7 +13,7 @@
 
 /**
  * @brief The MapTimer class
- * Timer class sending periodical signals and with the ability to set time.
+ * @details Timer class sending periodical signals and with the ability to set time.
  */
 class MapTimer : public QObject
 {
@@ -41,7 +41,7 @@ public:
     void stop();
     /**
      * @brief Resets time to its initial value.
-     * Resets time to its initial value. If the time was running, it starts it again.
+     * @details Resets time to its initial value. If the time was running, it starts it again.
      */
     void reset();
     /**
@@ -52,13 +52,13 @@ public:
 
     /**
      * @brief Sets timeout interval.
-     * Sets the time in milliseconds of how often the timeout signal will be emitted.
+     * @details Sets the time in milliseconds of how often the timeout signal will be emitted.
      * @param interval Time in milliseconds
      */
     void setInterval(int interval);
     /**
      * @brief Returns current interval.
-     * Returns current interval in milliseconds of how often the timeout signal is emitted.
+     * @details Returns current interval in milliseconds of how often the timeout signal is emitted.
      * @return Interval
      */
     int getInterval() const;
@@ -89,19 +89,19 @@ public:
 signals:
     /**
      * @brief Timeout signal.
-     * Periodically emitted timeout signal.
+     * @details Periodically emitted timeout signal.
      * @param time New current time of the MapTimer class instance.
      */
     void timeout(QTime time);
     /**
      * @brief Interval changed signal.
-     * Interval changed signal that is emitted every time the MapTimer's interval changes.
+     * @details Interval changed signal that is emitted every time the MapTimer's interval changes.
      * @param newInterval New timer interval.
      */
     void intervalChanged(int newInterval);
     /**
      * @brief Multiplier changed signal.
-     * Multiplier changed signal that is emitted every time the multiplier changes.
+     * @details Multiplier changed signal that is emitted every time the multiplier changes.
      * @param newMultiplier New multiplier
      */
     void multiplierChanged(double newMultiplier);

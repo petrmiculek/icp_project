@@ -64,7 +64,7 @@ QPointF PositionOnLine(Street street, double street_percentage);
 
 /**
  * @brief Returns a color from the internal color list at the given index.
- * If the index is -1, returns the next color from the list.
+ * @remarks If the index is -1, returns the next color from the list.
  * @param index Index to return the color from.
  * @return color from the list at given index
  */
