@@ -61,3 +61,14 @@ CONFIG(release, debug|release) {
 DISTFILES += \
     README.txt \
     Doxyfile
+
+PACKAGENAME = xlavin00-xmicul08
+
+cleantarget.commands = rm -f $${TARGET};
+cleandoc.commands = rm -rf doc/*;
+cleanpack.commands = rm -f $${PACKAGENAME}.zip
+clean.depends = cleandoc cleantarget
+distclean.depends = cleanpack
+doxygen.commands = doxygen;
+pack.commands = mkdir -p doc; zip $${PACKAGENAME}.zip doc; zip -9r $${PACKAGENAME}.zip Doxyfile Makefile README.txt *.{qrc,pro,cpp,h,ui,json} src/ examples/;
+QMAKE_EXTRA_TARGETS += clean cleandoc cleantarget cleanpack distclean doxygen pack
