@@ -31,31 +31,32 @@ StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
 
     label = new QGraphicsSimpleTextItem(street->name, (this)); // label
 
-    label->setPos(line().center());
     label->setFont(FontLabel());
+
     SetLabelPosition();
 }
 
 
 void StreetItem::SetLabelPosition()
 {
+
     // get center point of line
     auto center = line().center();
 
     // shift point to top/right (so that it's not directly on the line)
-    QLineF normal = line().normalVector();
-    auto tmp = line().p2() - center;
+    auto normal = line().normalVector();
+    auto shift_to_center = line().p2() - center;
 
-    normal.translate(tmp);
+    normal.translate(shift_to_center);
 
     // calculate length of the beforementioned shift, so that it's far enough
     normal.setLength(LabelDistance());
-    text_center = normal.p2(); // useful later VERIFY
+    auto text_center = normal.p2();
 
     // compute top left corner of text
-    QPointF aligned_rect = CenteredRectToPoint(label->boundingRect(), text_center);
+    auto label_pos = CenteredRectToPoint(label->boundingRect(), text_center);
 
-    label->setPos(aligned_rect);
+    label->setPos(label_pos);
 
     // rotate around its center
     label->setTransformOriginPoint(label->boundingRect().center());
@@ -77,11 +78,6 @@ void StreetItem::SetHighlight(bool highlighted)
 }
 
 
-/**
- * @brief StreetItem::GetStreet Get street if valid
- * @return Street pointer if the street is valid.
- *         Nullptr if the street is a default Street object
- */
 Street * StreetItem::GetStreet()
 {
     if (street->id != Street().id) {
@@ -95,7 +91,14 @@ Street * StreetItem::GetStreet()
 
 void StreetItem::SetStreetTrafficDensity(int value)
 {
-    street->setTrafficDensity(value);
+    if(street)
+    {
+        street->setTrafficDensity(value);
+    }
+    else
+    {
+        qDebug() << "could not set traffic density - nullptr";
+    }
 }
 
 
@@ -103,9 +106,6 @@ void StreetItem::paint( QPainter * painter, const QStyleOptionGraphicsItem * opt
 {
     const float ratio = TrafficDensity(street->trafficDensity());
     label->setFont(FontLabel());
-    // auto aligned_rect = CenteredRectToPoint(label->boundingRect(), text_center);
-
-    // label->setPos(aligned_rect);
 
     SetLabelPosition();
 

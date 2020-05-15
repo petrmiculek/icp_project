@@ -20,10 +20,19 @@ class DataModel : public QObject
 public:
     explicit DataModel(QObject *parent = nullptr);
 
+    /**
+     * @brief LoadData Load map data from files
+     * @return true on success, false on failure
+     */
     bool LoadData();
 
+    /**
+     * @brief DataModel::LoadJSONFile Load JSON File of given structure, based on file name
+     * @param file_name_prefix prefix for file path
+     * @param file_name file name
+     * @return true on success, false on failure
+     */
     bool LoadJSONFile(const QString file_name_prefix, const QString file_name);
-    void Read(const QJsonObject &json);
 
 //private:
     std::vector<Street> streets;

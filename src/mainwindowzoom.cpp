@@ -14,7 +14,7 @@
 #include <QPushButton>
 #include <QResizeEvent>
 
-int MainWindow::zoom_current = 2;
+int MainWindow::zoom_current = 1;
 
 void MainWindow::SceneZoomIn()
 {
@@ -110,6 +110,8 @@ void MainWindow::AddZoomButtons()
 
     QObject::connect(btn_zoom_in, &QPushButton::clicked, this, &MainWindow::ZoomInBtn_clicked);
     QObject::connect(btn_zoom_out, &QPushButton::clicked, this, &MainWindow::ZoomOutBtn_clicked);
+
+    btn_zoom_out->setEnabled(false);
 
     zoom_buttons_exist = true;
 }

@@ -42,11 +42,7 @@ bool DataModel::LoadData()
     return true;
 }
 
-/**
- * @brief DataModel::LoadJSONFile Load JSON File of given structure, based on file name
- * @param file_name
- * @return
- */
+
 bool DataModel::LoadJSONFile(const QString file_name_prefix, const QString file_name)
 {
     QFile file(":/" + file_name_prefix + file_name + ".json");

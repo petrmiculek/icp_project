@@ -19,22 +19,44 @@ public:
     TrafficCircleItem(QPointF center, QString content, QPen color, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent = nullptr);
     TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent = nullptr);
 
+    /**
+     * @brief paint Overridden QGraphicsEllipseItem::paint event
+     * @param painter see QGraphicsEllipseItem::paint
+     * @param option see QGraphicsEllipseItem::paint
+     * @param widget see QGraphicsEllipseItem::paint
+     *
+     * @link https://doc.qt.io/qt-5/qgraphicsellipseitem.html#paint
+     */
     void paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
+    /**
+     * @brief MoveTo Move item to a point (which indicates item's center)
+     * @param center Point that item will be centered to
+     */
     void MoveTo(QPointF center);
 
-    void UpdateEllipseSize();
-
+    /**
+     * @brief CircleDiameter Get item's scaled circle diameter
+     * @return Circle diameter scaled by zoom ratio
+     */
     static qreal CircleDiameter()
     {
         return circle_diameter * scaling_ratio;
     }
 
+    /**
+     * @brief PointCircleSize Get item's scaled dimensions
+     * @return Circle dimensions scaled by zoom ratio
+     */
     static QSizeF PointCircleSize()
     {
         return {CircleDiameter(), CircleDiameter()};
     }
 
+    /**
+     * @brief TextSize Get item's scaled text size
+     * @return Text size scaled by zoom ratio
+     */
     static qreal TextSize()
     {
         return text_size_default * scaling_ratio;

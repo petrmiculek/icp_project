@@ -40,6 +40,7 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
     setBrush(color);
 }
 
+// vehicles
 TrafficCircleItem::TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem *parent) :
     TrafficCircleItem(_vehicle->position(), _vehicle->symbol(), _vehicle->pen, _vehicle, parent)
 
@@ -80,11 +81,3 @@ void TrafficCircleItem::MoveTo(QPointF center)
     // text
     text_space = CenteredSizeToRect(PointCircleSize() * inscribed_square_size_ratio, center);
 }
-
-void TrafficCircleItem::UpdateEllipseSize()
-{
-    prepareGeometryChange();
-    setRect({this->boundingRect().topLeft(), this->PointCircleSize()});
-}
-
-

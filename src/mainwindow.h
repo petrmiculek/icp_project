@@ -93,7 +93,7 @@ private:
     // zoom range is measured in steps
     static constexpr int zoom_min = 1;
     static constexpr int zoom_max = 5;
-    static int zoom_current; // = 2 (on-init)
+    static int zoom_current; // = 1 (on-init)
 
     // size of a zoom step
     static constexpr qreal zoom_scale_factor = 5.0/4;

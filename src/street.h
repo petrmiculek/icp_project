@@ -37,11 +37,19 @@ public:
 
     ~Street(){}
 
+    /**
+     * @brief trafficDensity get street traffic density
+     * @return traffic density value <0; 100>
+     */
     int trafficDensity() const
     {
         return traffic_density;
     }
 
+    /**
+     * @brief setTrafficDensity Set street's traffic density
+     * @param value traffic density in the range <0; 100>
+     */
     void setTrafficDensity(int value)
     {
         assert(value >= 0 && value <= 100);

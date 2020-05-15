@@ -33,17 +33,27 @@ public:
     void SetLabelPosition();
 
     /**
-       UNUSED
-     * @brief StreetItem::SetLineWidth Set line width based on the street's traffic density
-     * @param traffic_density traffic density of the street
+     * @brief Name get street name
+     * @return QString street name
      */
-    // void SetLineWidth(int traffic_density);
-
     QString Name();
+
+    /**
+     * @brief SetHighlight Set flag for street highlight state
+     * @param highlighted flag
+     */
     void SetHighlight(bool highlighted);
 
+    /**
+     * @brief GetStreet Get pointer to street, if the street is valid/initialized
+     * @return Street pointer when the street is valid, nullptr if street is not valid/initialized
+     */
     Street* GetStreet();
 
+    /**
+     * @brief SetStreetTrafficDensity Set traffic density to the street
+     * @param value
+     */
     void SetStreetTrafficDensity(int value);
 
     static constexpr Qt::GlobalColor default_color = Qt::lightGray;
@@ -51,21 +61,37 @@ public:
     static constexpr Qt::GlobalColor default_traffic = Qt::red;
     static constexpr Qt::GlobalColor highlight_traffic = Qt::darkRed;
 
+    /**
+     * @brief FontSize Get scaled font size
+     * @return Font size scaled by zoom ratio
+     */
     qreal FontSize()
     {
         return font_size * scaling_ratio;
     }
+    /**
+     * @brief LineWidth Get scaled line width
+     * @return Line width scaled by zoom ratio
+     */
     qreal LineWidth()
     {
         return line_width * scaling_ratio;
     }
 
+    /**
+     * @brief LabelDistance Get scaled line to label distance
+     * @return distance scaled by zoom ratio
+     */
     qreal LabelDistance()
     {
         auto value = (line_width/2.0 + label_distance) * scaling_ratio;
         return value;
     }
 
+    /**
+     * @brief Scale items by a zoom factor
+     * @param factor zoom factor (>1 -> zooming in, <1 zooming out)
+     */
     static void Scale(qreal factor)
     {
         scaling_ratio *= factor;
@@ -79,10 +105,9 @@ private:
     Street* street;
 
     QGraphicsSimpleTextItem * label;
-    QPointF text_center; // verify that it's needed
 
     static constexpr qreal line_width = 6.0;
-    static constexpr qreal font_size = 9.0;
+    static constexpr qreal font_size = 10.0;
 
     QPen Pen(const QColor& color = default_color);
     qreal TrafficDensity(int traffic);
