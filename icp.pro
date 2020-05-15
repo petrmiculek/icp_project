@@ -54,23 +54,20 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resources.qrc
 
-CONFIG(release, debug|release) {
-    DEFINES += NDEBUG
-}
-
 DISTFILES += \
     README.txt \
     Doxyfile
 
-PACKAGENAME = xlavin00-xmicul08
+MAKEFILE = QMakefile
+TARGET = icp
+
+CONFIG(release, debug|release) {
+    DEFINES += NDEBUG
+}
 
 cleantarget.commands = rm -f $${TARGET};
-cleandoc.commands = rm -rf doc/*;
-cleanpack.commands = rm -f $${PACKAGENAME}.zip
-clean.depends = cleandoc cleantarget
-distclean.depends = cleanpack
-doxygen.commands = doxygen;
-pack.commands = mkdir -p doc; zip $${PACKAGENAME}.zip doc; zip -9r $${PACKAGENAME}.zip Doxyfile Makefile README.txt *.{qrc,pro,cpp,h,ui,json} src/ examples/;
+clean.depends = cleantarget
 run.commands = ./$${TARGET};
-run.depends = all doxygen
-QMAKE_EXTRA_TARGETS += clean cleandoc cleantarget cleanpack distclean doxygen pack run
+QMAKE_EXTRA_TARGETS += clean cleantarget run
+QMAKE_CC = gcc-10.1
+QMAKE_CXX= g++-10.1

@@ -1,3 +1,5 @@
+#include <memory>
+
 #include <QAbstractItemModel>
 #include <QDebug>
 #include <QFile>

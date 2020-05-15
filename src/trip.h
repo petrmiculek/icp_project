@@ -7,6 +7,8 @@
  * Author: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
  */
 
+#include <memory>
+
 #include <QTime>
 
 #include "direction.h"

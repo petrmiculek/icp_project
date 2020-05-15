@@ -7,6 +7,8 @@
  * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
 
+#include <memory>
+
 #include <QGraphicsEllipseItem>
 #include <QPainter>
 
