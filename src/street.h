@@ -1,7 +1,7 @@
 #ifndef STREET_H
 #define STREET_H
 
-/* vehicle.cpp
+/* vehicle.h
  * Project: CPP
  * Description: Street class - coordinates, stops, name
  * (header only)

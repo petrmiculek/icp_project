@@ -1,4 +1,4 @@
-/* streetitem.h
+/* streetitem.cpp
  * Project: CPP
  * Description: StreetItem class - GUI representation of a street
  * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
