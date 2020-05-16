@@ -13,7 +13,7 @@
 
 Vehicle::Vehicle(Street_dir *street_dir, QString line_name, double progress, double speed) :
      trip(nullptr),
-     vehicle_symbol(line_name.back()),
+     vehicle_symbol(line_name.at(line_name.size() - 1)),
      pen(NextColorPen()),
      street(&street_dir->first),
      direction(street_dir->second),
