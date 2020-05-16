@@ -96,6 +96,8 @@ void Trip::updateVehiclesAt(QTime time)
     // updating existing vehicles
     const int msecsElapsed = abs(time.msecsTo(lastTime));
     for (auto& vehicle : vehiclePool) {
+        if (vehicle->isinvalid())
+            continue;
         updateVehiclePosition(vehicle, msecsElapsed);
 
         // we've reached the end of the street
