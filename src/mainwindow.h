@@ -43,6 +43,8 @@ public:
      */
     void HighlightStreetsInTrip(const Trip * const trip);
 
+    void selectionChanged();
+
 private slots:
     void ListSelectionChanged(QModelIndex index);
     void on_toggleTimeBtn_clicked();
@@ -53,7 +55,6 @@ private slots:
     void on_normalBtn_clicked();
     void ZoomInBtn_clicked();
     void ZoomOutBtn_clicked();
-    void selectionChanged();
     void vehicleSelectionChanged(const Trip * trip);
     void on_resetBtn_clicked();
     void TrafficSliderChanged(int value);

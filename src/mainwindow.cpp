@@ -262,7 +262,7 @@ void MainWindow::vehicleSelectionChanged(const Trip *trip)
 
 void MainWindow::ListSelectionChanged(QModelIndex index)
 {
-
+    qDebug() << ui->pttreeView->selectionModel()->selectedIndexes().size();
     // clear all streets' highlight state
     for (auto& scene_street: scene_streets)
     {
