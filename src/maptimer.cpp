@@ -51,7 +51,7 @@ void MapTimer::reset()
 {
     const bool startTimer = internalTimer->isActive();
     internalTimer->stop();
-    setTime = new QTime(0, 0);
+    setTime->setHMS(0, 0, 0);
     emit timeout(*setTime);
     emit reset_signal();
     if (startTimer)
@@ -89,13 +89,12 @@ double MapTimer::getMultiplier() const
 
 void MapTimer::privateTimeout()
 {
-    updateTime(qRound(internalTimer->interval() * timeMultiplier), &setTime);
+    updateTime(qRound(internalTimer->interval() * timeMultiplier));
     emit this->timeout(*setTime);
 }
 
-void MapTimer::updateTime(int addMilliseconds, QTime **time)
+void MapTimer::updateTime(int addMilliseconds)
 {
-    *time = new QTime( (*time)->addMSecs(addMilliseconds) );
-    if (!(*time)->isValid())
-        throw std::logic_error("invalid time");
+    QTime tmp(setTime->addMSecs(addMilliseconds));
+    setTime->setHMS(tmp.hour(), tmp.minute(), tmp.second(), tmp.msec());
 }

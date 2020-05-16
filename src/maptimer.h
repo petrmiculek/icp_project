@@ -132,9 +132,8 @@ private:
     /**
      * @brief Adds to the current time.
      * @param addMilliseconds Milliseconds to be added.
-     * @param time Time to be added to.
      */
-    static void updateTime(int addMilliseconds, QTime **time);
+    void updateTime(int addMilliseconds);
 };
 
 #endif // MAPTIMER_H
