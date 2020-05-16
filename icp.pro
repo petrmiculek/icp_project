@@ -61,13 +61,11 @@ DISTFILES += \
 MAKEFILE = QMakefile
 TARGET = icp
 
-CONFIG(release, debug|release) {
+#CONFIG(release, debug|release) {
     DEFINES += NDEBUG
-}
+#}
 
 cleantarget.commands = rm -f $${TARGET};
 clean.depends = cleantarget
 run.commands = ./$${TARGET};
 QMAKE_EXTRA_TARGETS += clean cleantarget run
-QMAKE_CC = gcc-10.1
-QMAKE_CXX= g++-10.1
