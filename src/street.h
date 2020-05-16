@@ -40,10 +40,10 @@ public:
      */
     Street(int id, int x1, int y1, int x2, int y2, QString name) :
         id(id),
-        point1(new QPointF(x1, y1)),
-        point2(new QPointF(x2, y2)),
+        point1(QPointF(x1, y1)),
+        point2(QPointF(x2, y2)),
         name(name),
-        time_cost(euclid_distance(point1, point2))
+        time_cost(euclid_distance(&point1, &point2))
     {
 
     }
@@ -52,7 +52,7 @@ public:
      */
     Street():id(-1){}
 
-    ~Street(){}
+    ~Street() {}
 
     /**
      * @brief trafficDensity get street traffic density
@@ -79,8 +79,8 @@ public:
      */
     int id; // if not initialized, must not collide with regular street IDs
 
-    QPointF * point1{nullptr}; //!< First point of the street.
-    QPointF * point2{nullptr}; //!< Second point of the street.
+    QPointF point1; //!< First point of the street.
+    QPointF point2; //!< Second point of the street.
 
     /**
      * @brief Street's name

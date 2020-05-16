@@ -13,6 +13,7 @@
 #include <QGraphicsEllipseItem>
 #include <QMainWindow>
 #include <QPushButton>
+#include <QStandardItemModel>
 #include <QTreeView>
 
 #include "datamodel.h"
@@ -79,6 +80,7 @@ private:
     QTimer *incrementTimer; // automatically modifies time multiplicator with the user holding the button down
     QTimer *incrementWaiterTimer; // waits before starts automatically incrementing
 
+    QStandardItemModel *treeViewModel;
     DataModel * data;
     QGraphicsScene * scene;
     std::vector<StreetItem*> scene_streets;

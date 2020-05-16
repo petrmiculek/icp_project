@@ -9,7 +9,6 @@
 #include <QHeaderView>
 #include <QPen>
 #include <QStandardItem>
-#include <QStandardItemModel>
 #include <QTextStream>
 #include <QWheelEvent>
 
@@ -46,15 +45,15 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
 
     // initialize lines in tree view
-    auto* model = new QStandardItemModel();
+    treeViewModel = new QStandardItemModel();
     for (const auto& trip : data->trips) {
         auto* lineItem = new QStandardItem(trip.name());
         for (const auto& street_dir : trip.route())
             for (const auto& stop : street_dir.first.stops)
                 lineItem->appendRow(new QStandardItem(stop.name));
-        model->appendRow(lineItem);
+        treeViewModel->appendRow(lineItem);
     }
-    ui->pttreeView->setModel(model);
+    ui->pttreeView->setModel(treeViewModel);
 
     // Selecting streets
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
@@ -82,6 +81,7 @@ MainWindow::~MainWindow()
     delete data;
     delete mapTimer;
     delete scene;
+    delete treeViewModel;
 }
 
 void MainWindow::InitScene(DataModel* data)

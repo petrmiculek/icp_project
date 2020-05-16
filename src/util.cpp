@@ -44,11 +44,11 @@ QPointF CenteredRectToPoint(QRectF rect, QPointF point)
 
 QPointF PositionOnLine(Street street, double street_percentage)
 {
-    auto x_diff = street.point2->x() - street.point1->x();
-    auto y_diff = street.point2->y() - street.point1->y();
+    auto x_diff = street.point2.x() - street.point1.x();
+    auto y_diff = street.point2.y() - street.point1.y();
 
-    auto x = street.point1->x() + x_diff * street_percentage / 100.0;
-    auto y = street.point1->y() + y_diff * street_percentage / 100.0;
+    auto x = street.point1.x() + x_diff * street_percentage / 100.0;
+    auto y = street.point1.y() + y_diff * street_percentage / 100.0;
 
     return QPointF(x, y);
 }

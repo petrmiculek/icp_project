@@ -14,7 +14,7 @@
 qreal StreetItem::scaling_ratio = 1.0;
 
 StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
-    QGraphicsLineItem({*_street->point1, *_street->point2},parent) // line
+    QGraphicsLineItem({_street->point1, _street->point2},parent) // line
 {
     street = _street;
 
