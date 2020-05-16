@@ -21,19 +21,36 @@
 
 using Street_dir = std::pair<Street&, Direction>;
 
+/**
+ * @brief The Street class.
+ * @details Street represents a part of Vehicle's route.
+ * @see Vehicle
+ */
 class Street
 {
 public:
-    Street(int _id, int _x1, int _y1, int _x2, int _y2, QString _name) :
-        id(_id),
-        point1(new QPointF(_x1, _y1)),
-        point2(new QPointF(_x2, _y2)),
-        name(_name)
+    /**
+     * @brief Constructs Street class.
+     * @param id Street's id.
+     * @param x1 First point of the street on the x axis.
+     * @param y1 First point of the street on the y axis.
+     * @param x2 Second point of the street on the x axis.
+     * @param y2 Second point of the street on the y axis.
+     * @param Street's name.
+     */
+    Street(int id, int x1, int y1, int x2, int y2, QString name) :
+        id(id),
+        point1(new QPointF(x1, y1)),
+        point2(new QPointF(x2, y2)),
+        name(name),
+        time_cost(euclid_distance(point1, point2))
     {
-        time_cost = euclid_distance(point1, point2);
-    }
 
-    Street(){}
+    }
+    /**
+     * @brief Construct's Street class.
+     */
+    Street():id(-1){}
 
     ~Street(){}
 
@@ -57,18 +74,35 @@ public:
         traffic_density = value;
     }
 
-    int id{-1}; // if not initialized, must not collide with regular street IDs
+    /**
+     * @brief Street's ID.
+     */
+    int id; // if not initialized, must not collide with regular street IDs
 
-    QPointF * point1{nullptr};
-    QPointF * point2{nullptr};
+    QPointF * point1{nullptr}; //!< First point of the street.
+    QPointF * point2{nullptr}; //!< Second point of the street.
 
-    QString name{};
+    /**
+     * @brief Street's name
+     */
+    QString name;
 
-    std::vector<Stop> stops{};
+    /**
+     * @brief List of stops on the street.
+     */
+    std::vector<Stop> stops;
 
+    /**
+     * @brief Time cost.
+     * @details Time cost is computed as an euclid distance between starting and ending point of the street.
+     * @details euclid_distance
+     */
     double time_cost;
 
 private:
+    /**
+     * @brief Traffic density.
+     */
     int traffic_density{0}; // 0 = normal traffic
 };
 
