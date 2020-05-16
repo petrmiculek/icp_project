@@ -37,16 +37,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void InitScene(DataModel* data);
-
-    void AddZoomButtons();
-    void SceneZoomIn();
-    void SceneZoomOut();
-
-public slots:
-    void ListSelectionChanged(QModelIndex index);
+    /**
+     * @brief HighlightStreetsInTrip Highlight all streets in currently selected trip
+     * @param trip
+     */
+    void HighlightStreetsInTrip(const Trip * const trip);
 
 private slots:
+    void ListSelectionChanged(QModelIndex index);
     void on_toggleTimeBtn_clicked();
     void on_fasterBtn_pressed();
     void on_fasterBtn_released();
@@ -56,11 +54,34 @@ private slots:
     void ZoomInBtn_clicked();
     void ZoomOutBtn_clicked();
     void selectionChanged();
+    void vehicleSelectionChanged(const Trip * trip);
     void on_resetBtn_clicked();
     void TrafficSliderChanged(int value);
     void on_resettrafficBtn_clicked();
 
 private:
+
+    /**
+     * @brief InitScene initialize scene with
+     * @param data
+     */
+    void InitScene(DataModel* data);
+
+    /**
+    * @brief AddZoomButtons Add zoom buttons to the window
+    */
+    void AddZoomButtons();
+
+    /**
+     * @brief SceneZoomIn Zoom in map view
+     */
+    void SceneZoomIn();
+
+    /**
+     * @brief SceneZoomOut Zoom out map view
+     */
+    void SceneZoomOut();
+
     void initializeTimers();
     void updateTime();
     void incrementMultiplier();

@@ -14,8 +14,12 @@
 
 #include "vehicle.h"
 
-class TrafficCircleItem : public QGraphicsEllipseItem
+class TrafficCircleItem : public QObject, public QGraphicsEllipseItem
 {
+    Q_OBJECT
+signals:
+    void vehicleClicked(const Trip * trip);
+
 public:
     TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent = nullptr);
     TrafficCircleItem(QPointF center, QString content, QPen color, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent = nullptr);
@@ -64,12 +68,15 @@ public:
         return text_size_default * scaling_ratio;
     }
 
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
     QRectF text_space;
 
     const QPen pen;
     std::shared_ptr<Vehicle> vehicle;
 
     static qreal scaling_ratio;
+
 private:
     QString text;
     static constexpr qreal circle_diameter = 36;
