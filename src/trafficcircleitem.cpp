@@ -88,9 +88,6 @@ void TrafficCircleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if(vehicle != nullptr)
     {
-        // musí být propojeno toto jako signál
-        // HighlightStreetsInTrip(vehicle->trip);
-        qDebug() << vehicle->trip->name();
         emit vehicleClicked(vehicle->trip);
     }
 

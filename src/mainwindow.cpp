@@ -305,16 +305,20 @@ void MainWindow::HighlightStreetsInTrip(const Trip * const trip)
     if(trip == nullptr)
         return;
 
+    // clear all streets' highlight state
+    for (auto& scene_street: scene_streets)
+    {
+        scene_street->SetHighlight(false);
+    }
+
     for (const auto& street_dir : trip->route())
     {
         for (auto* const scene_street: scene_streets)
         {
             const auto* curr_street = scene_street->GetStreet();
-            if(curr_street)
+            if(curr_street && street_dir.first.id == curr_street->id)
             {
-                bool should_highlight = (street_dir.first.id == curr_street->id);
-                scene_street->SetHighlight(should_highlight);
-                if(should_highlight) qDebug() << curr_street->id;
+                scene_street->SetHighlight(true);
             }
         }
     }
