@@ -69,7 +69,7 @@ private:
 
     void redrawVehicles(QTime time);
     void invalidateVehicles();
-    void deleteDrawnVehicles();
+    void freeInvalidVehicles();
 
     Ui::MainWindow *ui;
 

@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    invalidateVehicles();
     delete ui;
     delete data;
     delete mapTimer;
@@ -117,7 +118,7 @@ void MainWindow::InitScene(DataModel* data)
 
 void MainWindow::redrawVehicles(QTime time)
 {
-    deleteDrawnVehicles();
+    freeInvalidVehicles();
 
     // move existing + spawn new
     for (auto& trip : data->trips) {
@@ -154,15 +155,15 @@ void MainWindow::redrawVehicles(QTime time)
 
 void MainWindow::invalidateVehicles()
 {
-    deleteDrawnVehicles();
     for (auto& trip : data->trips) {
         trip.setLastTime(mapTimer->currentTime());
         for (auto& vehicle : trip.vehicles())
             vehicle->invalidate();
     }
+    freeInvalidVehicles();
 }
 
-void MainWindow::deleteDrawnVehicles()
+void MainWindow::freeInvalidVehicles()
 {
     for (size_t i = 0; i < drawnVehicles.size(); i++) {
 
@@ -171,6 +172,7 @@ void MainWindow::deleteDrawnVehicles()
                 && drawnVehicles.at(i)->vehicle->isinvalid())
         {
             scene->removeItem(drawnVehicles.at(i));
+            delete drawnVehicles.at(i);
             drawnVehicles.erase(drawnVehicles.begin() + i);
         }
     }
