@@ -104,7 +104,7 @@ void MainWindow::InitScene(DataModel* data)
         for (const auto& stop: street.stops)
         {
             auto* scene_stop2 = new TrafficCircleItem(
-                        PositionOnLine(street, stop.street_percentage), stop.name.front());
+                        PositionOnLine(street, stop.street_percentage), stop.name.at(0));
             scene->addItem(scene_stop2);
 
         }
@@ -234,8 +234,8 @@ void MainWindow::selectionChanged()
 
     if(selected_streets.size() == 1)
     {
-        text = selected_streets.front()->Name();
-        ui->strttrafficSlider->setValue(selected_streets.front()->GetStreet()->trafficDensity()); // set slider to street's value
+        text = selected_streets.at(0)->Name();
+        ui->strttrafficSlider->setValue(selected_streets.at(0)->GetStreet()->trafficDensity()); // set slider to street's value
 
     }
     else

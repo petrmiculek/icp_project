@@ -24,9 +24,9 @@ Vehicle::Vehicle(Street_dir *street_dir, QString line_name, double progress, dou
 
 }
 
-Vehicle::Vehicle(Trip *trip, QTime spawn_time) : Vehicle(&trip->route().front(),
+Vehicle::Vehicle(Trip *trip, QTime spawn_time) : Vehicle(&trip->route().at(0),
                                         trip->name(),
-                                        trip->StopsPositions().front())
+                                        trip->StopsPositions().at(0))
 {
     pen = NextColorPen(trip->Id());
     this->trip = trip;
