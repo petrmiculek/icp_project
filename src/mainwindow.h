@@ -43,10 +43,11 @@ public:
      */
     void HighlightStreetsInTrip(const Trip * const trip);
 
-    void selectionChanged();
+public slots:
+    void ListSelectionChanged(QModelIndex index);
 
 private slots:
-    void ListSelectionChanged(QModelIndex index);
+    void selectionChanged();
     void on_toggleTimeBtn_clicked();
     void on_fasterBtn_pressed();
     void on_fasterBtn_released();

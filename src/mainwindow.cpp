@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
 
+    ui->pttreeView->window = this;
 
     // Selecting streets
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
@@ -262,7 +263,6 @@ void MainWindow::vehicleSelectionChanged(const Trip *trip)
 
 void MainWindow::ListSelectionChanged(QModelIndex index)
 {
-    qDebug() << ui->pttreeView->selectionModel()->selectedIndexes().size();
     // clear all streets' highlight state
     for (auto& scene_street: scene_streets)
     {

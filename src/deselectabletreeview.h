@@ -9,6 +9,9 @@
  * source:
  * https://stackoverflow.com/a/10826787/10501005
  * original author: Yassir Ennazk
+ *
+ * modified by: Kryštof Lavinger, FIT <xlavin00@stud.fit.vutbr.cz>
+ *              Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
 
 #include <QTreeView>
@@ -21,29 +24,23 @@
 class DeselectableTreeView : public QTreeView
 {
 public:
-    DeselectableTreeView(MainWindow * _window, QWidget *parent) : QTreeView(parent), window(_window) {}
+    DeselectableTreeView(QWidget *parent) : QTreeView(parent) {}
     virtual ~DeselectableTreeView() {}
 
-private:
     MainWindow * window;
 
+private:
     virtual void mousePressEvent(QMouseEvent *event)
     {
         QModelIndex item = indexAt(event->pos());
-        bool selected = selectionModel()->isSelected(indexAt(event->pos()));
+        const bool selected = selectionModel()->isSelected(indexAt(event->pos()));
         QTreeView::mousePressEvent(event);
 
-        if ((item.row() == -1 && item.column() == -1) || selected)
-        {
+        if ((item.row() == -1 && item.column() == -1) || selected) {
             clearSelection();
-            const QModelIndex index;
-
-            auto prev = selectionModel()->selectedIndexes();
-
-            selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-            //selectionModel()->select(item, QItemSelectionModel::Deselect);
+            selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::Select);
         }
-        window->selectionChanged();
+        window->ListSelectionChanged(QModelIndex()); // deselects trip (empty selection)
     }
 };
 #endif // DESELECTABLETREEVIEW_H
