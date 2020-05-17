@@ -149,7 +149,7 @@ void MainWindow::UpdateVehicles(QTime time)
 
 void MainWindow::InvalidateAllVehicles()
 {
-    for (auto& trip : map_data->trips) {
+    for (auto& trip : map_data->trips) { // use drawnVehicles instead
         trip.setLastTime(mapTimer->currentTime());
         for (auto& vehicle : trip.vehicles())
             vehicle->invalidate();
@@ -159,8 +159,7 @@ void MainWindow::InvalidateAllVehicles()
 
 void MainWindow::RemoveInvalidVehicles()
 {
-    for (size_t i = 0; i < drawnVehicles.size(); i++) {
-
+    for (int i = drawnVehicles.size() - 1; i >= 0; i--) {
         // only delete invalid
         if(drawnVehicles.at(i)->vehicle != nullptr
                 && drawnVehicles.at(i)->vehicle->isinvalid())
@@ -270,7 +269,6 @@ void MainWindow::VehicleSelectionChanged(const Trip *trip)
 {
     HighlightStreetsInTrip(trip);
 }
-
 
 void MainWindow::ListSelectionChanged(QModelIndex index)
 {
