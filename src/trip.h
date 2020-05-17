@@ -122,7 +122,7 @@ private:
 
     /**
      * @brief Last time a vehicle pool was updated.
-     * @note Last time has to be updated manually by a user.
+     * @remarks Last time has to be updated manually by a user.
      * @see Trip::setLastTime
      */
     QTime lastTime;
@@ -152,10 +152,10 @@ private:
      * @brief Updates vehicle's position
      * @param v Vehicle's position to be updated.
      * @param elapsedMSecs Time traveled by a vehicle.
-     * @remarks If a vehicle reaches end of the street, it is passed onto the next one (no progress is discarded).
-     * @remarks If a vehicle reaches a bus stop, elapsed time is used to wait. No progress is added.
-     * @remarks When a vehicle reaches its final stop and has no wait time left, it is marked as invalid.
-     * @note Elapsed time is converted to street's progress.
+     * @note If a vehicle reaches end of the street, it is passed onto the next one (no progress is discarded).
+     * If a vehicle reaches a bus stop, elapsed time is used to wait. No progress is added.
+     * When a vehicle reaches its final stop and has no wait time left, it is marked as invalid.
+     * @remarks Elapsed time is converted to street's progress.
      * @see Vehicle::fromMSecsToProgress
      * @see Trip::advanceVehicleRoute
      */
