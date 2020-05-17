@@ -132,7 +132,7 @@ void MainWindow::CreateVehiclesInTrip(Trip& trip, QTime time)
 
 void MainWindow::UpdateVehicles(QTime time)
 {
-    FreeInvalidVehicles();
+    RemoveInvalidVehicles();
 
     // move existing + spawn new
     for (auto& trip : map_data->trips) {
@@ -165,10 +165,10 @@ void MainWindow::InvalidateAllVehicles()
         for (auto& vehicle : trip.vehicles())
             vehicle->invalidate();
     }
-    FreeInvalidVehicles();
+    RemoveInvalidVehicles();
 }
 
-void MainWindow::FreeInvalidVehicles()
+void MainWindow::RemoveInvalidVehicles()
 {
     for (size_t i = 0; i < drawnVehicles.size(); i++) {
 
