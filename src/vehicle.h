@@ -84,7 +84,7 @@ public:
      * @remark User manipulating this value will result in undefined behaviour.
      * @see Trip::updateVehiclePosition
      */
-    double restMSecs; // milliseconds to rest (i.e. on a bus stop)
+    double restMSecs{}; // milliseconds to rest (i.e. on a bus stop)
 
     /**
      * @brief Invalidates a vehicle (does not destroy it).
@@ -149,7 +149,7 @@ private:
      * @param speed Speed of the vehicle.
      * @pre \p street_dir must be a valid instance of Street_dir.
      */
-    Vehicle(Street_dir *street_dir, QString line_name, double progress = 0.0, double speed = speed_default);
+    Vehicle(Street_dir *street_dir, const QString& line_name, double progress = 0.0, double speed = speed_default);
 
     /**
      * @brief Spawn time of a vehicle.

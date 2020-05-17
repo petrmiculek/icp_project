@@ -147,7 +147,7 @@ private:
      * @param v Vehicle's position to be updated.
      * @see Trip::updateVehiclePosition
      */
-    void advanceVehicleRoute(std::shared_ptr<Vehicle> v);
+    void advanceVehicleRoute(const std::shared_ptr<Vehicle>& v);
     /**
      * @brief Updates vehicle's position
      * @param v Vehicle's position to be updated.
@@ -159,7 +159,7 @@ private:
      * @see Vehicle::fromMSecsToProgress
      * @see Trip::advanceVehicleRoute
      */
-    void updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs);
+    void updateVehiclePosition(const std::shared_ptr<Vehicle>& v, double elapsedMSecs);
     /**
      * @brief Initializes a vector of stops' positions on the current line.
      * @details Saves stops' positions into a vector as a cache. Takes into account the direction from which a vehicle approaches.

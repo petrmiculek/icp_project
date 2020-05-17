@@ -24,8 +24,8 @@ signals:
 
 public:
     TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent = nullptr);
-    TrafficCircleItem(QPointF center, QString content, QPen color, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent = nullptr);
-    TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent = nullptr);
+    TrafficCircleItem(QPointF center, QString content, QPen _pen, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent = nullptr);
+    TrafficCircleItem(const std::shared_ptr<Vehicle>& _vehicle, QGraphicsItem * parent = nullptr);
 
     /**
      * @brief paint Overridden QGraphicsEllipseItem::paint event

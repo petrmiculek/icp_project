@@ -7,7 +7,7 @@
 
 #include <cmath>
 #include <QDebug>
-
+#include <utility> 
 #include "maptimer.h"
 #include "util.h"
 
@@ -25,13 +25,13 @@ Trip::Trip(int id) :
 
 Trip::Trip(int id, vector<Street_dir> route) : Trip (id)
 {
-    lineRoute = route;
+    lineRoute = std::move(route);
     initStopsPositions();
 }
 
-Trip::Trip(int id, std::vector<Street_dir> route, std::vector<QTime> departures) : Trip(id, route)
+Trip::Trip(int id, std::vector<Street_dir> route, std::vector<QTime> departures) : Trip(id, std::move(route))
 {
-    this->departures = departures;
+    this->departures = std::move(departures);
     initStopsPositions();
 }
 
@@ -70,7 +70,7 @@ void Trip::setLastTime(QTime time)
     lastTime = QTime(time);
 }
 
-void Trip::advanceVehicleRoute(std::shared_ptr<Vehicle> v)
+void Trip::advanceVehicleRoute(const std::shared_ptr<Vehicle>& v)
 {
     v->restMSecs = RandomInRange(wait_min, wait_max);
     v->internal_street_index++;
@@ -90,7 +90,7 @@ void Trip::advanceVehicleRoute(std::shared_ptr<Vehicle> v)
 
 void Trip::updateVehiclesAt(QTime time)
 {
-    if (vehiclePool.size() == 0)
+    if (vehiclePool.empty())
         return;
 
     // updating existing vehicles
@@ -113,7 +113,7 @@ void Trip::updateVehiclesAt(QTime time)
     }
 }
 
-void Trip::updateVehiclePosition(std::shared_ptr<Vehicle> v, double elapsedMSecs)
+void Trip::updateVehiclePosition(const std::shared_ptr<Vehicle>& v, double elapsedMSecs)
 {
     if (elapsedMSecs == 0)
         return;
@@ -167,7 +167,7 @@ void Trip::initStopsPositions()
 {
     stopsPositions.clear();
     for (size_t i = 0; i < lineRoute.size(); i++) {
-        if (lineRoute.at(i).first.stops.size() == 0) {
+        if (lineRoute.at(i).first.stops.empty()) {
             // fill with placeholders since this street has no bus stops
             stopsPositions.push_back(-1);
             continue;
