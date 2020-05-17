@@ -65,13 +65,20 @@ QRectF CenteredSizeToRect(QSizeF dimensions, QPointF point);
 QPointF PositionOnLine(Street street, double street_percentage);
 
 /**
- * @brief Returns a color from the internal color list at the given index.
+ * @brief NextColor Get color from a static list (at the given index, or a random one).
  * @remarks If the index is -1, returns the next color from the list.
  * @param index Index to return the color from.
  * @return color from the list at given index
  */
 QColor NextColor(int index = -1); // index = -1  --> select random
 
+
+/**
+ * @brief NextColorPen Get pen with a color from a static list (at the given index, or a random one).
+ * @param index Index to return the color from.
+ * @remarks If the index is -1, returns the next color from the list.
+ * @return color from the list at given index
+ */
 QPen NextColorPen(int index = -1); // index = -1  --> select random
 
 /**

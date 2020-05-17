@@ -56,6 +56,7 @@ public:
      */
     void SetStreetTrafficDensity(int value);
 
+    // color scheme for streets
     static constexpr Qt::GlobalColor default_color = Qt::lightGray;
     static constexpr Qt::GlobalColor highlight_color = Qt::darkGray;
     static constexpr Qt::GlobalColor default_traffic = Qt::red;
