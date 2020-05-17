@@ -143,17 +143,6 @@ void MainWindow::UpdateVehicles(QTime time)
         trip.setLastTime(time);
     }
 
-    // propagate changes to gui items
-    for (auto* item : drawnVehicles) {
-
-        if (item->vehicle == nullptr || item->vehicle->isinvalid())
-        {
-            continue;
-        }
-
-        item->MoveTo(item->vehicle->position());
-    }
-
     scene->update();
 }
 
