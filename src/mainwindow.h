@@ -38,114 +38,115 @@ public:
     ~MainWindow();
 
     /**
-     * @brief HighlightStreetsInTrip Highlight all streets in currently selected trip
-     * @param trip
+     * @brief Highlights all streets in currently selected trip.
+     * @param trip Currently selected trip.
      */
     void HighlightStreetsInTrip(const Trip * const trip);
 
 public slots:
     /**
-     * @brief ListSelectionChanged Handle change of selection on list of lines
-     * @param index which item was selected
+     * @brief Handles change of selection on list of lines.
+     * @param index Selected item.
      */
     void ListSelectionChanged(QModelIndex index);
 
 private slots:
 
     /**
-     * @brief vehicleSelectionChanged Handle change to vehicle selection
-     * @param trip trip of the selected vehicle
+     * @brief Handles vehicle's selection.
+     * @param trip Trip the selected Vehicle belongs to.
      */
     void VehicleSelectionChanged(const Trip * trip);
 
     /**
-     * @brief TrafficSliderChanged Handle change of traffic density slider value
-     * @param value new slider value
+     * @brief Handles change of traffic density slider value.
+     * @param value New slider value.
      */
     void TrafficSliderChanged(int value);
 
     /**
-     * @brief SceneSelectionChanged Handle change of selection in the GraphicsScene
+     * @brief Handles change of selection in the GraphicsScene.
      */
     void SceneSelectionChanged();
 
     /**
-     * @brief on_toggleTimeBtn_clicked Handle "Start/Stop time" button click
+     * @brief Handles "Start/Stop time" button click.
      */
     void on_toggleTimeBtn_clicked();
 
     /**
-     * @brief on_fasterBtn_pressed Handle "Make time go faster" button press
-     * @note using pressed+released instead of clicked <= holding the button keeps increasing the time speed
+     * @brief Handles click on "faster speed" button.
+     * @remarks Increases map time speed.
+     * @note If the user keeps holding down the button, the timer speed is going to decrease in increasingly bigger chunks.
      */
     void on_fasterBtn_pressed();
 
     /**
-     * @brief on_fasterBtn_released Handle "Make time go faster" button release
-     *
-     * @note using pressed+released instead of clicked <= holding the button keeps increasing the time speed
+     * @brief Handles click on "faster speed" button.
+     * @details Resets all relevant timers that implement auto-incrementing.
      */
     void on_fasterBtn_released();
 
     /**
-     * @brief on_slowerBtn_pressed Handle "Make time go faster" button press
-     * @note using pressed+released instead of clicked <= holding the button keeps decreasing the time speed
+     * @brief Handles click on "faster speed" button.
+     * @remarks Decreases map time speed.
+     * @note If the user keeps holding down the button, the timer speed is going to decrease in increasingly bigger chunks.
      */
     void on_slowerBtn_pressed();
 
     /**
-     * @brief on_fasterBtn_released Handle "Make time go faster" button release
-     *
-     * @note using pressed+released instead of clicked <= holding the button keeps decreasing the time speed
+     * @brief Handles click on "slower speed" button.
+     * @details Resets all relevant timers that implement auto-incrementing.
      */
     void on_slowerBtn_released();
 
     /**
-     * @brief on_normalBtn_clicked Handle "Make time go default speed" button click
+     * @brief Handles click on "normal speed" button.
+     * @remarks Resets time speed.
      */
     void on_normalBtn_clicked();
 
     /**
-     * @brief ZoomInBtn_clicked Handle Zoom-in button click
+     * @brief Handles Zoom-in button click.
      */
     void ZoomInBtn_clicked();
 
     /**
-     * @brief ZoomOutBtn_clicked Handle Zoom-out button click
+     * @brief Handles Zoom-out button click.
      */
     void ZoomOutBtn_clicked();
 
     /**
-     * @brief on_resetBtn_clicked Handle Reset button click
-     * @note button resets time and removes vehicles
+     * @brief Handles Reset button click.
+     * @remarks Button resets time and removes vehicles.
      */
     void on_resetBtn_clicked();
 
     /**
-     * @brief on_resettrafficBtn_clicked Reset all traffic density to zero
+     * @brief Resets all traffic density to zero.
      */
     void on_resettrafficBtn_clicked();
 
 private:
 
     /**
-     * @brief InitializeScene Initialize scene with map data
-     * @param data map data
+     * @brief Initializes scene with map data.
+     * @param data Map data.
      */
     void InitializeScene(DataModel* map_data);
 
     /**
-    * @brief AddZoomButtons Add zoom buttons to the window
+    * @brief Adds zoom buttons to the window.
     */
     void AddZoomButtons();
 
     /**
-     * @brief SceneZoomIn Zoom in map view
+     * @brief Zooms in the map view
      */
     void SceneZoomIn();
 
     /**
-     * @brief SceneZoomOut Zoom out map view
+     * @brief Zooms out the map view.
      */
     void SceneZoomOut();
 
@@ -156,47 +157,80 @@ private:
     void multiplyMultiplicator();
 
     /**
-     * @brief CreateVehiclesInTrip Create new vehicles for
-     * @param trip Trip for which vehicles will be created
-     * @param time Time at which vehicles are being spawned (current time)
+     * @brief Creates new vehicles
+     * @param trip Trip for which vehicles will be created.
+     * @param time Time at which vehicles are being spawned (current time).
      */
     void CreateVehiclesInTrip(Trip& trip, QTime time);
 
     /**
-     * @brief UpdateVehicles Update vehicle positions and spawn new
-     * @param time
+     * @brief Updates vehicles' positions and spawns new ones.
+     * @param time Spawn vehicles up to this time.
      */
     void UpdateVehicles(QTime time);
 
     /**
-     * @brief InvalidateAllVehicles Make all vehicles invalid => ready to despawn
+     * @brief Marks all vehicles as invalid and releases them from memory.
+     * @remarks Used mainly when the timer (and therefore the scene) is reset.
      */
     void InvalidateAllVehicles();
 
     /**
-     * @brief FreeInvalidVehicles Remove invalid vehicles from the scene and correctly delete their objects
+     * @brief Removes invalid vehicles from the graphics scene and frees them from memory.
      */
     void RemoveInvalidVehicles();
 
     // GUI Elements
     Ui::MainWindow *ui;
-    QPushButton* btn_zoom_in{};
-    QPushButton* btn_zoom_out{};
+    QPushButton* btn_zoom_in;
+    QPushButton* btn_zoom_out;
 
     // Time-related elements
     MapTimer *mapTimer;
-    double currentIncrement{}; // multiplier increment
-    QTimer *incrementsModifierTimer{}; // when timeout is signalled, enlarges the multiplier increment value
-    QTimer *incrementTimer{}; // automatically modifies time multiplicator with the user holding the button down
-    QTimer *incrementWaiterTimer{}; // waits before starts automatically incrementing
+    /**
+      * @brief Map time multiplier.
+      */
+    double currentIncrement;
+    /**
+      * @brief When timeout is signalled, enlarges the value auto-incremented to the time multiplier.
+      * @remarks Timer is stopped and reset when the user releases the time modifying button.
+      * @see MainWindow:currentIncrement
+      */
+    QTimer *incrementsModifierTimer;
+    /**
+      * @brief Auto-increments the time multiplicator as long as the user holds a time modifying button down.
+      * @remarks Timer is stopped and reset when the user releases the time modifying button.
+      * @see MainWindow:currentIncrement
+      */
+    QTimer *incrementTimer;
+    /**
+      * @brief When timeout is signalled, starts auto-incrementing the time multiplier.
+      * @remarks Timer is stopped and reset when the user releases the time modifying button.
+      * @note This timer ensures that the auto-incrementing doesn't start straightaway, therefore is unintentional.
+      * @see MainWindow:currentIncrement
+      */
+    QTimer *incrementWaiterTimer;
 
     // Data for GUI elements
     DataModel * map_data;
-    QStandardItemModel *treeViewModel{};
-    QGraphicsScene * scene{}; // all map-elements displayed (streets, stops, vehicles)
+    /**
+     * @brief Pointer to a TreeView's model.
+     * @remarks We keep this pointer in order to be able to free the model from the memory later on.
+     */
+    QStandardItemModel *treeViewModel;
+    /**
+     * @brief Graphics scene for all the vehicles, streets and stops.
+     */
+    QGraphicsScene * scene; // all map-elements displayed (streets, stops, vehicles)
 
     // Elements displayed in the scene
+    /**
+     * @brief Drawn streets.
+     */
     std::vector<StreetItem*> scene_streets; // all streets displayed
+    /**
+     * @brief Drawn vehicles.
+     */
     std::vector<TrafficCircleItem*> drawnVehicles; // all vehicles displayed
 
     // temporary elements
