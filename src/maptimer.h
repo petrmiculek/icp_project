@@ -26,7 +26,7 @@ public:
      * @param s second
      * @param multiplier Time multiplier for manipulating time speed.
      * @param parent QObject parent.
-     * @note Uses 24-hour format.
+     * @remarks Uses 24-hour format.
      */
     explicit MapTimer(int h = 0, int m = 0, int s = 0, double multiplier = 1, QObject *parent = nullptr);
     ~MapTimer();
