@@ -4,6 +4,7 @@
  * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
 #include <utility>
+#include <memory>
 #include "util.h"
 #include "trafficcircleitem.h"
 #include "trip.h"
