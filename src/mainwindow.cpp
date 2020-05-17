@@ -111,10 +111,6 @@ void MainWindow::InitScene(DataModel* data)
         treeViewModel->appendRow(lineItem);
     }
     ui->pttreeView->setModel(treeViewModel);
-
-    // todo comment
-    connect(scene, &QGraphicsScene::selectionChanged,
-            this, &MainWindow::selectionChanged);
 }
 
 
@@ -216,7 +212,9 @@ void MainWindow::selectionChanged()
     selected_streets.clear();
     selected_street = NONE_SELECTED;
 
-    // only handle streets
+    int vehicles_selected_new = 0;
+
+    // separate selected streets and vehicles
     for(const auto& item: items)
     {
         auto line = dynamic_cast<StreetItem*>(item);
@@ -224,7 +222,28 @@ void MainWindow::selectionChanged()
         {
             selected_streets.push_back(line);
         }
+
+        auto vehicle = dynamic_cast<TrafficCircleItem*>(item);
+        if (vehicle != nullptr)
+        {
+            vehicles_selected_new++;
+        }
     }
+
+    // if a line was highlighted through clicking on a vehicle
+    // and no vehicle is highlighted anymore
+    // remove the highlight
+    if(vehicles_selected > 0
+            && vehicles_selected_new == 0)
+    {
+        // de-highlight all
+        for (auto& scene_street: scene_streets)
+        {
+            scene_street->SetHighlight(false);
+        }
+    }
+
+    vehicles_selected = vehicles_selected_new;
 
     // no street is selected -> disable setting traffic density
     if (selected_streets.empty())
@@ -236,6 +255,7 @@ void MainWindow::selectionChanged()
         return;
     }
 
+    // street selection is not empty => enable setting traffic density
     ui->strttrafficSlider->setEnabled(true);
     ui->strttrafficLbl->setEnabled(true);
 

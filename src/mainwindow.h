@@ -114,6 +114,8 @@ private:
     std::vector<StreetItem*> selected_streets;
     int selected_street;
 
+    int vehicles_selected{0};
+
 
     // zoom range is measured in steps
     static constexpr int zoom_min = 1;
