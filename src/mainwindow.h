@@ -180,20 +180,20 @@ private:
 
     // GUI Elements
     Ui::MainWindow *ui;
-    QPushButton* btn_zoom_in;
-    QPushButton* btn_zoom_out;
+    QPushButton* btn_zoom_in{};
+    QPushButton* btn_zoom_out{};
 
     // Time-related elements
     MapTimer *mapTimer;
-    double currentIncrement; // multiplier increment
-    QTimer *incrementsModifierTimer; // when timeout is signalled, enlarges the multiplier increment value
-    QTimer *incrementTimer; // automatically modifies time multiplicator with the user holding the button down
-    QTimer *incrementWaiterTimer; // waits before starts automatically incrementing
+    double currentIncrement{}; // multiplier increment
+    QTimer *incrementsModifierTimer{}; // when timeout is signalled, enlarges the multiplier increment value
+    QTimer *incrementTimer{}; // automatically modifies time multiplicator with the user holding the button down
+    QTimer *incrementWaiterTimer{}; // waits before starts automatically incrementing
 
     // Data for GUI elements
     DataModel * map_data;
-    QStandardItemModel *treeViewModel;
-    QGraphicsScene * scene; // all map-elements displayed (streets, stops, vehicles)
+    QStandardItemModel *treeViewModel{};
+    QGraphicsScene * scene{}; // all map-elements displayed (streets, stops, vehicles)
 
     // Elements displayed in the scene
     std::vector<StreetItem*> scene_streets; // all streets displayed

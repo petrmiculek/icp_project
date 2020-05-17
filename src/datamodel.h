@@ -32,7 +32,7 @@ public:
      * @param file_name file name
      * @return true on success, false on failure
      */
-    bool LoadJSONFile(const QString file_name_prefix, const QString file_name);
+    bool LoadJSONFile(const QString& file_name_prefix, const QString& file_name);
 
     std::vector<Street> streets;
     std::vector<Trip> trips;

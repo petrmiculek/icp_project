@@ -3,6 +3,7 @@
  * Description: GUI representation of a stop or a vehicle
  * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
+#include <utility>
 #include "util.h"
 #include "trafficcircleitem.h"
 #include "trip.h"
@@ -11,7 +12,7 @@ qreal TrafficCircleItem::scaling_ratio = 1.0;
 
 // stops
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsItem * parent) :
-    TrafficCircleItem(center, content, NextColorPen(), nullptr, parent)
+    TrafficCircleItem(center, std::move(content), NextColorPen(), nullptr, parent)
 {
     // nothing
 }
@@ -19,9 +20,9 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QGraphicsI
 // vehicles
 TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen, std::shared_ptr<Vehicle> _vehicle, QGraphicsItem * parent) :
     QGraphicsEllipseItem(parent),
-    pen(_pen),
-    vehicle(_vehicle),
-    text(content)
+    pen(std::move(std::move(_pen))),
+    vehicle(std::move(_vehicle)),
+    text(std::move(content))
 {
     MoveTo(center);
 
@@ -43,7 +44,7 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
 }
 
 // vehicles
-TrafficCircleItem::TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphicsItem *parent) :
+TrafficCircleItem::TrafficCircleItem(const std::shared_ptr<Vehicle>& _vehicle, QGraphicsItem *parent) :
     TrafficCircleItem(_vehicle->position(), _vehicle->symbol(), _vehicle->pen, _vehicle, parent)
 
 {

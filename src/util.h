@@ -62,7 +62,7 @@ QRectF CenteredSizeToRect(QSizeF dimensions, QPointF point);
  * @param street_percentage position of element within the street
  * @return QPointF element position as coordinates
  */
-QPointF PositionOnLine(Street street, double street_percentage);
+QPointF PositionOnLine(const Street& street, double street_percentage);
 
 /**
  * @brief NextColor Get color from a static list (at the given index, or a random one).
@@ -90,7 +90,7 @@ QPen NextColorPen(int index = -1); // index = -1  --> select random
  * @pre \p c1 and \p c2 must be valid colors.
  * @pre \p ratio must be in range [0,1].
  */
-QColor MixColors(QColor c1, QColor c2, float ratio);
+QColor MixColors(const QColor& c1, const QColor& c2, float ratio);
 
 /**
  * @brief Converts given string to camel case. Spaces are preserved.

@@ -33,9 +33,9 @@ DataModel::DataModel(QObject *parent) : QObject(parent)
 bool DataModel::LoadData()
 {
     static const QString files_prefix = "examples/";
-    static const QString files[] = { "streets", "stops", "trips" };
+    static const std::vector<QString> files = { "streets", "stops", "trips" };
 
-    for (QString file : files)
+    for (const QString& file : files)
         if (!LoadJSONFile(files_prefix, file))
             return false;
 
@@ -43,7 +43,7 @@ bool DataModel::LoadData()
 }
 
 
-bool DataModel::LoadJSONFile(const QString file_name_prefix, const QString file_name)
+bool DataModel::LoadJSONFile(const QString& file_name_prefix, const QString& file_name)
 {
     QFile file(":/" + file_name_prefix + file_name + ".json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -86,8 +86,8 @@ bool DataModel::LoadJSONFile(const QString file_name_prefix, const QString file_
         {
             QJsonArray stops_json = json["stops"].toArray();
 
-            for (int i = 0; i < stops_json.size(); ++i) {
-                QJsonObject stop = stops_json[i].toObject();
+            for (auto && i : stops_json) {
+                QJsonObject stop = i.toObject();
 
                 unsigned int street_id = stop["street_id"].toInt();
                 if(street_id < streets.size()){
@@ -121,9 +121,9 @@ bool DataModel::LoadJSONFile(const QString file_name_prefix, const QString file_
         {
             QJsonArray stops_json = json["trips"].toArray();
 
-            for (int i = 0; i < stops_json.size(); ++i)
+            for (auto && i : stops_json)
             {
-                QJsonObject trip_json = stops_json[i].toObject();
+                QJsonObject trip_json = i.toObject();
 
                 unsigned int trip_id = trip_json["trip_id"].toInt();
 

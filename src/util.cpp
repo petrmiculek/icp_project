@@ -42,7 +42,7 @@ QPointF CenteredRectToPoint(QRectF rect, QPointF point)
 }
 
 
-QPointF PositionOnLine(Street street, double street_percentage)
+QPointF PositionOnLine(const Street& street, double street_percentage)
 {
     auto x_diff = street.point2.x() - street.point1.x();
     auto y_diff = street.point2.y() - street.point1.y();
@@ -63,14 +63,14 @@ QPen NextColorPen(int index) // index = -1  --> select random
 
 }
 
-QColor MixColors(QColor c1, QColor c2, float ratio)
+QColor MixColors(const QColor& c1, const QColor& c2, float ratio)
 {
     if (ratio < 0 || ratio > 1)
         throw std::out_of_range("wrong color ratio");
     return QColor(
-                c1.red() * (1 - ratio) + c2.red() * ratio,
-                c1.green() * (1 - ratio) + c2.green() * ratio,
-                c1.blue() * (1 - ratio) + c2.blue() * ratio
+                static_cast<int>(c1.red() * (1 - ratio) + c2.red() * ratio),
+                static_cast<int>(c1.green() * (1 - ratio) + c2.green() * ratio),
+                static_cast<int>(c1.blue() * (1 - ratio) + c2.blue() * ratio)
                 );
 }
 
@@ -98,20 +98,20 @@ QColor NextColor(int index)
 
     if(index == -1)
     {
+        // return random
         return pens.at(static_index++ % pens.size());
     }
-    else
+
+    if (index < 0)
     {
-        if (index < 0)
-        {
-            index = 0;
-        }
-        if (index >= static_cast<int>(pens.size()))
-        {
-            index = pens.size() - 1;
-        }
-        return pens.at(index);
+        index = 0;
     }
+    if (index >= static_cast<int>(pens.size()))
+    {
+        index = pens.size() - 1;
+    }
+    return pens.at(index);
+
 }
 
 int RandomInRange(int min, int max)
