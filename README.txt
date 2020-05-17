@@ -32,6 +32,7 @@ Interacting with the map:
 
     Selecting a vehicle highlights its route in the map.
     Clicking anywhere else on the map (deselecting the vehicle) removes the highlight.
+    When a selected vehicle gets despawned, the highlight of its route disappears.
 
     Highlighting a line route can also be accomplished by clicking the line name in the list of lines on the right.
     Clicking anywhere else in the list (other than the Line X item) removes the highlight.
