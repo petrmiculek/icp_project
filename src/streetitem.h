@@ -20,39 +20,42 @@ public:
     StreetItem(Street* street, QGraphicsItem * parent = nullptr);
 
     /**
-     * @brief StreetItem::paint Reimplemented paint event handler - decide line color based on street state
-     * @param painter see QGraphicsLineItem::paint
-     * @param option see QGraphicsLineItem::paint
-     * @param widget see QGraphicsLineItem::paint
+     * @brief Reimplemented paint event handler.
+     * @details Decides line color based on street state.
+     * @param painter Painter
+     * @param option Options
+     * @param widget Widget
+     * @see QGraphicsLineItem::paint
      */
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     /**
-     * @brief StreetItem::SetLabelPosition Align label (street name) next to the street
+     * @brief Aligns label (street name) next to the street.
      */
     void SetLabelPosition();
 
     /**
-     * @brief Name get street name
-     * @return QString street name
+     * @brief Returns street name.
+     * @return Street name.
      */
     QString Name();
 
     /**
-     * @brief SetHighlight Set flag for street highlight state
-     * @param highlighted flag
+     * @brief Sets the highlight flag for a street.
+     * @param highlighted Flag
      */
     void SetHighlight(bool highlighted);
 
     /**
-     * @brief GetStreet Get pointer to street, if the street is valid/initialized
-     * @return Street pointer when the street is valid, nullptr if street is not valid/initialized
+     * @brief Gets pointer to a valid street, or nullptr.
+     * @return Street Pointer when the street is valid, nullptr if street is not valid/initialized.
      */
     Street* GetStreet();
 
     /**
-     * @brief SetStreetTrafficDensity Set traffic density to the street
-     * @param value
+     * @brief Sets traffic density to the street.
+     * @param value Density value.
+     * @remarks Value has to be in range 0 - 100 (incl.).
      */
     void SetStreetTrafficDensity(int value);
 
@@ -63,16 +66,16 @@ public:
     static constexpr Qt::GlobalColor highlight_traffic = Qt::darkRed;
 
     /**
-     * @brief FontSize Get scaled font size
-     * @return Font size scaled by zoom ratio
+     * @brief Gets scaled font size.
+     * @return Font size scaled by zoom ratio.
      */
     qreal FontSize()
     {
         return font_size * scaling_ratio;
     }
     /**
-     * @brief LineWidth Get scaled line width
-     * @return Line width scaled by zoom ratio
+     * @brief Gets scaled line width.
+     * @return Line width scaled by zoom ratio.
      */
     qreal LineWidth()
     {
@@ -80,8 +83,8 @@ public:
     }
 
     /**
-     * @brief LabelDistance Get scaled line to label distance
-     * @return distance scaled by zoom ratio
+     * @brief Gets scaled line to label distance.
+     * @return Distance scaled by zoom ratio.
      */
     qreal LabelDistance()
     {
@@ -90,8 +93,8 @@ public:
     }
 
     /**
-     * @brief Scale items by a zoom factor
-     * @param factor zoom factor (>1 -> zooming in, <1 zooming out)
+     * @brief Scales items by a zoom factor.
+     * @param Factor zoom factor (>1 -> zooming in, <1 zooming out).
      */
     static void Scale(qreal factor)
     {
