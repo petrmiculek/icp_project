@@ -7,8 +7,6 @@
  * Author: Petr Mičulek, FIT <xmicul08@stud.fit.vutbr.cz>
  */
 
-#include <memory>
-
 #include <QGraphicsEllipseItem>
 #include <QPainter>
 
@@ -18,6 +16,10 @@ class TrafficCircleItem : public QObject, public QGraphicsEllipseItem
 {
     Q_OBJECT
 signals:
+    /**
+     * @brief vehicleClicked emitted when vehicle is clicked on/selected
+     * @param trip trip of the target vehicle
+     */
     void vehicleClicked(const Trip * trip);
 
 public:
@@ -68,14 +70,19 @@ public:
         return text_size_default * scaling_ratio;
     }
 
+    /**
+     * @brief mouseReleaseEvent overriden QGraphicsItem::mouseReleaseEvent
+     * @param event QGraphicsSceneMouseEvent
+     */
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
-    QRectF text_space;
+    QRectF text_space; //!< text_space bounding rectangle for text
 
-    const QPen pen;
-    std::shared_ptr<Vehicle> vehicle;
+    const QPen pen; //!< pen for drawing the TrafficCircleItem
 
-    static qreal scaling_ratio;
+    std::shared_ptr<Vehicle> vehicle; //!< if TrafficCircleItem is a vehicle, points to its Vehicle object
+
+    static qreal scaling_ratio; //!< current scaling ratio, affected by zoom level
 
 private:
     QString text;
