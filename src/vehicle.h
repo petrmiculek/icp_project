@@ -67,7 +67,7 @@ public:
     Direction direction;
     /**
      * @brief Internal route index.
-     * @note This index makes sense only in scope of Trip class and is usually uninteresting for the user.
+     * @remarks This index makes sense only in scope of Trip class and is usually uninteresting for the user.
      * @see Trip::advanceVehicleRoute
      */
     unsigned int internal_street_index;
