@@ -56,7 +56,6 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::UpdateVehicles);
 
     initializeTimers();
-    selected_streets = {};
 
 #ifndef NDEBUG
     for (auto& t : data->trips) {
@@ -171,19 +170,6 @@ void MainWindow::RemoveInvalidVehicles()
     }
 }
 
-/*
-// podle videa https://www.youtube.com/watch?v=4dq7n8S9AHw
-// udelat custom view, ktere nahradi tridu graphicsView?
-void MainWindow::wheelEvent(QWheelEvent *event)
-{
-    if (event->modifiers().testFlag(Qt::ControlModifier))
-    {
-        scaleView(pow((double)2, -event->delta() / 240.0));
-    } else {
-        QGraphicsView::wheelEvent(event);
-    }
-}
-*/
 
 void MainWindow::TrafficSliderChanged(int value)
 {

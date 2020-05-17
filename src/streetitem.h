@@ -98,6 +98,10 @@ public:
     }
 
 private:
+    QPen Pen(const QColor& color = default_color);
+    qreal TrafficDensity(int traffic);
+    QFont FontLabel();
+
     QString name;
 
     bool is_highlighted;
@@ -106,14 +110,10 @@ private:
 
     QGraphicsSimpleTextItem * label;
 
+    // base size properties of displayed line
     static constexpr qreal line_width = 6.0;
     static constexpr qreal font_size = 10.0;
-
-    QPen Pen(const QColor& color = default_color);
-    qreal TrafficDensity(int traffic);
-    QFont FontLabel();
-
-    qreal label_distance = 12.0; // from street
+    static constexpr qreal label_distance = 12.0; // from street
 
     static qreal scaling_ratio; // 1.0 by default
 };

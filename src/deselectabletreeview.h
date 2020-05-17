@@ -30,7 +30,11 @@ public:
     MainWindow * window;
 
 private:
-    virtual void mousePressEvent(QMouseEvent *event)
+    /**
+     * @brief mousePressEvent Overridden QTreeView::mousePressEvent
+     * @param event QMouseEvent
+     */
+    virtual void mousePressEvent(QMouseEvent *event) override
     {
         QModelIndex item = indexAt(event->pos());
         const bool selected = selectionModel()->isSelected(indexAt(event->pos()));

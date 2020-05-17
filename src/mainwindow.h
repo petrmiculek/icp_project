@@ -200,7 +200,7 @@ private:
     std::vector<TrafficCircleItem*> drawnVehicles; // all vehicles displayed
 
     // temporary elements
-    std::vector<StreetItem*> selected_streets; // all streets currently selected
+    std::vector<StreetItem*> selected_streets{}; // all streets currently selected
     int vehicles_selected{0}; // count of currently selected vehicles
 
     // zoom range is measured in steps

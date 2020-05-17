@@ -34,7 +34,6 @@ public:
      */
     bool LoadJSONFile(const QString file_name_prefix, const QString file_name);
 
-//private:
     std::vector<Street> streets;
     std::vector<Trip> trips;
 };
