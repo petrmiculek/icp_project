@@ -23,7 +23,8 @@ tags
 .DS_Store
 .directory
 *.debug
-Makefile*
+#Makefile*
+QMakefile
 *.prl
 *.app
 moc_*.cpp
