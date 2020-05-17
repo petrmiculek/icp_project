@@ -17,8 +17,8 @@ class TrafficCircleItem : public QObject, public QGraphicsEllipseItem
     Q_OBJECT
 signals:
     /**
-     * @brief vehicleClicked emitted when vehicle is clicked on/selected
-     * @param trip trip of the target vehicle
+     * @brief vehicleClicked emitted when vehicle is clicked on/selected.
+     * @param trip Trip of the target vehicle.
      */
     void vehicleClicked(const Trip * trip);
 
@@ -28,24 +28,25 @@ public:
     TrafficCircleItem(const std::shared_ptr<Vehicle>& _vehicle, QGraphicsItem * parent = nullptr);
 
     /**
-     * @brief paint Overridden QGraphicsEllipseItem::paint event
-     * @param painter see QGraphicsEllipseItem::paint
-     * @param option see QGraphicsEllipseItem::paint
-     * @param widget see QGraphicsEllipseItem::paint
+     * @brief Overridden QGraphicsEllipseItem::paint event.
+     * @param painter Painter
+     * @param option Option
+     * @param widget Widget
+     * @see QGraphicsEllipseItem::paint
      *
      * @link https://doc.qt.io/qt-5/qgraphicsellipseitem.html#paint
      */
     void paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
     /**
-     * @brief MoveTo Move item to a point (which indicates item's center)
-     * @param center Point that item will be centered to
+     * @brief Moves item to a point (which indicates item's center).
+     * @param center Point that item will be centered to.
      */
     void MoveTo(QPointF center);
 
     /**
-     * @brief CircleDiameter Get item's scaled circle diameter
-     * @return Circle diameter scaled by zoom ratio
+     * @brief Gets item's scaled circle diameter.
+     * @return Circle diameter scaled by zoom ratio.
      */
     static qreal CircleDiameter()
     {
@@ -53,8 +54,8 @@ public:
     }
 
     /**
-     * @brief PointCircleSize Get item's scaled dimensions
-     * @return Circle dimensions scaled by zoom ratio
+     * @brief Gets item's scaled dimensions.
+     * @return Circle dimensions scaled by zoom ratio.
      */
     static QSizeF PointCircleSize()
     {
@@ -62,8 +63,8 @@ public:
     }
 
     /**
-     * @brief TextSize Get item's scaled text size
-     * @return Text size scaled by zoom ratio
+     * @brief Get item's scaled text size.
+     * @return Text size scaled by zoom ratio.
      */
     static qreal TextSize()
     {
@@ -71,18 +72,18 @@ public:
     }
 
     /**
-     * @brief mouseReleaseEvent overriden QGraphicsItem::mouseReleaseEvent
-     * @param event QGraphicsSceneMouseEvent
+     * @brief Overriden QGraphicsItem::mouseReleaseEvent.
+     * @param event Event data.
      */
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
-    QRectF text_space; //!< text_space bounding rectangle for text
+    QRectF text_space; //!< text_space bounding rectangle for text.
 
-    const QPen pen; //!< pen for drawing the TrafficCircleItem
+    const QPen pen; //!< Pen for drawing the TrafficCircleItem.
 
-    std::shared_ptr<Vehicle> vehicle; //!< if TrafficCircleItem is a vehicle, points to its Vehicle object
+    std::shared_ptr<Vehicle> vehicle; //!< If TrafficCircleItem is a vehicle, points to its Vehicle object.
 
-    static qreal scaling_ratio; //!< current scaling ratio, affected by zoom level
+    static qreal scaling_ratio; //!< Current scaling ratio, affected by zoom level.
 
 private:
     QString text;
