@@ -41,7 +41,7 @@ void StreetItem::SetLabelPosition()
 {
 
     // get center point of line
-    auto center = line().center();
+    auto center = Center(line());
 
     // shift point to top/right (so that it's not directly on the line)
     auto normal = line().normalVector();

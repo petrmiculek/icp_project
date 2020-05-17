@@ -118,3 +118,8 @@ int RandomInRange(int min, int max)
 {
     return rand() % (max - min) + min;
 }
+
+QPointF Center(QLineF line)
+{
+    return QPointF(0.5 * line.p1() + 0.5 * line.p2());
+}

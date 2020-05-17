@@ -110,4 +110,11 @@ QString ToCamelCase(QString& s);
  */
 int RandomInRange(int min, int max);
 
+/**
+ * @brief Returns the center point of a line.
+ * @param line Line.
+ * @return The center point of a line.
+ */
+QPointF Center(QLineF line);
+
 #endif // UTIL_H
