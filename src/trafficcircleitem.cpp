@@ -5,6 +5,7 @@
  */
 #include "util.h"
 #include "trafficcircleitem.h"
+#include "trip.h"
 
 qreal TrafficCircleItem::scaling_ratio = 1.0;
 
@@ -36,6 +37,7 @@ TrafficCircleItem::TrafficCircleItem(QPointF center, QString content, QPen _pen,
     {
         // vehicle
         color.setAlpha(30);
+        setFlag(QGraphicsItem::ItemIsSelectable, true);
     }
     setBrush(color);
 }
@@ -80,4 +82,14 @@ void TrafficCircleItem::MoveTo(QPointF center)
 
     // text
     text_space = CenteredSizeToRect(PointCircleSize() * inscribed_square_size_ratio, center);
+}
+
+void TrafficCircleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(vehicle != nullptr)
+    {
+        emit vehicleClicked(vehicle->trip);
+    }
+
+    QGraphicsEllipseItem::mouseReleaseEvent(event);
 }

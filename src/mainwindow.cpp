@@ -44,16 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
     QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
 
-    // initialize lines in tree view
-    treeViewModel = new QStandardItemModel();
-    for (const auto& trip : data->trips) {
-        auto* lineItem = new QStandardItem(trip.name());
-        for (const auto& street_dir : trip.route())
-            for (const auto& stop : street_dir.first.stops)
-                lineItem->appendRow(new QStandardItem(stop.name));
-        treeViewModel->appendRow(lineItem);
-    }
-    ui->pttreeView->setModel(treeViewModel);
+    ui->pttreeView->window = this;
 
     // Selecting streets
     QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
@@ -90,7 +81,6 @@ void MainWindow::InitScene(DataModel* data)
     scene = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    // ui->graphicsView->scale(3, 3);
 
     // streets
     for (auto& street : data->streets) {
@@ -111,8 +101,16 @@ void MainWindow::InitScene(DataModel* data)
         }
     }
 
-    connect(scene, &QGraphicsScene::selectionChanged,
-            this, &MainWindow::selectionChanged);
+    // initialize lines in tree view
+    treeViewModel = new QStandardItemModel();
+    for (const auto& trip : data->trips) {
+        auto* lineItem = new QStandardItem(trip.name());
+        for (const auto& street_dir : trip.route())
+            for (const auto& stop : street_dir.first.stops)
+                lineItem->appendRow(new QStandardItem(stop.name));
+        treeViewModel->appendRow(lineItem);
+    }
+    ui->pttreeView->setModel(treeViewModel);
 }
 
 
@@ -136,6 +134,10 @@ void MainWindow::redrawVehicles(QTime time)
             auto* v = new TrafficCircleItem(vehicle);
             scene->addItem(v);
             drawnVehicles.push_back(v);
+
+            // todo comment
+            connect(v, &TrafficCircleItem::vehicleClicked,
+                    this, &MainWindow::vehicleSelectionChanged);
         }
     }
 
@@ -210,7 +212,41 @@ void MainWindow::selectionChanged()
     selected_streets.clear();
     selected_street = NONE_SELECTED;
 
-    if (items.empty())
+    int vehicles_selected_new = 0;
+
+    // separate selected streets and vehicles
+    for(const auto& item: items)
+    {
+        auto line = dynamic_cast<StreetItem*>(item);
+        if (line != nullptr)
+        {
+            selected_streets.push_back(line);
+        }
+
+        auto vehicle = dynamic_cast<TrafficCircleItem*>(item);
+        if (vehicle != nullptr)
+        {
+            vehicles_selected_new++;
+        }
+    }
+
+    // if a line was highlighted through clicking on a vehicle
+    // and no vehicle is highlighted anymore
+    // remove the highlight
+    if(vehicles_selected > 0
+            && vehicles_selected_new == 0)
+    {
+        // de-highlight all
+        for (auto& scene_street: scene_streets)
+        {
+            scene_street->SetHighlight(false);
+        }
+    }
+
+    vehicles_selected = vehicles_selected_new;
+
+    // no street is selected -> disable setting traffic density
+    if (selected_streets.empty())
     {
         ui->strttrafficSlider->setEnabled(false);
         ui->strttrafficSlider->setValue(QSlider::NoTicks); // set slider to zero-value
@@ -219,21 +255,13 @@ void MainWindow::selectionChanged()
         return;
     }
 
-
-    for(const auto& item: items)
-    {
-        auto line = dynamic_cast<StreetItem*>(item);
-        if (line != nullptr)
-        {
-            selected_streets.push_back(line);
-        }
-    }
-
+    // street selection is not empty => enable setting traffic density
     ui->strttrafficSlider->setEnabled(true);
     ui->strttrafficLbl->setEnabled(true);
 
     QString text;
 
+    // display street name or the count of selected streets
     if(selected_streets.size() == 1)
     {
         text = selected_streets.at(0)->Name();
@@ -242,38 +270,20 @@ void MainWindow::selectionChanged()
     }
     else
     {
-        text = "More streets(" + QString::number(selected_streets.size()) + ")";
+        text = "More streets (" + QString::number(selected_streets.size()) + ")";
     }
     ui->strtnameLbl->setText(text);
+}
 
-
-/*
-    for(unsigned long i = 0; i < data->streets.size(); i++)
-    {
-        auto street = data->streets.at(i);
-
-        auto pt1 = line->line().p1();
-        auto pt2 = line->line().p2();
-
-        if (pt1.x() == street.point1->x()
-                && pt1.y() == street.point1->y()
-                && pt2.x() == street.point2->x()
-                && pt2.y() == street.point2->y())
-        {
-            selected_streets.push_back(street);
-            selected_street = static_cast<int>(i);
-
-            ui->strttrafficSlider->setValue(street.trafficDensity());
-            break;
-        }
-    }
-    */
+void MainWindow::vehicleSelectionChanged(const Trip *trip)
+{
+    HighlightStreetsInTrip(trip);
 }
 
 
 void MainWindow::ListSelectionChanged(QModelIndex index)
 {
-    // selected a line => clear highlight of all others
+    // clear all streets' highlight state
     for (auto& scene_street: scene_streets)
     {
         scene_street->SetHighlight(false);
@@ -288,6 +298,8 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     auto line_name = ui->pttreeView->model()->data(index);
 
     int index_found = -1;
+
+    // find the selected trip
     for(unsigned long i = 0; i < data->trips.size(); i++)
     {
         auto& trip = data->trips.at(i);
@@ -302,26 +314,38 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     {
         scene->update();
         return;
-
     }
 
-    auto route = data->trips.at(index_found).route();
+    HighlightStreetsInTrip(&data->trips.at(index_found));
+}
 
-    // highlight all streets in selected line
-    for (const auto& street_dir : route)
+
+void MainWindow::HighlightStreetsInTrip(const Trip * const trip)
+{
+    if(trip == nullptr)
+        return;
+
+    // clear all streets' highlight state
+    for (auto& scene_street: scene_streets)
+    {
+        scene_street->SetHighlight(false);
+    }
+
+    for (const auto& street_dir : trip->route())
     {
         for (auto* const scene_street: scene_streets)
         {
-            Street* curr_street = scene_street->GetStreet();
+            const auto* curr_street = scene_street->GetStreet();
             if(curr_street && street_dir.first.id == curr_street->id)
             {
                 scene_street->SetHighlight(true);
             }
         }
     }
-    scene->update();
 
+    scene->update();
 }
+
 
 void MainWindow::on_resettrafficBtn_clicked()
 {

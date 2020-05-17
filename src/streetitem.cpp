@@ -25,7 +25,7 @@ StreetItem::StreetItem(Street* _street, QGraphicsItem * parent) :
 #endif
 
     setPen(Pen(default_color));
-    setFlag(QGraphicsItem::ItemIsSelectable);
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     is_highlighted = false;
 

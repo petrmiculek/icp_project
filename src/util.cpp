@@ -91,7 +91,7 @@ QColor NextColor(int index)
                                       {Qt::blue},
                                       {Qt::black},
                                       {Qt::darkMagenta},
-                                      {Qt::darkGray},
+                                      {20, 100, 20},
                                       {Qt::darkBlue},
                                   });
     static int static_index = 0;
