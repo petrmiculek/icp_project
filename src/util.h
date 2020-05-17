@@ -25,59 +25,59 @@ struct DataLoadingException : public std::exception {
 };
 
 /**
- * @brief Returns euclid distance of two points
- * @param point1 First point
- * @param point2 Second point
+ * @brief Returns euclid distance of two points.
+ * @param point1 First point.
+ * @param point2 Second point.
  * @return distance of two points
  */
 double euclid_distance(QPointF * point1, QPointF * point2);
 
 /**
- * @brief CenterRect Get rectangle with its center aligned to a specified point
- * @param rect rectangle to be aligned (only width-height are used, position is ignored)
- * @param point point to align to
+ * @brief Gets rectangle with its center aligned to a specified point.
+ * @param rect Rectangle to be aligned (only width-height are used, position is ignored).
+ * @param point Point to align to.
  * @return QRectF aligned rectangle
  */
 QRectF CenteredRectToRect(QRectF rect, QPointF point);
 
 /**
- * @brief CenterRect Get Top-Left corner of rectangle with its center aligned to a specified point
- * @param rect rectangle to be aligned (only width-height are relevant)
- * @param point point to align to
- * @return QPointF Top-Left point of aligned rectangle
+ * @brief Gets Top-Left corner of rectangle with its center aligned to a specified point.
+ * @param rect Rectangle to be aligned (only width-height are relevant).
+ * @param point Point to align to.
+ * @return Top-Left point of aligned rectangle.
  */
 QPointF CenteredRectToPoint(QRectF rect, QPointF point);
 
 /**
- * @brief CenteredSizeToRect Get rectangle with its center aligned to a specified point
- * @param dimensions size of desired rectangle
- * @param point point to align to
- * @return QRectF aligned rectangle
+ * @brief Gets rectangle with its center aligned to a specified point.
+ * @param Dimensions size of desired rectangle.
+ * @param Point point to align to.
+ * @return QRectF aligned rectangle.
  */
 QRectF CenteredSizeToRect(QSizeF dimensions, QPointF point);
 
 /**
- * @brief PositionOnLine Get coordinates of element on a street
- * @param street Street that the element is on
- * @param street_percentage position of element within the street
- * @return QPointF element position as coordinates
+ * @brief Gets coordinates of element on a street.
+ * @param street Street that the element is on.
+ * @param street_percentage Position of element within the street.
+ * @return QPointF element position as coordinates.
  */
 QPointF PositionOnLine(const Street& street, double street_percentage);
 
 /**
- * @brief NextColor Get color from a static list (at the given index, or a random one).
+ * @brief Gets color from a static list (at the given index, or a random one).
  * @remarks If the index is -1, returns the next color from the list.
  * @param index Index to return the color from.
- * @return color from the list at given index
+ * @return Color from the list at given index.
  */
 QColor NextColor(int index = -1); // index = -1  --> select random
 
 
 /**
- * @brief NextColorPen Get pen with a color from a static list (at the given index, or a random one).
+ * @brief Gets pen with a color from a static list (at the given index, or a random one).
  * @param index Index to return the color from.
  * @remarks If the index is -1, returns the next color from the list.
- * @return color from the list at given index
+ * @return Color from the list at given index.
  */
 QPen NextColorPen(int index = -1); // index = -1  --> select random
 
@@ -86,7 +86,7 @@ QPen NextColorPen(int index = -1); // index = -1  --> select random
  * @param c1 First color.
  * @param c2 Second color.
  * @param ratio Mixing ratio. 0 means only the first color.
- * @return mixed color
+ * @return Mixed color.
  * @pre \p c1 and \p c2 must be valid colors.
  * @pre \p ratio must be in range [0,1].
  */
