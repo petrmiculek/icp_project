@@ -95,7 +95,7 @@ public:
     /**
      * @brief Time cost.
      * @details Time cost is computed as an euclid distance between starting and ending point of the street.
-     * @details euclid_distance
+     * @see euclid_distance
      */
     double time_cost;
 
