@@ -31,8 +31,8 @@ public:
 
 private:
     /**
-     * @brief mousePressEvent Overridden QTreeView::mousePressEvent
-     * @param event QMouseEvent
+     * @brief Overridden QTreeView::mousePressEvent.
+     * @param event Event data.
      */
     virtual void mousePressEvent(QMouseEvent *event) override
     {
