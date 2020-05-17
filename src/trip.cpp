@@ -7,6 +7,8 @@
 
 #include <cmath>
 #include <QDebug>
+#include <memory>
+
 #include <utility> 
 #include "maptimer.h"
 #include "util.h"

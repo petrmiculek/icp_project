@@ -9,6 +9,8 @@
 
 #include <QGraphicsEllipseItem>
 #include <QPainter>
+#include <memory>
+
 
 #include "vehicle.h"
 
