@@ -73,18 +73,21 @@ public:
      * @param d Direction
      */
     void addStreetToRoute(Street s, Direction d = DIRFORWARD);
+
     /**
      * @brief Adds spawn time to the line.
      * @details Adds new spawn time at which a vehicle should be spawned.
      * @param time Spawn time
      */
     void addSpawn(QTime time);
+
     /**
      * @brief Sets a last time a vehicle could have been spawned.
      * @details Last time should be set manually every time new vehicles are spawned and old vehicles are update.
      * @param time Last time
      */
     void setLastTime(QTime time);
+
     /**
      * @brief Updates vehicles until given time.
      * @details Elapsed time is determined by checking the given time against lastTime.
@@ -92,6 +95,7 @@ public:
      * @see Trip::setLastTime
      */
     void updateVehiclesAt(QTime time);
+
     /**
      * @brief Creates new vehicles.
      * @details Creates new vehicles that were to be spawned until given time.
@@ -101,6 +105,7 @@ public:
      * @see Trip::setLastTime
      */
     std::vector<std::shared_ptr<Vehicle>> createNewVehiclesAt(QTime time);
+
     /**
      * @brief Returns stops positions on the line's route.
      * @return Vector of positions

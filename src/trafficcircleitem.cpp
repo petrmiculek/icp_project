@@ -52,17 +52,6 @@ TrafficCircleItem::TrafficCircleItem(std::shared_ptr<Vehicle> _vehicle, QGraphic
 
 void TrafficCircleItem::paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    // circle
-    if(vehicle != nullptr)
-    {
-        // vehicle
-        MoveTo(vehicle->position());
-    }
-    else
-    {
-        // stop
-        MoveTo(this->boundingRect().center());
-    }
     QGraphicsEllipseItem::paint(painter, option, widget);
 
     // text

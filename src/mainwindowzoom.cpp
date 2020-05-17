@@ -18,6 +18,13 @@ int MainWindow::zoom_current = 1;
 
 void MainWindow::SceneZoomIn()
 {
+    zoom_current++;
+
+    if(zoom_current == zoom_max)
+    {
+        btn_zoom_in->setEnabled(false);
+    }
+
     btn_zoom_out->setEnabled(true);
 
     auto scale_change = zoom_scale_factor;
@@ -26,19 +33,11 @@ void MainWindow::SceneZoomIn()
 
     auto scale_new = scale_old * scale_change;
 
-
     ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
 
     // drawn items scale inversely so as to keep a constant size on screen
     TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE
     StreetItem::Scale(1.0/scale_change); // INVERSE
-
-    zoom_current++;
-
-    if(zoom_current == zoom_max)
-    {
-        btn_zoom_in->setEnabled(false);
-    }
 
     scene->update();
 }
@@ -46,6 +45,13 @@ void MainWindow::SceneZoomIn()
 
 void MainWindow::SceneZoomOut()
 {
+    zoom_current--;
+
+    if(zoom_current == zoom_min) // reached min zoom level
+    {
+        btn_zoom_out->setEnabled(false);
+    }
+
     btn_zoom_in->setEnabled(true);
 
     auto scale_change = 1.0/zoom_scale_factor; // INVERSE
@@ -55,19 +61,11 @@ void MainWindow::SceneZoomOut()
 
     auto scale_new = scale_old * scale_change;
 
-
     ui->graphicsView->setMatrix({scale_new, m.m12(), m.m21(), scale_new, m.dx(), m.dy()});
 
     // drawn items scale inversely so as to keep a constant size on screen
     TrafficCircleItem::scaling_ratio *= 1.0/scale_change; // INVERSE to INVERSE
     StreetItem::Scale(1.0/scale_change); // INVERSE to INVERSE
-
-    zoom_current--;
-
-    if(zoom_current == zoom_min) // reached min zoom level
-    {
-        btn_zoom_out->setEnabled(false);
-    }
 
     scene->update();
 }
@@ -86,11 +84,6 @@ void MainWindow::ZoomOutBtn_clicked(){
 
 void MainWindow::AddZoomButtons()
 {
-    static bool zoom_buttons_exist = false;
-
-    if (zoom_buttons_exist)
-        return;
-
     auto* parent = new QWidget(this->ui->graphicsView);
 
     const auto button_size = 30; // h = w
@@ -112,6 +105,4 @@ void MainWindow::AddZoomButtons()
     QObject::connect(btn_zoom_out, &QPushButton::clicked, this, &MainWindow::ZoomOutBtn_clicked);
 
     btn_zoom_out->setEnabled(false);
-
-    zoom_buttons_exist = true;
 }

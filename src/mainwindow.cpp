@@ -34,26 +34,26 @@ MainWindow::MainWindow(QWidget *parent)
       ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    data = new DataModel();
-    InitScene(data);
+    map_data = new DataModel();
+    InitializeScene(map_data);
     AddZoomButtons();
 
     // initialize map timer
     mapTimer = new MapTimer(0, 0, 0, 1.0);
     mapTimer->setInterval(25); // default refresh interval
     QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::updateTime);
-    QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::invalidateVehicles);
+    QObject::connect(mapTimer, &MapTimer::reset_signal, this, &MainWindow::InvalidateAllVehicles);
 
     ui->pttreeView->window = this;
 
     // Selecting streets
-    QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::selectionChanged);
+    QObject::connect(scene, &QGraphicsScene::selectionChanged, this, &MainWindow::SceneSelectionChanged);
     // Selecting traffic density (slider)
     QObject::connect(ui->strttrafficSlider, &QSlider::valueChanged, this, &MainWindow::TrafficSliderChanged);
     // Choosing line from list
     QObject::connect(ui->pttreeView, &QTreeView::clicked, this, &MainWindow::ListSelectionChanged);
     // Redrawing vehicles when timer ticks
-    QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::redrawVehicles);
+    QObject::connect(mapTimer, &MapTimer::timeout, this, &MainWindow::UpdateVehicles);
 
     initializeTimers();
     selected_streets = {};
@@ -68,22 +68,22 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    invalidateVehicles();
+    InvalidateAllVehicles();
     delete ui;
-    delete data;
+    delete map_data;
     delete mapTimer;
     delete scene;
     delete treeViewModel;
 }
 
-void MainWindow::InitScene(DataModel* data)
+void MainWindow::InitializeScene(DataModel* map_data)
 {
     scene = new QGraphicsScene(ui->graphicsView);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
 
     // streets
-    for (auto& street : data->streets) {
+    for (auto& street : map_data->streets) {
         auto* scene_street = new StreetItem(&street);
         scene->addItem(scene_street);
 
@@ -91,7 +91,7 @@ void MainWindow::InitScene(DataModel* data)
     }
 
     // stops
-    for (const auto& street : data->streets) {
+    for (const auto& street : map_data->streets) {
         for (const auto& stop: street.stops)
         {
             auto* scene_stop2 = new TrafficCircleItem(
@@ -103,7 +103,7 @@ void MainWindow::InitScene(DataModel* data)
 
     // initialize lines in tree view
     treeViewModel = new QStandardItemModel();
-    for (const auto& trip : data->trips) {
+    for (const auto& trip : map_data->trips) {
         auto* lineItem = new QStandardItem(trip.name());
         for (const auto& street_dir : trip.route())
             for (const auto& stop : street_dir.first.stops)
@@ -114,31 +114,33 @@ void MainWindow::InitScene(DataModel* data)
 }
 
 
-void MainWindow::redrawVehicles(QTime time)
+void MainWindow::CreateVehiclesInTrip(Trip& trip, QTime time)
 {
-    freeInvalidVehicles();
+    std::vector<std::shared_ptr<Vehicle>> new_vehicles = trip.createNewVehiclesAt(time);
+
+    // create new vehicles
+    for (const auto& vehicle : new_vehicles) {
+        auto* v = new TrafficCircleItem(vehicle);
+        scene->addItem(v);
+        drawnVehicles.push_back(v);
+
+        // handle selection of vehicles through separate signal
+        connect(v, &TrafficCircleItem::vehicleClicked,
+                this, &MainWindow::VehicleSelectionChanged);
+    }
+}
+
+void MainWindow::UpdateVehicles(QTime time)
+{
+    FreeInvalidVehicles();
 
     // move existing + spawn new
-    for (auto& trip : data->trips) {
+    for (auto& trip : map_data->trips) {
         trip.updateVehiclesAt(time);
-        std::vector<std::shared_ptr<Vehicle>> new_vehicles = trip.createNewVehiclesAt(time);
+
+        CreateVehiclesInTrip(trip, time);
+
         trip.setLastTime(time);
-
-        // create new vehicles
-        for (const auto& vehicle : new_vehicles) {
-            if (vehicle->isinvalid())
-            {
-                qDebug() << "redrawVehicles: invalid vehicle";
-                continue;
-            }
-            auto* v = new TrafficCircleItem(vehicle);
-            scene->addItem(v);
-            drawnVehicles.push_back(v);
-
-            // todo comment
-            connect(v, &TrafficCircleItem::vehicleClicked,
-                    this, &MainWindow::vehicleSelectionChanged);
-        }
     }
 
     // propagate changes to gui items
@@ -151,21 +153,22 @@ void MainWindow::redrawVehicles(QTime time)
 
         item->MoveTo(item->vehicle->position());
     }
+
     scene->update();
 }
 
 
-void MainWindow::invalidateVehicles()
+void MainWindow::InvalidateAllVehicles()
 {
-    for (auto& trip : data->trips) {
+    for (auto& trip : map_data->trips) {
         trip.setLastTime(mapTimer->currentTime());
         for (auto& vehicle : trip.vehicles())
             vehicle->invalidate();
     }
-    freeInvalidVehicles();
+    FreeInvalidVehicles();
 }
 
-void MainWindow::freeInvalidVehicles()
+void MainWindow::FreeInvalidVehicles()
 {
     for (size_t i = 0; i < drawnVehicles.size(); i++) {
 
@@ -205,12 +208,11 @@ void MainWindow::TrafficSliderChanged(int value)
 }
 
 
-void MainWindow::selectionChanged()
+void MainWindow::SceneSelectionChanged()
 {
     QList<QGraphicsItem*> items = scene->selectedItems();
 
     selected_streets.clear();
-    selected_street = NONE_SELECTED;
 
     int vehicles_selected_new = 0;
 
@@ -275,7 +277,7 @@ void MainWindow::selectionChanged()
     ui->strtnameLbl->setText(text);
 }
 
-void MainWindow::vehicleSelectionChanged(const Trip *trip)
+void MainWindow::VehicleSelectionChanged(const Trip *trip)
 {
     HighlightStreetsInTrip(trip);
 }
@@ -300,9 +302,9 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
     int index_found = -1;
 
     // find the selected trip
-    for(unsigned long i = 0; i < data->trips.size(); i++)
+    for(unsigned long i = 0; i < map_data->trips.size(); i++)
     {
-        auto& trip = data->trips.at(i);
+        auto& trip = map_data->trips.at(i);
         if (trip.name() == line_name)
         {
             index_found = i;
@@ -316,7 +318,7 @@ void MainWindow::ListSelectionChanged(QModelIndex index)
         return;
     }
 
-    HighlightStreetsInTrip(&data->trips.at(index_found));
+    HighlightStreetsInTrip(&map_data->trips.at(index_found));
 }
 
 
@@ -350,7 +352,7 @@ void MainWindow::HighlightStreetsInTrip(const Trip * const trip)
 void MainWindow::on_resettrafficBtn_clicked()
 {
     ui->strttrafficSlider->setValue(QSlider::NoTicks);
-    for (auto& street : data->streets) {
+    for (auto& street : map_data->streets) {
         street.setTrafficDensity(0);
     }
     scene->update();

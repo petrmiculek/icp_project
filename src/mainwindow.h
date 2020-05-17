@@ -44,30 +44,95 @@ public:
     void HighlightStreetsInTrip(const Trip * const trip);
 
 public slots:
+    /**
+     * @brief ListSelectionChanged Handle change of selection on list of lines
+     * @param index which item was selected
+     */
     void ListSelectionChanged(QModelIndex index);
 
 private slots:
-    void selectionChanged();
-    void on_toggleTimeBtn_clicked();
-    void on_fasterBtn_pressed();
-    void on_fasterBtn_released();
-    void on_slowerBtn_pressed();
-    void on_slowerBtn_released();
-    void on_normalBtn_clicked();
-    void ZoomInBtn_clicked();
-    void ZoomOutBtn_clicked();
-    void vehicleSelectionChanged(const Trip * trip);
-    void on_resetBtn_clicked();
+
+    /**
+     * @brief vehicleSelectionChanged Handle change to vehicle selection
+     * @param trip trip of the selected vehicle
+     */
+    void VehicleSelectionChanged(const Trip * trip);
+
+    /**
+     * @brief TrafficSliderChanged Handle change of traffic density slider value
+     * @param value new slider value
+     */
     void TrafficSliderChanged(int value);
+
+    /**
+     * @brief SceneSelectionChanged Handle change of selection in the GraphicsScene
+     */
+    void SceneSelectionChanged();
+
+    /**
+     * @brief on_toggleTimeBtn_clicked Handle "Start/Stop time" button click
+     */
+    void on_toggleTimeBtn_clicked();
+
+    /**
+     * @brief on_fasterBtn_pressed Handle "Make time go faster" button press
+     * @note using pressed+released instead of clicked <= holding the button keeps increasing the time speed
+     */
+    void on_fasterBtn_pressed();
+
+    /**
+     * @brief on_fasterBtn_released Handle "Make time go faster" button release
+     *
+     * @note using pressed+released instead of clicked <= holding the button keeps increasing the time speed
+     */
+    void on_fasterBtn_released();
+
+    /**
+     * @brief on_slowerBtn_pressed Handle "Make time go faster" button press
+     * @note using pressed+released instead of clicked <= holding the button keeps decreasing the time speed
+     */
+    void on_slowerBtn_pressed();
+
+    /**
+     * @brief on_fasterBtn_released Handle "Make time go faster" button release
+     *
+     * @note using pressed+released instead of clicked <= holding the button keeps decreasing the time speed
+     */
+    void on_slowerBtn_released();
+
+    /**
+     * @brief on_normalBtn_clicked Handle "Make time go default speed" button click
+     */
+    void on_normalBtn_clicked();
+
+    /**
+     * @brief ZoomInBtn_clicked Handle Zoom-in button click
+     */
+    void ZoomInBtn_clicked();
+
+    /**
+     * @brief ZoomOutBtn_clicked Handle Zoom-out button click
+     */
+    void ZoomOutBtn_clicked();
+
+    /**
+     * @brief on_resetBtn_clicked Handle Reset button click
+     * @note button resets time and removes vehicles
+     */
+    void on_resetBtn_clicked();
+
+    /**
+     * @brief on_resettrafficBtn_clicked Reset all traffic density to zero
+     */
     void on_resettrafficBtn_clicked();
 
 private:
 
     /**
-     * @brief InitScene initialize scene with
-     * @param data
+     * @brief InitializeScene Initialize scene with map data
+     * @param data map data
      */
-    void InitScene(DataModel* data);
+    void InitializeScene(DataModel* map_data);
 
     /**
     * @brief AddZoomButtons Add zoom buttons to the window
@@ -90,36 +155,57 @@ private:
     void startAutoIncrement();
     void multiplyMultiplicator();
 
-    void redrawVehicles(QTime time);
-    void invalidateVehicles();
-    void freeInvalidVehicles();
+    /**
+     * @brief CreateVehiclesInTrip Create new vehicles for
+     * @param trip Trip for which vehicles will be created
+     * @param time Time at which vehicles are being spawned (current time)
+     */
+    void CreateVehiclesInTrip(Trip& trip, QTime time);
 
+    /**
+     * @brief UpdateVehicles Update vehicle positions and spawn new
+     * @param time
+     */
+    void UpdateVehicles(QTime time);
+
+    /**
+     * @brief InvalidateAllVehicles Make all vehicles invalid => ready to despawn
+     */
+    void InvalidateAllVehicles();
+
+    /**
+     * @brief FreeInvalidVehicles Remove invalid vehicles from the scene and correctly delete their objects
+     */
+    void RemoveInvalidVehicles();
+
+    // GUI Elements
     Ui::MainWindow *ui;
+    QPushButton* btn_zoom_in;
+    QPushButton* btn_zoom_out;
 
-    std::vector<TrafficCircleItem*> drawnVehicles;
+    // Time-related elements
     MapTimer *mapTimer;
     double currentIncrement; // multiplier increment
     QTimer *incrementsModifierTimer; // when timeout is signalled, enlarges the multiplier increment value
     QTimer *incrementTimer; // automatically modifies time multiplicator with the user holding the button down
     QTimer *incrementWaiterTimer; // waits before starts automatically incrementing
 
+    // Data for GUI elements
+    DataModel * map_data;
     QStandardItemModel *treeViewModel;
-    DataModel * data;
-    QGraphicsScene * scene;
-    std::vector<StreetItem*> scene_streets;
-    std::vector<QGraphicsEllipseItem*> scene_stops;
-    QPushButton* btn_zoom_in;
-    QPushButton* btn_zoom_out;
+    QGraphicsScene * scene; // all map-elements displayed (streets, stops, vehicles)
 
-    std::vector<StreetItem*> selected_streets;
-    int selected_street;
+    // Elements displayed in the scene
+    std::vector<StreetItem*> scene_streets; // all streets displayed
+    std::vector<TrafficCircleItem*> drawnVehicles; // all vehicles displayed
 
-    int vehicles_selected{0};
-
+    // temporary elements
+    std::vector<StreetItem*> selected_streets; // all streets currently selected
+    int vehicles_selected{0}; // count of currently selected vehicles
 
     // zoom range is measured in steps
     static constexpr int zoom_min = 1;
-    static constexpr int zoom_max = 5;
+    static constexpr int zoom_max = 4;
     static int zoom_current; // = 1 (on-init)
 
     // size of a zoom step

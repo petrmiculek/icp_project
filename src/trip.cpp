@@ -103,7 +103,7 @@ void Trip::updateVehiclesAt(QTime time)
         // we've reached the end of the street
         double w; // wasted progress
         while (vehicle->internal_street_index < lineRoute.size() &&
-               (w=vehicle->progress - lineRoute.at(vehicle->internal_street_index).first.time_cost) > 0) {
+               (w = vehicle->progress - lineRoute.at(vehicle->internal_street_index).first.time_cost) > 0) {
             advanceVehicleRoute(vehicle);
 
             w = vehicle->fromProgressToMSecs(w); // convert to wasted milliseconds
@@ -150,8 +150,8 @@ std::vector<std::shared_ptr<Vehicle>> Trip::createNewVehiclesAt(QTime time)
     for (auto t : departures)
         if (lastTime < t && t <= time) {
             std::shared_ptr<Vehicle> vehicle = std::make_shared<Vehicle>(this, t);
+            vehicle->restMSecs = RandomInRange(wait_min, wait_max);
             vehiclePool.push_back(vehicle);
-            vehiclePool.back()->restMSecs = RandomInRange(wait_min, wait_max);
             new_vehicles.push_back(vehicle);
         }
     return new_vehicles;
